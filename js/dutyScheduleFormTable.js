@@ -58,6 +58,7 @@ let locationMaster;
 let departmentMap = new Map();
 let departmentMaster;
 let currentRow;
+let currentDutyScheduleId;
 
 let dutyScheduleStatusMasters = [
   { statusCode: "N", statusDesc: "Normal" },
@@ -80,6 +81,13 @@ let dutyScheduleSStatusConstant = {
   Cancel: "C",
   Off: "O",
 };
+
+let dutyScheduleStatusMastersForUserUpdate = [
+  { statusCode: "N", statusDesc: "Normal" },
+  //   { statusCode: "A", statusDesc: "Approve" },
+  { statusCode: "C", statusDesc: "Cancel" },
+  //   { statusCode: "O", statusDesc: "Off" },
+];
 
 $(document).ready(function () {
   CreateDatatable.init();
@@ -298,6 +306,15 @@ let renderPage = function () {
       $("<option>", {
         value: item.departmentCode,
         text: item.departmentDesc,
+      })
+    );
+  });
+
+  $.each(dutyScheduleStatusMastersForUserUpdate, function (i, item) {
+    $("select[name=statusCodeModal]").append(
+      $("<option>", {
+        value: item.statusCode,
+        text: item.statusDesc,
       })
     );
   });
@@ -573,6 +590,7 @@ let CreateDatatable = (function () {
         let rowIndex = table.row($(this).closest("tr")).index();
         let data = table.row($(this).closest("tr")).data();
         currentRow = $(this).closest("tr");
+        currentDutyScheduleId = data.dutyScheduleId;
 
         $("#dutyDateEditModal")
           .val(
@@ -589,6 +607,7 @@ let CreateDatatable = (function () {
         $("#departmentCode2EditModal").val(data.departmentCode2);
         $("#departmentCode3EditModal").val(data.departmentCode3);
         $("#remarkEditModal").val(data.remark);
+        $("#statusCodeModal").val(data.status);
 
         $("#editScheduleModal").modal();
       });

@@ -215,6 +215,13 @@
           >
         </li>
 
+        <li class="nav-item">
+          <a class="nav-link" href="regulationsAndWelfare.html">
+            <i class="fas fa-fw fa-file"></i>
+            <span>ระเบียบปฏิบัติ สวัสดิการ</span></a
+          >
+        </li>
+
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block" />
 
@@ -556,7 +563,7 @@
                 />
               </div> -->
               <div class="form-group col-sm-3 row">
-                <label for="shiftStartModal" class="col-sm-2 col-form-label-sm"
+                <label for="statusCode" class="col-sm-2 col-form-label-sm"
                   >สถานะ</label
                 >
                 <div class="col-sm-6">
@@ -645,13 +652,13 @@
         <!-- End of Main Content -->
 
         <!-- Footer -->
-        <footer class="sticky-footer bg-white">
+        <!-- <footer class="sticky-footer bg-white">
           <div class="container my-auto">
             <div class="copyright text-center my-auto">
               <span>Copyright &copy; Your Website 2020</span>
             </div>
           </div>
-        </footer>
+        </footer> -->
         <!-- End of Footer -->
       </div>
       <!-- End of Content Wrapper -->
@@ -1007,6 +1014,20 @@
                   class="custom-select custom-select-sm departmentCode3EditModal"
                   name="departmentCode3EditModal"
                   id="departmentCode3EditModal"
+                  data-size="4"
+                >
+                  <option selected disabled hidden>กรุณาเลือก</option>
+                </select>
+              </div>
+              <div class="col-sm-6">
+                <label for="statusCodeModal" class="col-form-label-sm"
+                  >สถานะ</label
+                >
+
+                <select
+                  class="custom-select custom-select-sm statusCodeModal"
+                  name="statusCodeModal"
+                  id="statusCodeModal"
                   data-size="4"
                 >
                   <option selected disabled hidden>กรุณาเลือก</option>

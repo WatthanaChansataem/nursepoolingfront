@@ -10,7 +10,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
 
-    <title>NursePooling - DutyScheduleForm</title>
+    <title>NursePooling - RegulationsAndWelfare</title>
 
     <!-- Custom fonts for this template -->
     <link
@@ -43,7 +43,12 @@
       rel="stylesheet"
     />
   </head>
-  <style></style>
+  <style>
+    /* Set font size for the entire table */
+    /* table.dataTable {
+      font-size: 1em;
+    } */
+  </style>
 
   <body id="page-top">
     <!-- Page Wrapper -->
@@ -196,7 +201,7 @@
         </li>
 
         <!-- Nav Item - Tables -->
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="nav-link" href="dutyScheduleForm.html">
             <i class="fas fa-fw fa-folder"></i>
             <span>แบบฟอร์มส่งเวร</span></a
@@ -210,7 +215,7 @@
           >
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item active">
           <a class="nav-link" href="regulationsAndWelfare.html">
             <i class="fas fa-fw fa-file"></i>
             <span>ระเบียบปฏิบัติ สวัสดิการ</span></a
@@ -528,83 +533,68 @@
           <!-- Begin Page Content -->
           <div class="container-fluid">
             <!-- Page Heading -->
-            <h1 class="h3 mb-2 text-gray-800">แบบฟอร์มส่งเวร</h1>
-            <!-- <p class="mb-4">
-              DataTables is a third party plugin that is used to generate the
-              demo table below. For more information about DataTables, please
-              visit the
-              <a target="_blank" href="https://datatables.net"
-                >official DataTables documentation</a
-              >.
-            </p> -->
-            <div class="form-group row">
-              <div class="col-sm-3">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="beginDate"
-                  id="beginDate"
-                  placeholder="ปีที่เริ่ม"
-                />
-              </div>
-
-              <div
-                class="col-sm-9"
-                style="display: flex; justify-content: flex-end"
-              >
-                <a class="btn btn-success btn-icon-split" id="addSchedule">
-                  <span class="icon text-white-50">
-                    <i class="fa fa-plus"></i>
-                  </span>
-                  <span class="text">เพิ่มรายการ</span>
-                </a>
-              </div>
-            </div>
-
-            <div class="my-2"></div>
-            <!-- DataTales Example -->
-            <div class="card shadow mb-4">
-              <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">รายการ</h6>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table
-                    class="table table-bordered nowrap"
-                    id="dataTable"
-                    width="100%"
-                    cellspacing="0"
-                  >
-                    <thead>
-                      <tr>
-                        <th>No.</th>
-                        <th>วันเดือนปี</th>
-                        <th>ช่วงเวลา</th>
-                        <th>โรงพยาบาล</th>
-                        <th>Location</th>
-                        <th>แผนกลำดับที่ 1</th>
-                        <th>แผนกลำดับที่ 2</th>
-                        <th>แผนกลำดับที่ 3</th>
-                        <th>สถานะ</th>
-                        <th>หมายเหตุ</th>
-                        <th>แก้ไข</th>
-                      </tr>
-                    </thead>
-                  </table>
+            <h1 class="h3 mb-2 text-gray-800">ระเบียบปฏิบัติ สวัสดิการ</h1>
+            <div class="card o-hidden border-0 shadow-lg my-5">
+              <div class="card-body p-0">
+                <!-- <div class="row"> -->
+                <div class="col-lg-12">
+                  <div class="p-5">
+                    <div class="text-left">
+                      <h1 class="h4 text-gray-900 mb-4">
+                        ระเบียบปฏิบัติ สวัสดิการ
+                      </h1>
+                    </div>
+                    <!-- <form class="user">
+                      <div class="form-group">
+                        <input
+                          type="email"
+                          class="form-control form-control-user"
+                          id="exampleInputEmail"
+                          aria-describedby="emailHelp"
+                          placeholder="Enter Email Address..."
+                        />
+                      </div>
+                      <div class="form-group">
+                        <input
+                          type="password"
+                          class="form-control form-control-user"
+                          id="exampleInputPassword"
+                          placeholder="Password"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <div class="custom-control custom-checkbox small">
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="customCheck"
+                          />
+                          <label class="custom-control-label" for="customCheck"
+                            >Remember Me</label
+                          >
+                        </div>
+                      </div>
+                      <a
+                        href="index.html"
+                        class="btn btn-primary btn-user btn-block"
+                      >
+                        Login
+                      </a>
+                    </form> -->
+                    <hr />
+                    <!-- <div class="text-center">
+                      <a class="small" href="forgot-password.html"
+                        >Forgot Password?</a
+                      >
+                    </div>
+                    <div class="text-center">
+                      <a class="small" href="register.html"
+                        >Create an Account!</a
+                      >
+                    </div> -->
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="form-group row" style="display: none">
-              <div
-                class="col-sm-12"
-                style="display: flex; justify-content: flex-end"
-              >
-                <a class="btn btn-primary btn-icon-split" id="submit">
-                  <span class="icon text-white-50">
-                    <i class="fa fa-check"></i>
-                  </span>
-                  <span class="text">บันทึก</span>
-                </a>
+                <!-- </div> -->
               </div>
             </div>
           </div>
@@ -670,368 +660,6 @@
       </div>
     </div>
 
-    <!-- AddSchedule Modal-->
-    <div
-      class="modal fade"
-      id="addScheduleModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">
-              บันทึกรายการขอเวร
-            </h5>
-            <button
-              class="close"
-              type="button"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="form-group row">
-              <label for="dutyDateModal" class="col-sm-3 col-form-label-sm"
-                >วันที่ขอเวร</label
-              >
-              <div class="col-sm-6 div-input-dutyDateModal">
-                <input
-                  type="text"
-                  class="form-control form-control-sm"
-                  name="dutyDateModal"
-                  id="dutyDateModal"
-                  placeholder="วันที่ขอเวร"
-                />
-                <div class="invalid-feedback validation-error-message"></div>
-                <span class="form-text text-muted"></span>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="shiftStartModal" class="col-sm-1 col-form-label-sm"
-                >เวลา</label
-              >
-              <div class="col-sm-4 div-input-shiftStartModal">
-                <input
-                  type="time"
-                  class="form-control form-control-sm"
-                  name="shiftStartModal"
-                  id="shiftStartModal"
-                />
-                <div class="invalid-feedback validation-error-message"></div>
-                <span class="form-text text-muted"></span>
-              </div>
-              <label for="shiftEndModal" class="col-sm-1 col-form-label-sm"
-                >ถึง</label
-              >
-              <div class="col-sm-4 div-input-shiftEndModal">
-                <input
-                  type="time"
-                  class="form-control form-control-sm"
-                  name="shiftEndModal"
-                  id="shiftEndModal"
-                />
-                <div class="invalid-feedback validation-error-message"></div>
-                <span class="form-text text-muted"></span>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <div class="col-sm-6 div-input-hospitalCodeModal">
-                <label for="hospitalCodeModal" class="col-form-label-sm"
-                  >โรงพยาบาล</label
-                >
-                <select
-                  class="custom-select custom-select-sm hospitalCodeModal"
-                  name="hospitalCodeModal"
-                  id="hospitalCodeModal"
-                  data-size="4"
-                >
-                  <option selected disabled hidden>กรุณาเลือก</option>
-                </select>
-                <div class="invalid-feedback validation-error-message"></div>
-                <span class="form-text text-muted"></span>
-              </div>
-              <div class="col-sm-6 div-input-locationCodeModal">
-                <label for="locationCodeModal" class="col-form-label-sm"
-                  >Location</label
-                >
-
-                <select
-                  class="custom-select custom-select-sm locationCodeModal"
-                  name="locationCodeModal"
-                  id="locationCodeModal"
-                  data-size="4"
-                >
-                  <option selected disabled hidden>กรุณาเลือก</option>
-                </select>
-                <div class="invalid-feedback validation-error-message"></div>
-                <span class="form-text text-muted"></span>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <div class="col-sm-6 div-input-departmentCode1Modal">
-                <label for="departmentCode1Modal" class="col-form-label-sm"
-                  >แผนกลำดับที่ 1</label
-                >
-                <select
-                  class="custom-select custom-select-sm departmentCode1Modal"
-                  name="departmentCode1Modal"
-                  id="departmentCode1Modal"
-                  data-size="4"
-                >
-                  <option selected disabled hidden>กรุณาเลือก</option>
-                </select>
-                <div class="invalid-feedback validation-error-message"></div>
-                <span class="form-text text-muted"></span>
-              </div>
-              <div class="col-sm-6">
-                <label for="departmentCode2Modal" class="col-form-label-sm"
-                  >แผนกลำดับที่ 2</label
-                >
-
-                <select
-                  class="custom-select custom-select-sm departmentCode2Modal"
-                  name="departmentCode2Modal"
-                  id="departmentCode2Modal"
-                  data-size="4"
-                >
-                  <option selected disabled hidden>กรุณาเลือก</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <div class="col-sm-6">
-                <label for="departmentCode3Modal" class="col-form-label-sm"
-                  >แผนกลำดับที่ 3</label
-                >
-                <select
-                  class="custom-select custom-select-sm departmentCode3Modal"
-                  name="departmentCode3Modal"
-                  id="departmentCode3Modal"
-                  data-size="4"
-                >
-                  <option selected disabled hidden>กรุณาเลือก</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <div class="col-sm-12">
-                <textarea
-                  type="text"
-                  class="form-control form-control-sm"
-                  name="remarkModal"
-                  id="remarkModal"
-                  placeholder="หมายเหตุ"
-                ></textarea>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              class="btn btn-secondary"
-              type="button"
-              data-dismiss="modal"
-            >
-              ยกเลิก
-            </button>
-            <a class="btn btn-success" id="addScheduleBtnModal">บันทึก</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- EditSchedule Modal-->
-    <div
-      class="modal fade"
-      id="editScheduleModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleEditModalLabel">
-              แก้ขรายการขอเวร
-            </h5>
-            <button
-              class="close"
-              type="button"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="form-group row">
-              <label for="dutyDateEditModal" class="col-sm-3 col-form-label-sm"
-                >วันที่ขอเวร</label
-              >
-              <div class="col-sm-6">
-                <input
-                  type="text"
-                  class="form-control form-control-sm"
-                  name="dutyDateEditModal"
-                  id="dutyDateEditModal"
-                  placeholder="วันที่ขอเวร"
-                />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label
-                for="shiftStartEditModal"
-                class="col-sm-1 col-form-label-sm"
-                >เวลา</label
-              >
-              <div class="col-sm-4">
-                <input
-                  type="time"
-                  class="form-control form-control-sm"
-                  name="shiftStartEditModal"
-                  id="shiftStartEditModal"
-                />
-              </div>
-              <label for="shiftEndEditModal" class="col-sm-1 col-form-label-sm"
-                >ถึง</label
-              >
-              <div class="col-sm-4">
-                <input
-                  type="time"
-                  class="form-control form-control-sm"
-                  name="shiftEndEditModal"
-                  id="shiftEndEditModal"
-                />
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <div class="col-sm-6 div-input-hospitalCodeEditModal">
-                <label for="hospitalCodeEditModal" class="col-form-label-sm"
-                  >โรงพยาบาล</label
-                >
-                <select
-                  class="custom-select custom-select-sm hospitalCodeEditModal"
-                  name="hospitalCodeEditModal"
-                  id="hospitalCodeEditModal"
-                  data-size="4"
-                >
-                  <option selected disabled hidden>กรุณาเลือก</option>
-                </select>
-                <div class="invalid-feedback validation-error-message"></div>
-                <span class="form-text text-muted"></span>
-              </div>
-              <div class="col-sm-6">
-                <label for="locationCodeEditModal" class="col-form-label-sm"
-                  >Location</label
-                >
-
-                <select
-                  class="custom-select custom-select-sm locationCodeEditModal"
-                  name="locationCodeEditModal"
-                  id="locationCodeEditModal"
-                  data-size="4"
-                >
-                  <option selected disabled hidden>กรุณาเลือก</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <div class="col-sm-6">
-                <label for="departmentCode1EditModal" class="col-form-label-sm"
-                  >แผนกลำดับที่ 1</label
-                >
-                <select
-                  class="custom-select custom-select-sm departmentCode1EditModal"
-                  name="departmentCode1EditModal"
-                  id="departmentCode1EditModal"
-                  data-size="4"
-                >
-                  <option selected disabled hidden>กรุณาเลือก</option>
-                </select>
-              </div>
-              <div class="col-sm-6">
-                <label for="departmentCode2EditModal" class="col-form-label-sm"
-                  >แผนกลำดับที่ 2</label
-                >
-
-                <select
-                  class="custom-select custom-select-sm departmentCode2EditModal"
-                  name="departmentCode2EditModal"
-                  id="departmentCode2EditModal"
-                  data-size="4"
-                >
-                  <option selected disabled hidden>กรุณาเลือก</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <div class="col-sm-6">
-                <label for="departmentCode3EditModal" class="col-form-label-sm"
-                  >แผนกลำดับที่ 3</label
-                >
-                <select
-                  class="custom-select custom-select-sm departmentCode3EditModal"
-                  name="departmentCode3EditModal"
-                  id="departmentCode3EditModal"
-                  data-size="4"
-                >
-                  <option selected disabled hidden>กรุณาเลือก</option>
-                </select>
-              </div>
-              <div class="col-sm-6">
-                <label for="statusCodeModal" class="col-form-label-sm"
-                  >สถานะ</label
-                >
-
-                <select
-                  class="custom-select custom-select-sm statusCodeModal"
-                  name="statusCodeModal"
-                  id="statusCodeModal"
-                  data-size="4"
-                >
-                  <option selected disabled hidden>กรุณาเลือก</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <div class="col-sm-12">
-                <textarea
-                  type="text"
-                  class="form-control form-control-sm"
-                  name="remarkEditModal"
-                  id="remarkEditModal"
-                  placeholder="หมายเหตุ"
-                ></textarea>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              class="btn btn-secondary"
-              type="button"
-              data-dismiss="modal"
-            >
-              ยกเลิก
-            </button>
-            <a class="btn btn-success" id="editScheduleBtnModal">บันทึก</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -1058,7 +686,7 @@
 
     <!-- Custom scripts for all pages-->
     <!-- <script src="js/sb-admin-2.min.js"></script> -->
-    <script src="js/dutyScheduleForm.js"></script>
+    <script src="js/regulationsAndWelfare.js"></script>
 
     <!-- Page level custom scripts -->
     <!-- <script src="js/demo/datatables-demo.js"></script> -->

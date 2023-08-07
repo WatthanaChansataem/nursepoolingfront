@@ -60,9 +60,7 @@ let courseIdList = [];
 
 $(document).ready(function () {
   let setupDataDefered = $.Deferred();
-  LoadDutyFile();
   SetupData.init(setupDataDefered);
-  sessionStorage.setItem("test", "12356");
 
   $.when(setupDataDefered).done(function (success) {
     if (!success) {
@@ -478,81 +476,8 @@ $("#submitRegister").on("click", function () {
   }
   console.log(courseSubmit);
 
-  // let testfile = $("#testFile").files[0];
-  // console.log(testfile);
-  // let form = $("#fileUploadForm")[0];
-  // let data = new FormData(form);
-  // console.log(data);
-  // console.log(JSON.stringify(data));
+  let testfile = $("#testFile").files[0];
+  console.log(testfile);
 
-  // Get the file input element
-  // const fileInput = $("#fileUploadForm")[0];
-
-  // // Create a FormData object to store the file data
-  // const formData = new FormData();
-
-  // Add the selected file to the FormData object
-  // formData.append("file", fileInput.files[0]);
-
-  console.log(sessionStorage.getItem("test"));
-  // FileUpload
-  if ($("input[name=fieldcreditcontrolzone]")[0].files.length > 0) {
-    console.log($("input[name=fieldcreditcontrolzone]")[0].files[0]);
-    var data = new FormData();
-    data.append(
-      "documentName",
-      $("input[name=fieldcreditcontrolzone]")[0].files[0].name
-    );
-    data.append(
-      "document",
-      $("input[name=fieldcreditcontrolzone]")[0].files[0]
-    );
-    // data.append("documentId", document.documentId);
-
-    $.ajax({
-      url: "https://localhost:7063/api/document/create",
-      method: "POST",
-      data: data,
-      dataType: "json",
-      contentType: false,
-      processData: false,
-      success: function (res) {
-        if (res.status.code == 200) {
-          toastr.success("บันทึกสำเร็จ");
-        } else {
-          toastr.error(res.status.message);
-        }
-      },
-      error: function (res) {
-        toastr.error("ไม่สามารถบันทึกได้");
-      },
-    });
-  } else {
-  }
+  toastr.error("Something went wrong!", "Error");
 });
-
-$("input[name=fieldcreditcontrolzone]").on("change", function () {
-  $(".custom-file-label").html(
-    $("input[name=fieldcreditcontrolzone]")[0].files[0].name
-  );
-});
-
-let LoadDutyFile = function () {
-  $.ajax({
-    url: "https://localhost:7063/api/document/list",
-    type: "GET",
-    success: function (res) {
-      if (res.status.code == 200) {
-        console.log(res.data);
-        $("#fileName").html(res.data[0].fileName);
-        // var refFileUpload = $("#refFileUpload");
-        // refFileUpload.attr("href", res.data[0].contentType + res.data[0].content);
-      } else {
-        toastr.error("ไม่สามารถดึงข้อมูลเอกสารได้", "Error");
-      }
-    },
-    error: function (res) {
-      toastr.error("ไม่สามารถดึงข้อมูลเอกสารได้", "Error");
-    },
-  });
-};
