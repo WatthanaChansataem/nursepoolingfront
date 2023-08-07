@@ -707,7 +707,7 @@ let CreateDatatable = (function () {
           departmentCode3: departmentCode3,
           remark: remark,
           dutyScheduleId: currentDutyScheduleId,
-          status: status
+          status: status,
         };
         isValidate = 0;
 
@@ -716,9 +716,7 @@ let CreateDatatable = (function () {
             .find(`.div-input-dutyDateModal .form-control`)
             .addClass(isInvalidClass);
           modal
-            .find(
-              `.div-input-dutyDateModal .${validationErrorMessageClass}`gi
-            )
+            .find(`.div-input-dutyDateModal .${validationErrorMessageClass}`)
             .html(`กรุณาระบุ`);
           isValidate = 1;
         } else {
