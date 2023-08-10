@@ -630,7 +630,7 @@ let CreateDatatable = (function () {
           targets: 8,
           title: "สถานะ",
           render: function (data, type, full, meta) {
-            return `<a class="btn btn-${dutyScheduleSStatusMap[data].state}" >${dutyScheduleSStatusMap[data].desc}</a>`;
+            return `<a class="btn btn-${dutyScheduleSStatusMap[data].state}" style="width: 90px;">${dutyScheduleSStatusMap[data].desc}</a>`;
           },
         },
         {

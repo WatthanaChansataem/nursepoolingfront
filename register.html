@@ -79,12 +79,17 @@
                   />
                   <br />
                   <br />
-                  <input
-                    class="input-sm"
-                    type="file"
-                    onchange="readURL(this);"
-                    style="width: 200px; line-height: 1em"
-                  />
+                  <div class="text-center" style="display: none">
+                    <input
+                      class="input-sm"
+                      type="file"
+                      onchange="readURL(this);"
+                      style="width: 200px; line-height: 1em"
+                      id="changeProfileImage"
+                      name="changeProfileImage"
+                    />
+                  </div>
+                  <a class="small" href="#" id="editProfile">รูปโปรไฟล์</a>
                 </div>
                 <br />
                 <form class="user">
@@ -231,8 +236,6 @@
                       ></div>
                       <span class="form-text text-muted"></span>
                     </div>
-
-                    
                   </div>
 
                   <!-- <form id="fileUploadForm">
