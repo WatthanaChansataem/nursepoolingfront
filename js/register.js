@@ -74,7 +74,7 @@ $(document).ready(function () {
   let setupDataDefered = $.Deferred();
   // LoadDutyFile();
   SetupData.init(setupDataDefered);
-  sessionStorage.setItem("test", "12356");
+  localStorage.setItem("test", "12356");
 
   $.when(setupDataDefered).done(function (success) {
     if (!success) {
@@ -635,7 +635,7 @@ $("#submitRegister").on("click", function () {
   }
   console.log(courseSubmit);
 
-  console.log(sessionStorage.getItem("test"));
+  console.log(localStorage.getItem("test"));
 
   // console.log($(`#pdpaCheck`).is(":checked"));
   let pdpaCheck = $(`#pdpaCheck`).is(":checked");

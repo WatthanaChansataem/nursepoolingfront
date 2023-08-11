@@ -90,6 +90,9 @@ let SetupData = (function () {
     $.ajax({
       url: "https://localhost:7063/api/title/list",
       type: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
       success: function (res) {
         if (res.status.code == 200) {
           titleMaster = res.data;
@@ -113,6 +116,9 @@ let SetupData = (function () {
     $.ajax({
       url: "https://localhost:7063/api/educationalQualification/list",
       type: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
       success: function (res) {
         if (res.status.code == 200) {
           educationalQualificationMaster = res.data;
@@ -136,6 +142,9 @@ let SetupData = (function () {
     $.ajax({
       url: "https://localhost:7063/api/experienceType/list",
       type: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
       success: function (res) {
         if (res.status.code == 200) {
           experienceTypeMaster = res.data;
@@ -159,6 +168,9 @@ let SetupData = (function () {
     $.ajax({
       url: "https://localhost:7063/api/position/list",
       type: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
       success: function (res) {
         if (res.status.code == 200) {
           positionMaster = res.data;
@@ -179,15 +191,12 @@ let SetupData = (function () {
   };
 
   let loadUserData = function (defered) {
-    let objData = {
-      userId: 6,
-    };
     $.ajax({
       url: "https://localhost:7063/api/user/details",
-      type: "POST",
-      data: JSON.stringify(objData),
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
+      type: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
       success: function (res) {
         if (res.status.code == 200) {
           userData = res.data;
@@ -195,15 +204,20 @@ let SetupData = (function () {
           //   for (let data of res.data) {
           //     positionMap.set(data.positionCode, data);
           //   }
+          $("#currentUserName").html(
+            userData.firstName + " " + userData.lastName
+          );
           defered.resolve(true);
         } else {
           defered.resolve(false);
           toastr.error("ไม่สามารถดึงข้อมูลผู้ใช้ได้", "Error");
+          window.location.href = "login.html";
         }
       },
       error: function (res) {
         defered.resolve(false);
         toastr.error("ไม่สามารถดึงข้อมูลผู้ใช้ได้", "Error");
+        window.location.href = "login.html";
       },
     });
   };
@@ -289,7 +303,6 @@ let renderPage = function () {
   $("#employeeNo").val(userData.employeeNo);
   $("#vendorNo").val(userData.vendorNo);
 
-  console.log(userData);
   renderEducation(userData.educationList);
   renderExperience(userData.experienceList);
   renderTrainingCourse(userData.trainingCourseList);
@@ -737,6 +750,9 @@ $("#submitRegister").on("click", function () {
   $.ajax({
     url: "https://localhost:7063/api/user/update",
     type: "POST",
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
     data: JSON.stringify(objadddata),
     contentType: "application/json; charset=utf-8",
     dataType: "json",
@@ -757,6 +773,9 @@ let upLoadFile = function (uploadFileData, defer) {
   $.ajax({
     url: "https://localhost:7063/api/document/create",
     method: "POST",
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
     data: uploadFileData,
     dataType: "json",
     contentType: false,

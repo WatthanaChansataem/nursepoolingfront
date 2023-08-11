@@ -47,9 +47,58 @@
     });
 })(jQuery);
 
-
 $(document).ready(function () {
+  let setupDataDefered = $.Deferred();
+  SetupData.init(setupDataDefered);
 
-  console.log("NewPage");
-
+  $.when(setupDataDefered).done(function (success) {
+    if (!success) {
+      return;
+    }
+    // renderPage();
+  });
 });
+
+let SetupData = (function () {
+  let loadUserData = function (defered) {
+    $.ajax({
+      url: "https://localhost:7063/api/user/details",
+      type: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      success: function (res) {
+        if (res.status.code == 200) {
+          let userData = res.data;
+          $("#currentUserName").html(
+            userData.firstName + " " + userData.lastName
+          );
+          defered.resolve(true);
+        } else {
+          defered.resolve(false);
+          toastr.error("ไม่สามารถดึงข้อมูลผู้ใช้ได้", "Error");
+          window.location.href = "login.html";
+        }
+      },
+      error: function (res) {
+        defered.resolve(false);
+        toastr.error("ไม่สามารถดึงข้อมูลผู้ใช้ได้", "Error");
+        window.location.href = "login.html";
+      },
+    });
+  };
+  return {
+    init: function (defered) {
+      let userDataDefered = $.Deferred();
+      loadUserData(userDataDefered);
+
+      $.when(userDataDefered).done(function (userDataResult) {
+        if (userDataResult) {
+          defered.resolve(true);
+        } else {
+          defered.resolve(false);
+        }
+      });
+    },
+  };
+})();

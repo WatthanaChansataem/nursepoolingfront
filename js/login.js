@@ -43,5 +43,35 @@
 })(jQuery);
 
 $(document).ready(function () {
-  console.log(sessionStorage.getItem("test"));
+  // localStorage.clear();
+  console.log(localStorage.getItem("token"));
+});
+
+$("#loginButton").on("click", function () {
+  let userName = $(`#userName`).val();
+  let password = $(`#password`).val();
+  let rememberMe = $(`#rememberMe`).is(":checked");
+  let objData = {
+    userName: userName,
+    password: password,
+    rememberMe: rememberMe,
+  };
+  $.ajax({
+    url: "https://localhost:7063/api/user/login",
+    type: "POST",
+    data: JSON.stringify(objData),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (res) {
+      if (res.status.code == 200) {
+        localStorage.setItem("token", res.data);
+        window.location.href = "dutyScheduleForm.html";
+      } else {
+        toastr.error(res.status.message);
+      }
+    },
+    error: function (res) {
+      toastr.error("ไม่สามารถ Login ได้", "Error");
+    },
+  });
 });

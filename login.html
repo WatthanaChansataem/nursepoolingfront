@@ -25,6 +25,12 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+
+    <!-- Include toastr CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"
+    />
   </head>
 
   <body class="bg-gradient-primary">
@@ -49,16 +55,16 @@
                         <input
                           type="email"
                           class="form-control form-control-user"
-                          id="exampleInputEmail"
+                          id="userName"
                           aria-describedby="emailHelp"
-                          placeholder="Enter Email Address..."
+                          placeholder="Username"
                         />
                       </div>
                       <div class="form-group">
                         <input
                           type="password"
                           class="form-control form-control-user"
-                          id="exampleInputPassword"
+                          id="password"
                           placeholder="Password"
                         />
                       </div>
@@ -67,16 +73,17 @@
                           <input
                             type="checkbox"
                             class="custom-control-input"
-                            id="customCheck"
+                            id="rememberMe"
                           />
-                          <label class="custom-control-label" for="customCheck"
+                          <label class="custom-control-label" for="rememberMe"
                             >Remember Me</label
                           >
                         </div>
                       </div>
+                      <!-- href="dutyScheduleForm.html" -->
                       <a
-                        href="dutyScheduleForm.html"
                         class="btn btn-primary btn-user btn-block"
+                        id="loginButton"
                       >
                         Login
                       </a>
@@ -107,6 +114,9 @@
 
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- toastr -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="js/login.js"></script>

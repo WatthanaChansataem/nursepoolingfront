@@ -110,6 +110,9 @@ let SetupData = (function () {
     $.ajax({
       url: "https://localhost:7063/api/hospital/list",
       type: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
       success: function (res) {
         if (res.status.code == 200) {
           hospitalMaster = res.data;
@@ -133,6 +136,9 @@ let SetupData = (function () {
     $.ajax({
       url: "https://localhost:7063/api/location/list",
       type: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
       success: function (res) {
         if (res.status.code == 200) {
           locationMaster = res.data;
@@ -156,6 +162,9 @@ let SetupData = (function () {
     $.ajax({
       url: "https://localhost:7063/api/department/list",
       type: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
       success: function (res) {
         if (res.status.code == 200) {
           departmentMaster = res.data;
@@ -174,24 +183,65 @@ let SetupData = (function () {
       },
     });
   };
+
+  let loadUserData = function (defered) {
+    $.ajax({
+      url: "https://localhost:7063/api/user/details",
+      type: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      success: function (res) {
+        if (res.status.code == 200) {
+          let userData = res.data;
+          $("#currentUserName").html(
+            userData.firstName + " " + userData.lastName
+          );
+          defered.resolve(true);
+        } else {
+          defered.resolve(false);
+          toastr.error("ไม่สามารถดึงข้อมูลผู้ใช้ได้", "Error");
+          window.location.href = "login.html";
+        }
+      },
+      error: function (res) {
+        defered.resolve(false);
+        toastr.error("ไม่สามารถดึงข้อมูลผู้ใช้ได้", "Error");
+        window.location.href = "login.html";
+      },
+    });
+  };
   return {
     init: function (defered) {
       let hospitalDefered = $.Deferred();
       let locationDefered = $.Deferred();
       let departmentDefered = $.Deferred();
+      let userDataDefered = $.Deferred();
       loadHospital(hospitalDefered);
       loadLocation(locationDefered);
       loadDepartment(departmentDefered);
+      loadUserData(userDataDefered);
 
-      $.when(hospitalDefered, locationDefered, departmentDefered).done(
-        function (hospitalResult, locationDefered, departmentDefered) {
-          if (hospitalResult && locationDefered && departmentDefered) {
-            defered.resolve(true);
-          } else {
-            defered.resolve(false);
-          }
+      $.when(
+        hospitalDefered,
+        locationDefered,
+        departmentDefered,
+        userDataDefered
+      ).done(function (
+        hospitalResult,
+        locationDefered,
+        departmentDefered,
+        userDataResult
+      ) {
+        if (
+          (hospitalResult && locationDefered && departmentDefered,
+          userDataResult)
+        ) {
+          defered.resolve(true);
+        } else {
+          defered.resolve(false);
         }
-      );
+      });
     },
   };
 })();
@@ -327,7 +377,7 @@ let renderPage = function () {
     })
     .datepicker("setDate", new Date());
 
-  LoadDutyScheduleForm();
+  // LoadDutyScheduleForm();
 };
 
 $("#addSchedule").on("click", function () {
@@ -478,6 +528,9 @@ $("#addScheduleBtnModal").on("click", function () {
   $.ajax({
     url: "https://localhost:7063/api/dutySchedule/create",
     type: "POST",
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
     data: JSON.stringify(objData),
     contentType: "application/json; charset=utf-8",
     dataType: "json",
@@ -507,6 +560,9 @@ $("#submit").on("click", function () {
     $.ajax({
       url: "https://localhost:7063/api/dutySchedule/create",
       type: "POST",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
       data: JSON.stringify(objData),
       contentType: "application/json; charset=utf-8",
       dataType: "json",
@@ -836,6 +892,9 @@ let CreateDatatable = (function () {
         $.ajax({
           url: "https://localhost:7063/api/dutySchedule/update",
           type: "POST",
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
           data: JSON.stringify(objData),
           contentType: "application/json; charset=utf-8",
           dataType: "json",
@@ -882,11 +941,13 @@ let CreateDatatable = (function () {
 let LoadDutyScheduleForm = function () {
   let objData = {
     dutyDate: $("#beginDate").val(),
-    userId: 1,
   };
   $.ajax({
     url: "https://localhost:7063/api/dutySchedule/searchDutyScheduleForDutyScheduleForm",
     type: "POST",
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
     data: JSON.stringify(objData),
     contentType: "application/json; charset=utf-8",
     dataType: "json",
