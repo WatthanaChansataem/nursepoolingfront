@@ -291,6 +291,7 @@ let renderPage = function () {
       `https://localhost:7063/api/document/get/${docIDCardCopy.documentId}`
     );
     $("#fileNameIDCardCopy").html(docIDCardCopy.documentName);
+    $("input[name=iDCardCopy]").attr("documentId", docIDCardCopy.documentId);
   }
 
   if (docProfessionalLicenseCopy != null) {
@@ -300,6 +301,10 @@ let renderPage = function () {
     );
     $("#fileNameProfessionalLicenseCopy").html(
       docProfessionalLicenseCopy.documentName
+    );
+    $("input[name=professionalLicenseCopy]").attr(
+      "documentId",
+      docProfessionalLicenseCopy.documentId
     );
   }
 
@@ -352,22 +357,20 @@ let renderPage = function () {
 
 $("input[name=iDCardCopy]").on("change", function () {
   $(".iDCardCopyLabel").html($(this)[0].files[0].name);
+  let changeElement = $("input[name=iDCardCopy]");
+  var uploadata = new FormData();
+  uploadata.append("documentName", changeElement[0].files[0].name);
+  uploadata.append("document", changeElement[0].files[0]);
+  uploadata.append("documentTypeCode", DocumentTypeCode.IDCardCopy);
 
-  // var uploadata = new FormData();
-  // uploadata.append("documentName", $(this)[0].files[0].name);
-  // uploadata.append("document", $(this)[0].files[0]);
-  // uploadata.append("documentTypeCode", DocumentTypeCode.IDCardCopy);
-
-  // let defer = $.Deferred();
-  // upLoadFile(uploadata, defer);
-  // $.when(defer).done(function (result) {
-  //   if (result) {
-  //     resData = result;
-  //     $(this).attr("documentId", resData.documentId);
-  //     console.log(resData);
-  //     console.log($(this).attr("documentId"));
-  //   }
-  // });
+  let defer = $.Deferred();
+  upLoadFile(uploadata, defer);
+  $.when(defer).done(function (result) {
+    if (result) {
+      resData = result;
+      changeElement.attr("documentId", resData.documentId);
+    }
+  });
 });
 
 $("input[name=changeProfileImage]").on("change", function () {
@@ -392,6 +395,23 @@ $("input[name=professionalLicenseCopy]").on("change", function () {
   $(".professionalLicenseCopyLabel").html(
     $("input[name=professionalLicenseCopy]")[0].files[0].name
   );
+  let changeElement = $("input[name=professionalLicenseCopy]");
+  var uploadata = new FormData();
+  uploadata.append("documentName", changeElement[0].files[0].name);
+  uploadata.append("document", changeElement[0].files[0]);
+  uploadata.append(
+    "documentTypeCode",
+    DocumentTypeCode.ProfessionalLicenseCopy
+  );
+
+  let defer = $.Deferred();
+  upLoadFile(uploadata, defer);
+  $.when(defer).done(function (result) {
+    if (result) {
+      resData = result;
+      changeElement.attr("documentId", resData.documentId);
+    }
+  });
 });
 
 $("#addEducation").on("click", function () {
@@ -991,7 +1011,13 @@ $("#submitRegister").on("click", function () {
   }
   console.log(courseSubmit);
 
-  console.log(sessionStorage.getItem("test"));
+  let iDCardCopyDocumentId = parseInt(
+    $("input[name=iDCardCopy]").attr("documentId")
+  );
+
+  let professionalLicenseCopyDocumentId = parseInt(
+    $("input[name=professionalLicenseCopy]").attr("documentId")
+  );
 
   let titleCode = parseInt($("#titleCode").val());
   let firstName = $("#firstName").val();
@@ -1004,6 +1030,24 @@ $("#submitRegister").on("click", function () {
   let positionCode = parseInt($("#positionCode").val());
   let employeeNo = $(`#employeeNo`).val();
   let vendorNo = $(`#vendorNo`).val();
+
+  let deleteEducations = $.grep(userData.educationList, function (o) {
+    return !$.map(educationSubmit, function (n) {
+      return n.educationCode;
+    }).includes(o.educationCode);
+  });
+
+  let deleteExperiences = $.grep(userData.experienceList, function (o) {
+    return !$.map(experienceSubmit, function (n) {
+      return n.experienceCode;
+    }).includes(o.experienceCode);
+  });
+
+  let deleteTrainingCourses = $.grep(userData.trainingCourseList, function (o) {
+    return !$.map(courseSubmit, function (n) {
+      return n.trainingCourseCode;
+    }).includes(o.trainingCourseCode);
+  });
 
   let objadddata = {
     userId: 0,
@@ -1021,7 +1065,13 @@ $("#submitRegister").on("click", function () {
     educations: educationSubmit,
     experiences: experienceSubmit,
     trainingCourses: courseSubmit,
+    iDCardCopyDocumentId: iDCardCopyDocumentId,
+    professionalLicenseCopyDocumentId: professionalLicenseCopyDocumentId,
+    deleteTrainingCourses: deleteTrainingCourses,
+    deleteEducations: deleteEducations,
+    deleteExperiences: deleteExperiences,
   };
+  // console.log(objadddata);
   if (
     objadddata["titleCode"] == "" ||
     objadddata["titleCode"] == null ||
@@ -1151,11 +1201,6 @@ $("#submitRegister").on("click", function () {
     $(`.div-input-positionCode .custom-select`).removeClass(isInvalidClass);
   }
 
-  console.log(objadddata);
-
-  if (isValidate == 1) {
-    return;
-  }
   $.ajax({
     url: "https://localhost:7063/api/user/update",
     type: "POST",
@@ -1191,7 +1236,7 @@ let upLoadFile = function (uploadFileData, defer) {
     processData: false,
     success: function (res) {
       if (res.status.code == 200) {
-        toastr.success("บันทึกไฟล์สำเร็จ");
+        // toastr.success("บันทึกไฟล์สำเร็จ");
         defer.resolve(res.data);
       } else {
         toastr.error(res.status.message);
