@@ -73,12 +73,12 @@
         <hr class="sidebar-divider my-0" />
 
         <!-- Nav Item - Dashboard -->
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="index.html">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a
           >
-        </li>
+        </li> -->
 
         <!-- Divider -->
         <!-- <hr class="sidebar-divider" /> -->
@@ -148,7 +148,7 @@
         <hr class="sidebar-divider" />
 
         <!-- Heading -->
-        <div class="sidebar-heading">Addons</div>
+        <div class="sidebar-heading">MENU</div>
 
         <!-- Nav Item - Pages Collapse Menu -->
         <!-- <li class="nav-item">
@@ -317,7 +317,7 @@
               </li>
 
               <!-- Nav Item - Alerts -->
-              <li class="nav-item dropdown no-arrow mx-1">
+              <!-- <li class="nav-item dropdown no-arrow mx-1">
                 <a
                   class="nav-link dropdown-toggle"
                   href="#"
@@ -328,10 +328,10 @@
                   aria-expanded="false"
                 >
                   <i class="fas fa-bell fa-fw"></i>
-                  <!-- Counter - Alerts -->
+                
                   <span class="badge badge-danger badge-counter">3+</span>
                 </a>
-                <!-- Dropdown - Alerts -->
+               
                 <div
                   class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                   aria-labelledby="alertsDropdown"
@@ -379,10 +379,10 @@
                     >Show All Alerts</a
                   >
                 </div>
-              </li>
+              </li> -->
 
               <!-- Nav Item - Messages -->
-              <li class="nav-item dropdown no-arrow mx-1">
+              <!-- <li class="nav-item dropdown no-arrow mx-1">
                 <a
                   class="nav-link dropdown-toggle"
                   href="#"
@@ -393,10 +393,10 @@
                   aria-expanded="false"
                 >
                   <i class="fas fa-envelope fa-fw"></i>
-                  <!-- Counter - Messages -->
+                  
                   <span class="badge badge-danger badge-counter">7</span>
                 </a>
-                <!-- Dropdown - Messages -->
+                
                 <div
                   class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                   aria-labelledby="messagesDropdown"
@@ -479,7 +479,7 @@
                     >Read More Messages</a
                   >
                 </div>
-              </li>
+              </li> -->
 
               <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -501,6 +501,7 @@
                   >
                   <img
                     class="img-profile rounded-circle"
+                    id="navProfileImg"
                     src="img/undraw_profile.svg"
                   />
                 </a>
@@ -509,18 +510,18 @@
                   class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                   aria-labelledby="userDropdown"
                 >
-                  <a class="dropdown-item" href="#">
+                  <a class="dropdown-item" href="profile.html">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Profile
+                    ข้อมูลส่วนตัว
                   </a>
-                  <a class="dropdown-item" href="#">
+                  <!-- <a class="dropdown-item" href="#">
                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                     Settings
                   </a>
                   <a class="dropdown-item" href="#">
                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                     Activity Log
-                  </a>
+                  </a> -->
                   <div class="dropdown-divider"></div>
                   <a
                     class="dropdown-item"
@@ -531,7 +532,7 @@
                     <i
                       class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"
                     ></i>
-                    Logout
+                    ล็อกเอาท์
                   </a>
                 </div>
               </li>
@@ -691,7 +692,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <h5 class="modal-title" id="exampleModalLabel">ออกจากระบบ?</h5>
             <button
               class="close"
               type="button"
@@ -701,18 +702,16 @@
               <span aria-hidden="true">×</span>
             </button>
           </div>
-          <div class="modal-body">
-            Select "Logout" below if you are ready to end your current session.
-          </div>
+          <div class="modal-body">กดปุ่ม "ล็อกเอาท์" เพื่อออกจากระบบ.</div>
           <div class="modal-footer">
             <button
               class="btn btn-secondary"
               type="button"
               data-dismiss="modal"
             >
-              Cancel
+              ยกเลิก
             </button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
+            <a class="btn btn-primary" id="logoutConfirm">ล็อกเอาท์</a>
           </div>
         </div>
       </div>

@@ -47,6 +47,10 @@
     });
 })(jQuery);
 
+let isInvalidClass = "is-invalid";
+let validationErrorMessageClass = "validation-error-message";
+let isValidate = 0;
+
 let titleMap = new Map();
 let titleMaster;
 let positionMap = new Map();
@@ -246,32 +250,60 @@ let renderPage = function () {
 
 $("input[name=iDCardCopy]").on("change", function () {
   $(".iDCardCopyLabel").html($(this)[0].files[0].name);
+  let changeElement = $("input[name=iDCardCopy]");
+  var uploadata = new FormData();
+  uploadata.append("documentName", changeElement[0].files[0].name);
+  uploadata.append("document", changeElement[0].files[0]);
+  uploadata.append("documentTypeCode", DocumentTypeCode.IDCardCopy);
 
-  // var uploadata = new FormData();
-  // uploadata.append("documentName", $(this)[0].files[0].name);
-  // uploadata.append("document", $(this)[0].files[0]);
-  // uploadata.append("documentTypeCode", DocumentTypeCode.IDCardCopy);
-
-  // let defer = $.Deferred();
-  // upLoadFile(uploadata, defer);
-  // $.when(defer).done(function (result) {
-  //   if (result) {
-  //     resData = result;
-  //     $(this).attr("documentId", resData.documentId);
-  //     console.log(resData);
-  //     console.log($(this).attr("documentId"));
-  //   }
-  // });
+  let defer = $.Deferred();
+  upLoadFile(uploadata, defer);
+  $.when(defer).done(function (result) {
+    if (result) {
+      resData = result;
+      changeElement.attr("documentId", resData.documentId);
+    }
+  });
 });
 
 $("input[name=changeProfileImage]").on("change", function () {
-  console.log("changeProfileImage");
+  let changeElement = $("input[name=changeProfileImage]");
+  var uploadata = new FormData();
+  uploadata.append("documentName", changeElement[0].files[0].name);
+  uploadata.append("document", changeElement[0].files[0]);
+  uploadata.append("documentTypeCode", DocumentTypeCode.ProfileImg);
+
+  let defer = $.Deferred();
+  upLoadFileWithContent(uploadata, defer);
+  $.when(defer).done(function (result) {
+    if (result) {
+      resData = result;
+      changeElement.attr("documentId", resData.documentId);
+    }
+  });
 });
 
 $("input[name=professionalLicenseCopy]").on("change", function () {
   $(".professionalLicenseCopyLabel").html(
     $("input[name=professionalLicenseCopy]")[0].files[0].name
   );
+  let changeElement = $("input[name=professionalLicenseCopy]");
+  var uploadata = new FormData();
+  uploadata.append("documentName", changeElement[0].files[0].name);
+  uploadata.append("document", changeElement[0].files[0]);
+  uploadata.append(
+    "documentTypeCode",
+    DocumentTypeCode.ProfessionalLicenseCopy
+  );
+
+  let defer = $.Deferred();
+  upLoadFile(uploadata, defer);
+  $.when(defer).done(function (result) {
+    if (result) {
+      resData = result;
+      changeElement.attr("documentId", resData.documentId);
+    }
+  });
 });
 
 $("#addEducation").on("click", function () {
@@ -280,7 +312,7 @@ $("#addEducation").on("click", function () {
   $("#collapseCardEducation").append(`
     <div class="card-body" id="education${educationCount}">
                           <div class="form-group row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-4 div-input-educationalQualificationCode${educationCount}">
                               <select
                                 class="custom-select custom-select-sm educationalQualificationCode"
                                 name="educationalQualificationCode${educationCount}"
@@ -289,16 +321,24 @@ $("#addEducation").on("click", function () {
                               >
                                 <option selected disabled>วุฒิการศึกษา</option>
                               </select>
+                              <div
+                                class="invalid-feedback validation-error-message"
+                              ></div>
+                              <span class="form-text text-muted"></span>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-4 div-input-majorCode${educationCount}">
                               <input
                                 type="text"
                                 class="form-control form-control-sm"
                                 id="majorCode${educationCount}"
                                 placeholder="สาขา"
                               />
+                              <div
+                                class="invalid-feedback validation-error-message"
+                              ></div>
+                              <span class="form-text text-muted"></span>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-4 div-input-graduationYear${educationCount}">
                               <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -306,10 +346,14 @@ $("#addEducation").on("click", function () {
                                 id="graduationYear${educationCount}"
                                 placeholder="ปีที่จบการศึกษา"
                               />
+                              <div
+                                class="invalid-feedback validation-error-message"
+                              ></div>
+                              <span class="form-text text-muted"></span>
                             </div>
                           </div>
                           <div class="form-group row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-6 div-input-university${educationCount}">
                               <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -317,6 +361,10 @@ $("#addEducation").on("click", function () {
                                 id="university${educationCount}"
                                 placeholder="มหาวิทยาลัย"
                               />
+                              <div
+                                class="invalid-feedback validation-error-message"
+                              ></div>
+                              <span class="form-text text-muted"></span>
                             </div>
                             <a
                                 class="btn btn-danger btn-circle btn-sm"
@@ -353,7 +401,7 @@ $("#addExperience").on("click", function () {
   $("#collapseCardExperience").append(`
     <div class="card-body" id="experience${experienceCount}">
                           <div class="form-group row">
-                            <div class="col-sm-3">
+                            <div class="col-sm-3 div-input-experienceTypeCode${experienceCount}">
                               <select
                                 class="custom-select custom-select-sm experienceTypeCode"
                                 name="experienceTypeCode${experienceCount}"
@@ -362,8 +410,12 @@ $("#addExperience").on("click", function () {
                               >
                                 <option selected disabled>หมวดหมู่</option>
                               </select>
+                              <div
+                                class="invalid-feedback validation-error-message"
+                              ></div>
+                              <span class="form-text text-muted"></span>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-3 div-input-positionCode${experienceCount}">
                               <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -371,8 +423,12 @@ $("#addExperience").on("click", function () {
                                 id="positionCode${experienceCount}"
                                 placeholder="ตำแหน่ง"
                               />
+                              <div
+                                class="invalid-feedback validation-error-message"
+                              ></div>
+                              <span class="form-text text-muted"></span>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-3 div-input-beginYear${experienceCount}">
                               <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -380,8 +436,12 @@ $("#addExperience").on("click", function () {
                                 id="beginYear${experienceCount}"
                                 placeholder="ปีที่เริ่ม"
                               />
+                              <div
+                                class="invalid-feedback validation-error-message"
+                              ></div>
+                              <span class="form-text text-muted"></span>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-3 div-input-endYear${experienceCount}">
                               <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -389,6 +449,10 @@ $("#addExperience").on("click", function () {
                                 id="endYear${experienceCount}"
                                 placeholder="ปีที่สิ้นสุด"
                               />
+                              <div
+                                class="invalid-feedback validation-error-message"
+                              ></div>
+                              <span class="form-text text-muted"></span>
                             </div>
                           </div>
                           <div class="form-group row">
@@ -453,15 +517,19 @@ $("#addCourse").on("click", function () {
   $("#collapseCardCourse").append(`
     <div class="card-body" id="course${courseCount}">
                           <div class="form-group row">
-                            <div class="col-sm-8">
+                            <div class="col-sm-8 div-input-trainingCourseDesc${courseCount}">
                               <input
                                 type="text"
                                 class="form-control form-control-sm"
                                 id="trainingCourseDesc${courseCount}"
                                 placeholder="ชื่อคอร์สอบรม"
                               />
+                              <div
+                                class="invalid-feedback validation-error-message"
+                              ></div>
+                              <span class="form-text text-muted"></span>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-4 div-input-trainingYear${courseCount}">
                               <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -469,6 +537,10 @@ $("#addCourse").on("click", function () {
                                 id="trainingYear${courseCount}"
                                 placeholder="ปีที่อบรม"
                               />
+                              <div
+                                class="invalid-feedback validation-error-message"
+                              ></div>
+                              <span class="form-text text-muted"></span>
                             </div>
                           </div>
                           <div class="form-group row">
@@ -574,6 +646,7 @@ $("#submitRegister").on("click", function () {
   let educationSubmit = [];
   let experienceSubmit = [];
   let courseSubmit = [];
+  isValidate = 0;
 
   for (let i = 0; i < educationIdList.length; i++) {
     let educationCount = educationIdList[i];
@@ -590,6 +663,71 @@ $("#submitRegister").on("click", function () {
       graduationYear,
       university,
     };
+
+    if (
+      obj["educationalQualificationCode"] == "" ||
+      obj["educationalQualificationCode"] == null ||
+      isNaN(obj["educationalQualificationCode"])
+    ) {
+      $(
+        `.div-input-educationalQualificationCode${educationCount} .custom-select`
+      ).addClass(isInvalidClass);
+      $(
+        `.div-input-educationalQualificationCode${educationCount} .${validationErrorMessageClass}`
+      ).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(
+        `.div-input-educationalQualificationCode${educationCount} .custom-select`
+      ).removeClass(isInvalidClass);
+    }
+
+    if (obj["majorCode"] == "" || obj["majorCode"] == null) {
+      $(`.div-input-majorCode${educationCount} .form-control`).addClass(
+        isInvalidClass
+      );
+      $(
+        `.div-input-majorCode${educationCount} .${validationErrorMessageClass}`
+      ).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(`.div-input-majorCode${educationCount} .form-control`).removeClass(
+        isInvalidClass
+      );
+    }
+
+    if (
+      obj["graduationYear"] == "" ||
+      obj["graduationYear"] == null ||
+      isNaN(obj["graduationYear"])
+    ) {
+      $(`.div-input-graduationYear${educationCount} .form-control`).addClass(
+        isInvalidClass
+      );
+      $(
+        `.div-input-graduationYear${educationCount} .${validationErrorMessageClass}`
+      ).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(`.div-input-graduationYear${educationCount} .form-control`).removeClass(
+        isInvalidClass
+      );
+    }
+
+    if (obj["university"] == "" || obj["university"] == null) {
+      $(`.div-input-university${educationCount} .form-control`).addClass(
+        isInvalidClass
+      );
+      $(
+        `.div-input-university${educationCount} .${validationErrorMessageClass}`
+      ).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(`.div-input-university${educationCount} .form-control`).removeClass(
+        isInvalidClass
+      );
+    }
+
     educationSubmit.push(obj);
   }
 
@@ -613,6 +751,75 @@ $("#submitRegister").on("click", function () {
       endYear,
       experienceDetail,
     };
+
+    if (
+      obj["experienceTypeCode"] == "" ||
+      obj["experienceTypeCode"] == null ||
+      isNaN(obj["experienceTypeCode"])
+    ) {
+      $(
+        `.div-input-experienceTypeCode${experienceCount} .custom-select`
+      ).addClass(isInvalidClass);
+      $(
+        `.div-input-experienceTypeCode${experienceCount} .${validationErrorMessageClass}`
+      ).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(
+        `.div-input-experienceTypeCode${experienceCount} .custom-select`
+      ).removeClass(isInvalidClass);
+    }
+
+    if (obj["positionCode"] == "" || obj["positionCode"] == null) {
+      $(`.div-input-positionCode${experienceCount} .form-control`).addClass(
+        isInvalidClass
+      );
+      $(
+        `.div-input-positionCode${experienceCount} .${validationErrorMessageClass}`
+      ).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(`.div-input-positionCode${experienceCount} .form-control`).removeClass(
+        isInvalidClass
+      );
+    }
+
+    if (
+      obj["beginYear"] == "" ||
+      obj["beginYear"] == null ||
+      isNaN(obj["beginYear"])
+    ) {
+      $(`.div-input-beginYear${experienceCount} .form-control`).addClass(
+        isInvalidClass
+      );
+      $(
+        `.div-input-beginYear${experienceCount} .${validationErrorMessageClass}`
+      ).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(`.div-input-beginYear${experienceCount} .form-control`).removeClass(
+        isInvalidClass
+      );
+    }
+
+    if (
+      obj["endYear"] == "" ||
+      obj["endYear"] == null ||
+      isNaN(obj["endYear"])
+    ) {
+      $(`.div-input-endYear${experienceCount} .form-control`).addClass(
+        isInvalidClass
+      );
+      $(
+        `.div-input-endYear${experienceCount} .${validationErrorMessageClass}`
+      ).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(`.div-input-endYear${experienceCount} .form-control`).removeClass(
+        isInvalidClass
+      );
+    }
+
     experienceSubmit.push(obj);
   }
   console.log(experienceSubmit);
@@ -631,6 +838,39 @@ $("#submitRegister").on("click", function () {
       trainingYear: trainingYear,
       documentId: documentId,
     };
+
+    if (obj["trainingCourseDesc"] == "" || obj["trainingCourseDesc"] == null) {
+      $(`.div-input-trainingCourseDesc${courseCount} .form-control`).addClass(
+        isInvalidClass
+      );
+      $(
+        `.div-input-trainingCourseDesc${courseCount} .${validationErrorMessageClass}`
+      ).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(
+        `.div-input-trainingCourseDesc${courseCount} .form-control`
+      ).removeClass(isInvalidClass);
+    }
+
+    if (
+      obj["trainingYear"] == "" ||
+      obj["trainingYear"] == null ||
+      isNaN(obj["trainingYear"])
+    ) {
+      $(`.div-input-trainingYear${courseCount} .form-control`).addClass(
+        isInvalidClass
+      );
+      $(
+        `.div-input-trainingYear${courseCount} .${validationErrorMessageClass}`
+      ).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(`.div-input-trainingYear${courseCount} .form-control`).removeClass(
+        isInvalidClass
+      );
+    }
+
     courseSubmit.push(obj);
   }
   console.log(courseSubmit);
@@ -656,6 +896,19 @@ $("#submitRegister").on("click", function () {
 
     let userName = $(`#userName`).val();
     let password = $(`#password`).val();
+    let repeatPassword = $(`#repeatPassword`).val();
+
+    let profileDocumentId = parseInt(
+      $("input[name=changeProfileImage]").attr("documentId")
+    );
+
+    let iDCardCopyDocumentId = parseInt(
+      $("input[name=iDCardCopy]").attr("documentId")
+    );
+
+    let professionalLicenseCopyDocumentId = parseInt(
+      $("input[name=professionalLicenseCopy]").attr("documentId")
+    );
 
     let objadddata = {
       titleCode: titleCode,
@@ -669,14 +922,212 @@ $("#submitRegister").on("click", function () {
       positionCode: positionCode,
       userName: userName,
       password: password,
+      repeatPassword: repeatPassword,
       employeeNo: employeeNo,
       vendorNo: vendorNo,
       educations: educationSubmit,
       experiences: experienceSubmit,
       trainingCourses: courseSubmit,
+      profileDocumentId: profileDocumentId,
+      iDCardCopyDocumentId: iDCardCopyDocumentId,
+      professionalLicenseCopyDocumentId: professionalLicenseCopyDocumentId,
     };
-
     console.log(objadddata);
+
+    if (objadddata["userName"] == "" || objadddata["userName"] == null) {
+      $(`.div-input-userName .form-control`).addClass(isInvalidClass);
+      $(`.div-input-userName .${validationErrorMessageClass}`).html(
+        `กรุณาระบุ`
+      );
+      isValidate = 1;
+    } else {
+      $(`.div-input-userName .form-control`).removeClass(isInvalidClass);
+    }
+
+    let pattern =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+!.=])[a-zA-Z0-9@#$%^&+!.=]{7,}$/;
+    let isValid = pattern.test(objadddata["password"]);
+
+    // if (isValid) {
+    //   alert("Password is valid.");
+    // } else {
+    //   alert("Password is not valid.");
+    // }
+
+    if (!isValid) {
+      $(`.div-input-password .form-control`).addClass(isInvalidClass);
+      $(`.div-input-password .${validationErrorMessageClass}`).html(
+        `ต้องมีอักษรตัวพิมพ์เล็กอย่างน้อยหนึ่งตัว มีอักษรตัวพิมพ์ใหญ่อย่างน้อยหนึ่งตัว มีตัวเลขอย่างน้อยหนึ่งตัว มีอักขระพิเศษ @#$%^&+!.= อย่างน้อยหนึ่งตัว และมีความยาวอย่างน้อย 7 ตัวอักษร`
+      );
+      isValidate = 1;
+    } else {
+      $(`.div-input-password .form-control`).removeClass(isInvalidClass);
+    }
+
+    if (objadddata["repeatPassword"] != objadddata["password"]) {
+      $(`.div-input-repeatPassword .form-control`).addClass(isInvalidClass);
+      $(`.div-input-repeatPassword .${validationErrorMessageClass}`).html(
+        `รหัสผ่านไม่ตรงกัน`
+      );
+      isValidate = 1;
+    } else {
+      $(`.div-input-repeatPassword .form-control`).removeClass(isInvalidClass);
+    }
+
+    if (
+      objadddata["titleCode"] == "" ||
+      objadddata["titleCode"] == null ||
+      isNaN(objadddata["titleCode"])
+    ) {
+      $(`.div-input-titleCode .custom-select`).addClass(isInvalidClass);
+      $(`.div-input-titleCode .${validationErrorMessageClass}`).html(
+        `กรุณาระบุ`
+      );
+      isValidate = 1;
+    } else {
+      $(`.div-input-titleCode .custom-select`).removeClass(isInvalidClass);
+    }
+
+    if (objadddata["firstName"] == "" || objadddata["firstName"] == null) {
+      $(`.div-input-firstName .form-control`).addClass(isInvalidClass);
+      $(`.div-input-firstName .${validationErrorMessageClass}`).html(
+        `กรุณาระบุ`
+      );
+      isValidate = 1;
+    } else {
+      $(`.div-input-firstName .form-control`).removeClass(isInvalidClass);
+    }
+
+    if (objadddata["lastName"] == "" || objadddata["lastName"] == null) {
+      $(`.div-input-lastName .form-control`).addClass(isInvalidClass);
+      $(`.div-input-lastName .${validationErrorMessageClass}`).html(
+        `กรุณาระบุ`
+      );
+      isValidate = 1;
+    } else {
+      $(`.div-input-lastName .form-control`).removeClass(isInvalidClass);
+    }
+
+    if (objadddata["identityCardId"].length != 13) {
+      $(`.div-input-identityCardId .form-control`).addClass(isInvalidClass);
+      $(`.div-input-identityCardId .${validationErrorMessageClass}`).html(
+        `ต้องเป็นเลข 13 หลักเท่านั้น`
+      );
+      isValidate = 1;
+    } else if (isNaN(Number(objadddata["identityCardId"]))) {
+      $(`.div-input-identityCardId .form-control`).addClass(isInvalidClass);
+      $(`.div-input-identityCardId .${validationErrorMessageClass}`).html(
+        `ไม่สามารถมีตัวอักษรได้`
+      );
+      isValidate = 1;
+    } else {
+      let sum = 0;
+      let num;
+      let lastNum = Number(
+        objadddata["identityCardId"].slice(
+          objadddata["identityCardId"].length - 1,
+          objadddata["identityCardId"].length
+        )
+      );
+      for (let i = 0; i < objadddata["identityCardId"].length - 1; i++) {
+        num = Number(objadddata["identityCardId"].slice(i, i + 1));
+        sum = sum + num * (13 - i);
+      }
+      let checkNum = 11 - (sum % 11);
+      if (lastNum != checkNum % 10) {
+        $(`.div-input-identityCardId .form-control`).addClass(isInvalidClass);
+        $(`.div-input-identityCardId .${validationErrorMessageClass}`).html(
+          `เลขที่บัตรไม่ถูกต้อง`
+        );
+        isValidate = 1;
+      } else {
+        $(`.div-input-identityCardId .form-control`).removeClass(
+          isInvalidClass
+        );
+      }
+    }
+
+    if (objadddata["email"] == "" || objadddata["email"] == null) {
+      $(`.div-input-email .form-control`).addClass(isInvalidClass);
+      $(`.div-input-email .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(`.div-input-email .form-control`).removeClass(isInvalidClass);
+    }
+
+    if (objadddata["phone"] == "" || objadddata["phone"] == null) {
+      $(`.div-input-phone .form-control`).addClass(isInvalidClass);
+      $(`.div-input-phone .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else if (isNaN(Number(objadddata["phone"]))) {
+      $(`.div-input-phone .form-control`).addClass(isInvalidClass);
+      $(`.div-input-phone .${validationErrorMessageClass}`).html(
+        `ไม่สามารถมีตัวอักษรได้`
+      );
+      isValidate = 1;
+    } else {
+      $(`.div-input-phone .form-control`).removeClass(isInvalidClass);
+    }
+
+    if (objadddata["lineID"] == "" || objadddata["lineID"] == null) {
+      $(`.div-input-lineID .form-control`).addClass(isInvalidClass);
+      $(`.div-input-lineID .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(`.div-input-lineID .form-control`).removeClass(isInvalidClass);
+    }
+
+    if (objadddata["workplace"] == "" || objadddata["workplace"] == null) {
+      $(`.div-input-workplace .form-control`).addClass(isInvalidClass);
+      $(`.div-input-workplace .${validationErrorMessageClass}`).html(
+        `กรุณาระบุ`
+      );
+      isValidate = 1;
+    } else {
+      $(`.div-input-workplace .form-control`).removeClass(isInvalidClass);
+    }
+
+    if (
+      objadddata["positionCode"] == "" ||
+      objadddata["positionCode"] == null ||
+      isNaN(objadddata["positionCode"])
+    ) {
+      $(`.div-input-positionCode .custom-select`).addClass(isInvalidClass);
+      $(`.div-input-positionCode .${validationErrorMessageClass}`).html(
+        `กรุณาระบุ`
+      );
+      isValidate = 1;
+    } else {
+      $(`.div-input-positionCode .custom-select`).removeClass(isInvalidClass);
+    }
+
+    if (isNaN(objadddata["iDCardCopy"])) {
+      $(`.div-input-iDCardCopy .form-control`).addClass(isInvalidClass);
+      $(`.div-input-iDCardCopy .${validationErrorMessageClass}`).html(
+        `กรุณาระบุ`
+      );
+      isValidate = 1;
+    } else {
+      $(`.div-input-iDCardCopy .form-control`).removeClass(isInvalidClass);
+    }
+
+    if (isNaN(objadddata["professionalLicenseCopy"])) {
+      $(`.div-input-professionalLicenseCopy .form-control`).addClass(
+        isInvalidClass
+      );
+      $(
+        `.div-input-professionalLicenseCopy .${validationErrorMessageClass}`
+      ).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(`.div-input-professionalLicenseCopy .form-control`).removeClass(
+        isInvalidClass
+      );
+    }
+
+    if (isValidate == 1) {
+      return;
+    }
     $.ajax({
       url: "https://localhost:7063/api/user/create",
       type: "POST",
@@ -686,6 +1137,7 @@ $("#submitRegister").on("click", function () {
       success: function (res) {
         if (res.status.code == 200) {
           toastr.success("ลงทะเบียนสำเร็จ");
+          window.location.href = "login.html";
         } else {
           toastr.error(res.status.message);
         }
@@ -759,6 +1211,30 @@ let upLoadFile = function (uploadFileData, defer) {
   });
 };
 
+let upLoadFileWithContent = function (uploadFileData, defer) {
+  $.ajax({
+    url: "https://localhost:7063/api/document/createWithContent",
+    method: "POST",
+    data: uploadFileData,
+    dataType: "json",
+    contentType: false,
+    processData: false,
+    success: function (res) {
+      if (res.status.code == 200) {
+        toastr.success("บันทึกสำเร็จ");
+        defer.resolve(res.data);
+      } else {
+        toastr.error(res.status.message);
+        defer.resolve(false);
+      }
+    },
+    error: function (res) {
+      toastr.error("ไม่สามารถบันทึกได้");
+      defer.resolve(false);
+    },
+  });
+};
+
 function readURL(input) {
   if (input.files && input.files[0]) {
     var reader = new FileReader();
@@ -768,5 +1244,14 @@ function readURL(input) {
     };
 
     reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function showPassword() {
+  let element = document.getElementById("password");
+  if (element.type === "password") {
+    element.type = "text";
+  } else {
+    element.type = "password";
   }
 }

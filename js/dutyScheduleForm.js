@@ -197,6 +197,10 @@ let SetupData = (function () {
           $("#currentUserName").html(
             userData.firstName + " " + userData.lastName
           );
+          $("#navProfileImg").attr(
+            "src",
+            `https://localhost:7063/api/document/avatar/${userData.userId}`
+          );
           defered.resolve(true);
         } else {
           defered.resolve(false);
@@ -975,3 +979,8 @@ let isDateTime = function (dutyDate) {
 
   return false;
 };
+
+$("#logoutConfirm").on("click", function () {
+  localStorage.clear();
+  window.location.href = "login.html";
+});

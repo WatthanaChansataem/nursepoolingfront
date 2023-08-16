@@ -87,6 +87,8 @@
                       style="width: 200px; line-height: 1em"
                       id="changeProfileImage"
                       name="changeProfileImage"
+                      accept="image/*"
+                      alt="image"
                     />
                   </div>
                   <a class="small" href="#" id="editProfile">รูปโปรไฟล์</a>
@@ -94,7 +96,10 @@
                 <br />
                 <form class="user">
                   <div class="form-group row">
-                    <div class="col-sm-3 mb-3 mb-sm-0" style="padding-top: 5px">
+                    <div
+                      class="col-sm-3 mb-3 mb-sm-0 div-input-titleCode"
+                      style="padding-top: 5px"
+                    >
                       <select
                         class="custom-select titleCode"
                         name="titleCode"
@@ -103,67 +108,102 @@
                       >
                         <option selected disabled>คำนำหน้า</option>
                       </select>
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
                     </div>
 
-                    <div class="col-sm-4 mb-3 mb-sm-0">
+                    <div class="col-sm-4 mb-3 mb-sm-0 div-input-firstName">
                       <input
                         type="text"
                         class="form-control form-control-user"
                         id="firstName"
                         placeholder="ชื่อ"
                       />
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
                     </div>
-                    <div class="col-sm-5">
+                    <div class="col-sm-5 div-input-lastName">
                       <input
                         type="text"
                         class="form-control form-control-user"
                         id="lastName"
                         placeholder="นามสกุล"
                       />
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
                     </div>
                   </div>
-                  <div class="form-group">
+                  <div class="form-group div-input-identityCardId">
                     <input
                       class="form-control form-control-user"
                       id="identityCardId"
                       placeholder="หมายเลขบัตรประชาชน"
                     />
+                    <div
+                      class="invalid-feedback validation-error-message"
+                    ></div>
+                    <span class="form-text text-muted"></span>
                   </div>
-                  <div class="form-group">
+                  <div class="form-group div-input-email">
                     <input
                       type="email"
                       class="form-control form-control-user"
                       id="email"
                       placeholder="Email Address"
                     />
+                    <div
+                      class="invalid-feedback validation-error-message"
+                    ></div>
+                    <span class="form-text text-muted"></span>
                   </div>
 
                   <div class="form-group row">
-                    <div class="col-sm-6 mb-3 mb-sm-0">
+                    <div class="col-sm-6 mb-3 mb-sm-0 div-input-phone">
                       <input
                         class="form-control form-control-user"
                         id="phone"
                         placeholder="หมายเลขโทรศพท์"
                       />
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-6 div-input-lineID">
                       <input
                         class="form-control form-control-user"
                         id="lineID"
                         placeholder="LineID"
                       />
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
                     </div>
                   </div>
 
                   <div class="form-group row">
-                    <div class="col-sm-6 mb-3 mb-sm-0">
+                    <div class="col-sm-6 mb-3 mb-sm-0 div-input-workplace">
                       <input
                         class="form-control form-control-user"
                         id="workplace"
                         placeholder="สถานที่ทำงาน"
                       />
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
                     </div>
-                    <div class="col-sm-6" style="padding-top: 6px">
+                    <div
+                      class="col-sm-6 div-input-positionCode"
+                      style="padding-top: 6px"
+                    >
                       <select
                         class="custom-select positionCode"
                         name="positionCode"
@@ -172,6 +212,10 @@
                       >
                         <option selected disabled>ตำแหน่ง</option>
                       </select>
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
                     </div>
                   </div>
 
@@ -323,30 +367,47 @@
                   <a class="btn btn-success btn-circle btn-sm" id="addCourse">
                     <i class="fas fa-plus"></i>
                   </a>
-                  <div class="form-group">
+                  <div class="form-group div-input-userName">
                     <input
                       type="usernames"
                       class="form-control form-control-user"
                       id="userName"
                       placeholder="Username"
                     />
+                    <div
+                      class="invalid-feedback validation-error-message"
+                    ></div>
+                    <span class="form-text text-muted"></span>
                   </div>
                   <div class="form-group row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-6 div-input-password">
                       <input
                         type="password"
                         class="form-control form-control-user"
                         id="password"
                         placeholder="Password"
                       />
+                      <input type="checkbox" onclick="showPassword()" /><label
+                        class="small"
+                      >
+                        &nbsp;&nbsp;แสดง Password
+                      </label>
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-6 div-input-repeatPassword">
                       <input
                         type="password"
                         class="form-control form-control-user"
                         id="repeatPassword"
                         placeholder="Repeat Password"
                       />
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
                     </div>
                   </div>
                   <div class="form-check">

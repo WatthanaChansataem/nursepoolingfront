@@ -73,12 +73,12 @@
         <hr class="sidebar-divider my-0" />
 
         <!-- Nav Item - Dashboard -->
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="index.html">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a
           >
-        </li>
+        </li> -->
 
         <!-- Divider -->
         <!-- <hr class="sidebar-divider" /> -->
@@ -148,7 +148,7 @@
         <hr class="sidebar-divider" />
 
         <!-- Heading -->
-        <div class="sidebar-heading">Addons</div>
+        <div class="sidebar-heading">MENU</div>
 
         <!-- Nav Item - Pages Collapse Menu -->
         <!-- <li class="nav-item">
@@ -316,7 +316,7 @@
               </li>
 
               <!-- Nav Item - Alerts -->
-              <li class="nav-item dropdown no-arrow mx-1">
+              <!-- <li class="nav-item dropdown no-arrow mx-1">
                 <a
                   class="nav-link dropdown-toggle"
                   href="#"
@@ -327,10 +327,10 @@
                   aria-expanded="false"
                 >
                   <i class="fas fa-bell fa-fw"></i>
-                  <!-- Counter - Alerts -->
+                  
                   <span class="badge badge-danger badge-counter">3+</span>
                 </a>
-                <!-- Dropdown - Alerts -->
+                
                 <div
                   class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                   aria-labelledby="alertsDropdown"
@@ -378,10 +378,10 @@
                     >Show All Alerts</a
                   >
                 </div>
-              </li>
+              </li> -->
 
               <!-- Nav Item - Messages -->
-              <li class="nav-item dropdown no-arrow mx-1">
+              <!-- <li class="nav-item dropdown no-arrow mx-1">
                 <a
                   class="nav-link dropdown-toggle"
                   href="#"
@@ -392,10 +392,10 @@
                   aria-expanded="false"
                 >
                   <i class="fas fa-envelope fa-fw"></i>
-                  <!-- Counter - Messages -->
+                 
                   <span class="badge badge-danger badge-counter">7</span>
                 </a>
-                <!-- Dropdown - Messages -->
+                
                 <div
                   class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                   aria-labelledby="messagesDropdown"
@@ -478,7 +478,7 @@
                     >Read More Messages</a
                   >
                 </div>
-              </li>
+              </li> -->
 
               <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -500,6 +500,7 @@
                   >
                   <img
                     class="img-profile rounded-circle"
+                    id="navProfileImg"
                     src="img/undraw_profile.svg"
                   />
                 </a>
@@ -508,18 +509,18 @@
                   class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                   aria-labelledby="userDropdown"
                 >
-                  <a class="dropdown-item" href="#">
+                  <a class="dropdown-item" href="profile.html">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Profile
+                    ข้อมูลส่วนตัว
                   </a>
-                  <a class="dropdown-item" href="#">
+                  <!-- <a class="dropdown-item" href="#">
                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                     Settings
                   </a>
                   <a class="dropdown-item" href="#">
                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                     Activity Log
-                  </a>
+                  </a> -->
                   <div class="dropdown-divider"></div>
                   <a
                     class="dropdown-item"
@@ -530,7 +531,7 @@
                     <i
                       class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"
                     ></i>
-                    Logout
+                    ล็อกเอาท์
                   </a>
                 </div>
               </li>
@@ -556,6 +557,7 @@
                           id="profileImg"
                           width="100"
                           height="100"
+                          alt="image"
                         />
                       </div>
                       <br />
@@ -567,6 +569,7 @@
                           style="width: 200px; line-height: 1em"
                           id="changeProfileImage"
                           name="changeProfileImage"
+                          accept="image/*"
                         />
                       </div>
                       <div class="col-lg-1 text-center">
@@ -579,7 +582,7 @@
                     <form class="user">
                       <div class="form-group row">
                         <div
-                          class="col-sm-3 mb-3 mb-sm-0"
+                          class="col-sm-3 mb-3 mb-sm-0 div-input-titleCode"
                           style="padding-top: 5px"
                         >
                           <select
@@ -590,67 +593,102 @@
                           >
                             <option selected disabled>คำนำหน้า</option>
                           </select>
+                          <div
+                            class="invalid-feedback validation-error-message"
+                          ></div>
+                          <span class="form-text text-muted"></span>
                         </div>
 
-                        <div class="col-sm-4 mb-3 mb-sm-0">
+                        <div class="col-sm-4 mb-3 mb-sm-0 div-input-firstName">
                           <input
                             type="text"
                             class="form-control form-control-user"
                             id="firstName"
                             placeholder="ชื่อ"
                           />
+                          <div
+                            class="invalid-feedback validation-error-message"
+                          ></div>
+                          <span class="form-text text-muted"></span>
                         </div>
-                        <div class="col-sm-5">
+                        <div class="col-sm-5 div-input-lastName">
                           <input
                             type="text"
                             class="form-control form-control-user"
                             id="lastName"
                             placeholder="นามสกุล"
                           />
+                          <div
+                            class="invalid-feedback validation-error-message"
+                          ></div>
+                          <span class="form-text text-muted"></span>
                         </div>
                       </div>
-                      <div class="form-group">
+                      <div class="form-group div-input-identityCardId">
                         <input
                           class="form-control form-control-user"
                           id="identityCardId"
                           placeholder="หมายเลขบัตรประชาชน"
                         />
+                        <div
+                          class="invalid-feedback validation-error-message"
+                        ></div>
+                        <span class="form-text text-muted"></span>
                       </div>
-                      <div class="form-group">
+                      <div class="form-group div-input-email">
                         <input
                           type="email"
                           class="form-control form-control-user"
                           id="email"
                           placeholder="Email Address"
                         />
+                        <div
+                          class="invalid-feedback validation-error-message"
+                        ></div>
+                        <span class="form-text text-muted"></span>
                       </div>
 
                       <div class="form-group row">
-                        <div class="col-sm-6 mb-3 mb-sm-0">
+                        <div class="col-sm-6 mb-3 mb-sm-0 div-input-phone">
                           <input
                             class="form-control form-control-user"
                             id="phone"
                             placeholder="หมายเลขโทรศพท์"
                           />
+                          <div
+                            class="invalid-feedback validation-error-message"
+                          ></div>
+                          <span class="form-text text-muted"></span>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-6 div-input-lineID">
                           <input
                             class="form-control form-control-user"
                             id="lineID"
                             placeholder="LineID"
                           />
+                          <div
+                            class="invalid-feedback validation-error-message"
+                          ></div>
+                          <span class="form-text text-muted"></span>
                         </div>
                       </div>
 
                       <div class="form-group row">
-                        <div class="col-sm-6 mb-3 mb-sm-0">
+                        <div class="col-sm-6 mb-3 mb-sm-0 div-input-workplace">
                           <input
                             class="form-control form-control-user"
                             id="workplace"
                             placeholder="สถานที่ทำงาน"
                           />
+                          <div
+                            class="invalid-feedback validation-error-message"
+                          ></div>
+                          <span class="form-text text-muted"></span>
                         </div>
-                        <div class="col-sm-6" style="padding-top: 6px">
+                        <div
+                          class="col-sm-6 div-input-positionCode"
+                          style="padding-top: 6px"
+                        >
                           <select
                             class="custom-select positionCode"
                             name="positionCode"
@@ -659,6 +697,10 @@
                           >
                             <option selected disabled>ตำแหน่ง</option>
                           </select>
+                          <div
+                            class="invalid-feedback validation-error-message"
+                          ></div>
+                          <span class="form-text text-muted"></span>
                         </div>
                       </div>
 
@@ -698,6 +740,15 @@
                             class="invalid-feedback validation-error-message"
                           ></div>
                           <span class="form-text text-muted"></span>
+                          <a
+                            target="_blank"
+                            id="refFileUploadIDCardCopy"
+                            href="#"
+                            ><i
+                              class="fa flaticon2-file-1 kt-font-primary"
+                              id="fileNameIDCardCopy"
+                            ></i
+                          ></a>
                         </div>
 
                         <div
@@ -722,6 +773,15 @@
                             class="invalid-feedback validation-error-message"
                           ></div>
                           <span class="form-text text-muted"></span>
+                          <a
+                            href="#"
+                            target="_blank"
+                            id="refFileUploadProfessionalLicenseCopy"
+                            ><i
+                              class="fa flaticon2-file-1 kt-font-primary"
+                              id="fileNameProfessionalLicenseCopy"
+                            ></i
+                          ></a>
                         </div>
                       </div>
                     </form>
@@ -855,7 +915,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <h5 class="modal-title" id="exampleModalLabel">ออกจากระบบ?</h5>
             <button
               class="close"
               type="button"
@@ -865,18 +925,16 @@
               <span aria-hidden="true">×</span>
             </button>
           </div>
-          <div class="modal-body">
-            Select "Logout" below if you are ready to end your current session.
-          </div>
+          <div class="modal-body">กดปุ่ม "ล็อกเอาท์" เพื่อออกจากระบบ.</div>
           <div class="modal-footer">
             <button
               class="btn btn-secondary"
               type="button"
               data-dismiss="modal"
             >
-              Cancel
+              ยกเลิก
             </button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
+            <a class="btn btn-primary" id="logoutConfirm">ล็อกเอาท์</a>
           </div>
         </div>
       </div>
