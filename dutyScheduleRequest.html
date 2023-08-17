@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>NursePooling - DutyScheduleRequest</title>
+
+    <!-- Custom fonts for this template -->
+    <link
+      href="vendor/fontawesome-free/css/all.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
+
+    <!-- Custom styles for this template -->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+
+    <!-- Custom styles for this page -->
+    <link
+      href="vendor/datatables/dataTables.bootstrap4.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Include toastr CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"
+    />
+
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <style></style>
+
+  <body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+      <!-- Sidebar -->
+      <ul
+        class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+        id="accordionSidebar"
+      >
+        <!-- Sidebar - Brand -->
+        <a
+          class="sidebar-brand d-flex align-items-center justify-content-center"
+          href="index.html"
+        >
+          <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-laugh-wink"></i>
+          </div>
+          <div class="sidebar-brand-text mx-3">NursePooling</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0" />
+
+        <!-- Divider -->
+        <hr class="sidebar-divider" />
+
+        <!-- Heading -->
+        <div class="sidebar-heading">MENU</div>
+        <!-- Nav Item - Tables -->
+        <li class="nav-item">
+          <a class="nav-link" href="dutyScheduleForm.html">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>แบบฟอร์มส่งเวร</span></a
+          >
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="dutyScheduleFormTable.html">
+            <i class="fas fa-fw fa-table"></i>
+            <span>ตารางเวร</span></a
+          >
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="regulationsAndWelfare.html">
+            <i class="fas fa-fw fa-file"></i>
+            <span>ระเบียบปฏิบัติ สวัสดิการ</span></a
+          >
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="profile.html">
+            <i class="fas fa-fw fa-user"></i>
+            <span>ข้อมูลส่วนตัว</span></a
+          >
+        </li>
+
+        <li class="nav-item active">
+          <a class="nav-link" href="dutyScheduleRequest.html">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>ฟอร์มขออัตรากำลัง</span></a
+          >
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block" />
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+          <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+      </ul>
+      <!-- End of Sidebar -->
+
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+          <!-- Topbar -->
+          <nav
+            class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+          >
+            <!-- Sidebar Toggle (Topbar) -->
+            <form class="form-inline">
+              <button
+                id="sidebarToggleTop"
+                class="btn btn-link d-md-none rounded-circle mr-3"
+              >
+                <i class="fa fa-bars"></i>
+              </button>
+            </form>
+            <span>โรงพยาบาล:</span>&nbsp;<span id="navHospitalCode">-</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span>Location:</span>&nbsp;<span
+              id="navLocationCode"
+              >-</span
+            >
+            &nbsp;&nbsp;&nbsp;&nbsp;<span>แผนก:</span>&nbsp;<span
+              id="navDepartmentCode"
+              >-</span
+            >
+
+            <!-- Topbar Navbar -->
+            <ul class="navbar-nav ml-auto">
+              <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+              <li class="nav-item dropdown no-arrow d-sm-none">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="searchDropdown"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <i class="fas fa-search fa-fw"></i>
+                </a>
+                <!-- Dropdown - Messages -->
+                <div
+                  class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                  aria-labelledby="searchDropdown"
+                >
+                  <form class="form-inline mr-auto w-100 navbar-search">
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        class="form-control bg-light border-0 small"
+                        placeholder="Search for..."
+                        aria-label="Search"
+                        aria-describedby="basic-addon2"
+                      />
+                      <div class="input-group-append">
+                        <button class="btn btn-primary" type="button">
+                          <i class="fas fa-search fa-sm"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </li>
+
+              <div class="topbar-divider d-none d-sm-block"></div>
+
+              <!-- Nav Item - User Information -->
+              <li class="nav-item dropdown no-arrow">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="userDropdown"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <span
+                    class="mr-2 d-none d-lg-inline text-gray-600 small"
+                    id="currentUserName"
+                    >Douglas McGee</span
+                  >
+                  <img
+                    class="img-profile rounded-circle"
+                    id="navProfileImg"
+                    src="img/undraw_profile.svg"
+                  />
+                </a>
+                <!-- Dropdown - User Information -->
+                <div
+                  class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                  aria-labelledby="userDropdown"
+                >
+                  <a class="dropdown-item" href="profile.html">
+                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                    ข้อมูลส่วนตัว
+                  </a>
+                  <!-- <a class="dropdown-item" href="#">
+                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Settings
+                  </a>
+                  <a class="dropdown-item" href="#">
+                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Activity Log
+                  </a> -->
+                  <div class="dropdown-divider"></div>
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    data-toggle="modal"
+                    data-target="#logoutModal"
+                  >
+                    <i
+                      class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"
+                    ></i>
+                    ล็อกเอาท์
+                  </a>
+                </div>
+              </li>
+            </ul>
+          </nav>
+          <!-- End of Topbar -->
+
+          <!-- Begin Page Content -->
+          <div class="container-fluid">
+            <!-- Page Heading -->
+            <h1 class="h3 mb-2 text-gray-800">ฟอร์มขออัตรากำลัง</h1>
+            <div class="form-group row">
+              <div class="col-sm-3 div-input-hospitalCode">
+                <label for="hospitalCode" class="col-form-label-sm"
+                  >โรงพยาบาล</label
+                >
+                <select
+                  class="custom-select hospitalCode"
+                  name="hospitalCode"
+                  id="hospitalCode"
+                  data-size="4"
+                >
+                  <option selected value="-1">ทั้งหมด</option>
+                </select>
+              </div>
+              <div class="col-sm-3 div-input-locationCode">
+                <label for="locationCode" class="col-form-label-sm"
+                  >Location</label
+                >
+                <select
+                  class="custom-select locationCode"
+                  name="locationCode"
+                  id="locationCode"
+                  data-size="4"
+                >
+                  <option selected value="-1">ทั้งหมด</option>
+                </select>
+              </div>
+              <div class="col-sm-3 div-input-departmentCode">
+                <label for="departmentCode" class="col-form-label-sm"
+                  >แผนก</label
+                >
+                <select
+                  class="custom-select departmentCode"
+                  name="departmentCode"
+                  id="departmentCode"
+                  data-size="4"
+                >
+                  <option selected value="-1">ทั้งหมด</option>
+                </select>
+              </div>
+
+              <div class="col-sm-3 div-input-positionCode">
+                <label for="positionCode" class="col-form-label-sm"
+                  >ตำแหน่ง</label
+                >
+                <select
+                  class="custom-select positionCode"
+                  name="positionCode"
+                  id="positionCode"
+                  data-size="4"
+                >
+                  <option selected value="-1">ทั้งหมด</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="beginDate"
+                  id="beginDate"
+                  placeholder="ปีที่เริ่ม"
+                />
+              </div>
+
+              <div
+                class="col-sm-9"
+                style="display: flex; justify-content: flex-end"
+              >
+                <a class="btn btn-success btn-icon-split" id="addSchedule">
+                  <span class="icon text-white-50">
+                    <i class="fa fa-plus"></i>
+                  </span>
+                  <span class="text">เพิ่มรายการ</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="my-2"></div>
+            <!-- DataTales Example -->
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">รายการ</h6>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table
+                    class="table table-bordered nowrap"
+                    id="dataTable"
+                    width="100%"
+                    cellspacing="0"
+                  >
+                    <thead>
+                      <tr>
+                        <th>No.</th>
+                        <th>วันเดือนปี</th>
+                        <th>โรงพยาบาล</th>
+                        <th>Location</th>
+                        <th>แผนก</th>
+                        <th>ตำแหน่ง</th>
+                        <th>07.00-15.00</th>
+                        <th>15.00-23.00</th>
+                        <th>23.00-07.00</th>
+                        <th>07.00-19.00</th>
+                        <th>19.00-07.00</th>
+                        <th></th>
+                        <th>08.00-20.00</th>
+                        <th>09.00-17.00</th>
+                        <th>อื่นๆ</th>
+                        <th>สถานะ</th>
+                        <th>หมายเหตุ</th>
+                        <th>แก้ไข</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row" style="display: none">
+              <div
+                class="col-sm-12"
+                style="display: flex; justify-content: flex-end"
+              >
+                <a class="btn btn-primary btn-icon-split" id="submit">
+                  <span class="icon text-white-50">
+                    <i class="fa fa-check"></i>
+                  </span>
+                  <span class="text">บันทึก</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <!-- <footer class="sticky-footer bg-white">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span>Copyright &copy; Your Website 2020</span>
+            </div>
+          </div>
+        </footer> -->
+        <!-- End of Footer -->
+      </div>
+      <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div
+      class="modal fade"
+      id="logoutModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">ออกจากระบบ?</h5>
+            <button
+              class="close"
+              type="button"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">กดปุ่ม "ล็อกเอาท์" เพื่อออกจากระบบ.</div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-dismiss="modal"
+            >
+              ยกเลิก
+            </button>
+            <a class="btn btn-primary" id="logoutConfirm">ล็อกเอาท์</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AddSchedule Modal-->
+    <div
+      class="modal fade"
+      id="addScheduleModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              บันทึกรายการขออัตรากำลัง
+            </h5>
+            <button
+              class="close"
+              type="button"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group row">
+              <label for="dutyDateModal" class="col-sm-3 col-form-label-sm"
+                >วันที่ขออัตรากำลัง</label
+              >
+              <div class="col-sm-6 div-input-dutyDateModal">
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="dutyDateModal"
+                  id="dutyDateModal"
+                  placeholder="วันที่ขออัตรากำลัง"
+                />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-6 div-input-hospitalCodeModal">
+                <label for="hospitalCodeModal" class="col-form-label-sm"
+                  >โรงพยาบาล</label
+                >
+                <select
+                  class="custom-select custom-select-sm hospitalCodeModal"
+                  name="hospitalCodeModal"
+                  id="hospitalCodeModal"
+                  data-size="4"
+                >
+                  <option selected disabled hidden>กรุณาเลือก</option>
+                </select>
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+              <div class="col-sm-6 div-input-locationCodeModal">
+                <label for="locationCodeModal" class="col-form-label-sm"
+                  >Location</label
+                >
+
+                <select
+                  class="custom-select custom-select-sm locationCodeModal"
+                  name="locationCodeModal"
+                  id="locationCodeModal"
+                  data-size="4"
+                >
+                  <option selected disabled hidden>กรุณาเลือก</option>
+                </select>
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-6 div-input-departmentCodeModal">
+                <label for="departmentCodeModal" class="col-form-label-sm"
+                  >แผนกลำดับที่</label
+                >
+                <select
+                  class="custom-select custom-select-sm departmentCodeModal"
+                  name="departmentCodeModal"
+                  id="departmentCodeModal"
+                  data-size="4"
+                >
+                  <option selected disabled hidden>กรุณาเลือก</option>
+                </select>
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+              <div class="col-sm-6 div-input-positionCodeModal">
+                <label for="positionCodeModal" class="col-form-label-sm"
+                  >ตำแหน่ง</label
+                >
+                <select
+                  class="custom-select custom-select-sm positionCodeModal"
+                  name="positionCodeModal"
+                  id="positionCodeModal"
+                  data-size="4"
+                >
+                  <option selected disabled hidden>กรุณาเลือก</option>
+                </select>
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+
+            <!-- <div class="form-group row">
+              <div class="col-sm-6 div-input-positionCodeModal">
+                <label for="positionCodeModal" class="col-form-label-sm"
+                  >ตำแหน่ง</label
+                >
+                <select
+                  class="custom-select custom-select-sm positionCodeModal"
+                  name="positionCodeModal"
+                  id="positionCodeModal"
+                  data-size="4"
+                >
+                  <option selected disabled hidden>กรุณาเลือก</option>
+                </select>
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+            </div> -->
+
+            <div class="form-group row" id="timeDiv" style="display: none">
+              <div class="col-sm-6 div-input-requestNumber1Modal">
+                <label for="requestNumber1Modal" class="col-form-label-sm"
+                  >07.00-15.00</label
+                >
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="requestNumber1Modal"
+                  placeholder="จำนวนอัตรากำลังที่ขอ"
+                  value="0"
+                  min="0"
+                />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+
+              <div class="col-sm-6 div-input-requestNumber2Modal ipd_div">
+                <label for="requestNumber2Modal" class="col-form-label-sm"
+                  >15.00-23.00</label
+                >
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="requestNumber2Modal"
+                  placeholder="จำนวนอัตรากำลังที่ขอ"
+                  value="0"
+                  min="0"
+                />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+
+              <div class="col-sm-6 div-input-requestNumber3Modal ipd_div">
+                <label for="requestNumber3Modal" class="col-form-label-sm"
+                  >23.00-07.00</label
+                >
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="requestNumber3Modal"
+                  placeholder="จำนวนอัตรากำลังที่ขอ"
+                  value="0"
+                  min="0"
+                />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+
+              <div class="col-sm-6 div-input-requestNumber4Modal">
+                <label for="requestNumber4Modal" class="col-form-label-sm"
+                  >07.00-19.00</label
+                >
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="requestNumber4Modal"
+                  placeholder="จำนวนอัตรากำลังที่ขอ"
+                  value="0"
+                  min="0"
+                />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+
+              <div class="col-sm-6 div-input-requestNumber5Modal ipd_div">
+                <label for="requestNumber5Modal" class="col-form-label-sm"
+                  >19.00-07.00</label
+                >
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="requestNumber5Modal"
+                  placeholder="จำนวนอัตรากำลังที่ขอ"
+                  value="0"
+                  min="0"
+                />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+
+              <div class="col-sm-6 div-input-requestNumber6Modal opd_div">
+                <label for="requestNumber6Modal" class="col-form-label-sm"
+                  >08.00-16.00</label
+                >
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="requestNumber6Modal"
+                  placeholder="จำนวนอัตรากำลังที่ขอ"
+                  value="0"
+                  min="0"
+                />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+
+              <div class="col-sm-6 div-input-requestNumber7Modal opd_div">
+                <label for="requestNumber7Modal" class="col-form-label-sm"
+                  >08.00-20.00</label
+                >
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="requestNumber7Modal"
+                  placeholder="จำนวนอัตรากำลังที่ขอ"
+                  value="0"
+                  min="0"
+                />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+
+              <div class="col-sm-6 div-input-requestNumber8Modal opd_div">
+                <label for="requestNumber8Modal" class="col-form-label-sm"
+                  >09.00-17.00</label
+                >
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="requestNumber8Modal"
+                  placeholder="จำนวนอัตรากำลังที่ขอ"
+                  value="0"
+                  min="0"
+                />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-12 div-input-requestOtherModal">
+                <label for="requestOtherModal" class="col-form-label-sm"
+                  >อื่นๆ</label
+                >
+                <div class="form-group row">
+                  <label
+                    for="shiftStartModal"
+                    class="col-sm-1 col-form-label-sm"
+                    >เวลา</label
+                  >
+                  <div class="col-sm-4 div-input-shiftStartModal">
+                    <input
+                      type="time"
+                      class="form-control form-control-sm"
+                      name="shiftStartModal"
+                      id="shiftStartModal"
+                    />
+                    <div
+                      class="invalid-feedback validation-error-message"
+                    ></div>
+                    <span class="form-text text-muted"></span>
+                  </div>
+                  <label for="shiftEndModal" class="col-sm-1 col-form-label-sm"
+                    >ถึง</label
+                  >
+                  <div class="col-sm-4 div-input-shiftEndModal">
+                    <input
+                      type="time"
+                      class="form-control form-control-sm"
+                      name="shiftEndModal"
+                      id="shiftEndModal"
+                    />
+                    <div
+                      class="invalid-feedback validation-error-message"
+                    ></div>
+                    <span class="form-text text-muted"></span>
+                  </div>
+                </div>
+                <div class="col-sm-6 div-input-requestNumberOtherModal">
+                  <input
+                    type="number"
+                    class="form-control form-control-sm"
+                    id="requestNumberOtherModal"
+                    placeholder="จำนวนอัตรากำลังที่ขอ"
+                    value="0"
+                    min="0"
+                  />
+                </div>
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-12">
+                <textarea
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="remarkModal"
+                  id="remarkModal"
+                  placeholder="หมายเหตุ"
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- Default switch -->
+            <div class="custom-control custom-switch">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="activeStatus"
+                checked
+              />
+              <label class="custom-control-label" for="activeStatus"
+                >สถานะ</label
+              >
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-dismiss="modal"
+            >
+              ยกเลิก
+            </button>
+            <a class="btn btn-success" id="addScheduleBtnModal">บันทึก</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EditSchedule Modal-->
+    <div
+      class="modal fade"
+      id="editScheduleModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleEditModalLabel">
+              แก้ขรายการขอเวร
+            </h5>
+            <button
+              class="close"
+              type="button"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group row">
+              <label for="dutyDateEditModal" class="col-sm-3 col-form-label-sm"
+                >วันที่ขอเวร</label
+              >
+              <div class="col-sm-6">
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="dutyDateEditModal"
+                  id="dutyDateEditModal"
+                  placeholder="วันที่ขอเวร"
+                />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-6 div-input-positionCodeEditModal">
+                <label for="positionCodeEditModal" class="col-form-label-sm"
+                  >ตำแหน่ง</label
+                >
+                <select
+                  class="custom-select custom-select-sm positionCodeEditModal"
+                  name="positionCodeEditModal"
+                  id="positionCodeEditModal"
+                  data-size="4"
+                >
+                  <option selected disabled hidden>กรุณาเลือก</option>
+                </select>
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label for="requestNumber1EditModal" class="col-form-label-sm"
+                  >7.00 - 15.00</label
+                >
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="requestNumber1EditModal"
+                  placeholder="จำนวนอัตรากำลังที่ขอ"
+                />
+              </div>
+              <div class="col-sm-6">
+                <label for="departmentCode2EditModal" class="col-form-label-sm"
+                  >แผนกลำดับที่ 2</label
+                >
+
+                <select
+                  class="custom-select custom-select-sm departmentCode2EditModal"
+                  name="departmentCode2EditModal"
+                  id="departmentCode2EditModal"
+                  data-size="4"
+                >
+                  <option selected disabled hidden>กรุณาเลือก</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label for="departmentCode3EditModal" class="col-form-label-sm"
+                  >แผนกลำดับที่ 3</label
+                >
+                <select
+                  class="custom-select custom-select-sm departmentCode3EditModal"
+                  name="departmentCode3EditModal"
+                  id="departmentCode3EditModal"
+                  data-size="4"
+                >
+                  <option selected disabled hidden>กรุณาเลือก</option>
+                </select>
+              </div>
+              <div class="col-sm-6">
+                <label for="statusCodeModal" class="col-form-label-sm"
+                  >สถานะ</label
+                >
+
+                <select
+                  class="custom-select custom-select-sm statusCodeModal"
+                  name="statusCodeModal"
+                  id="statusCodeModal"
+                  data-size="4"
+                >
+                  <option selected disabled hidden>กรุณาเลือก</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-12">
+                <textarea
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="remarkEditModal"
+                  id="remarkEditModal"
+                  placeholder="หมายเหตุ"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-dismiss="modal"
+            >
+              ยกเลิก
+            </button>
+            <a class="btn btn-success" id="editScheduleBtnModal">บันทึก</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- <script src="js/_GlobalConfig.js"></script> -->
+
+    <!-- Page level plugins -->
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!--  -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
+    <!-- <script src="https://netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
+
+    <!-- toastr -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+    <!-- moment -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <!-- <script src="js/sb-admin-2.min.js"></script> -->
+    <script src="js/dutyScheduleRequest.js"></script>
+
+    <!-- Page level custom scripts -->
+    <!-- <script src="js/demo/datatables-demo.js"></script> -->
+  </body>
+</html>
