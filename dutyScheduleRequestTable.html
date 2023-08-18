@@ -101,14 +101,14 @@
           >
         </li>
 
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="nav-link" href="dutyScheduleRequest.html">
             <i class="fas fa-fw fa-folder"></i>
             <span>ฟอร์มขออัตรากำลัง</span></a
           >
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item active">
           <a class="nav-link" href="dutyScheduleRequestTable.html">
             <i class="fas fa-fw fa-folder"></i>
             <span>ตารางเวรหน่วยงาน</span></a
@@ -325,7 +325,11 @@
                 class="col-sm-9"
                 style="display: flex; justify-content: flex-end"
               >
-                <a class="btn btn-success btn-icon-split" id="addSchedule">
+                <a
+                  class="btn btn-success btn-icon-split"
+                  id="addSchedule"
+                  style="display: none"
+                >
                   <span class="icon text-white-50">
                     <i class="fa fa-plus"></i>
                   </span>
@@ -365,6 +369,11 @@
                         <th>08.00-20.00</th>
                         <th>09.00-17.00</th>
                         <th>อื่นๆ</th>
+                        <th>จำนวนที่ขอ</th>
+                        <th>จำนวนที่อนุมัติ</th>
+                        <th>ชั่วโมงที่ขอ</th>
+                        <th>ชั่วโมงที่อนุมัติ</th>
+                        <th>ชั่วโมงที่OFF</th>
                         <th>สถานะ</th>
                         <th>หมายเหตุ</th>
                         <th>แก้ไข</th>
@@ -1169,7 +1178,7 @@
 
     <!-- Custom scripts for all pages-->
     <!-- <script src="js/sb-admin-2.min.js"></script> -->
-    <script src="js/dutyScheduleRequest.js"></script>
+    <script src="js/dutyScheduleRequestTable.js"></script>
 
     <!-- Page level custom scripts -->
     <!-- <script src="js/demo/datatables-demo.js"></script> -->
