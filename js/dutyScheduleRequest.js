@@ -50,6 +50,7 @@
 let isInvalidClass = "is-invalid";
 let validationErrorMessageClass = "validation-error-message";
 let modal = $("#addScheduleModal");
+let modalEdit = $("#editScheduleModal");
 
 let hospitalMap = new Map();
 let hospitalMaster;
@@ -58,7 +59,7 @@ let locationMaster;
 let departmentMap = new Map();
 let departmentMaster;
 let currentRow;
-let currentDutyScheduleId;
+let currentDutyScheduleRequestId;
 let isValidate = 0;
 let positionMap = new Map();
 let positionMaster;
@@ -342,14 +343,14 @@ let renderPage = function () {
     );
   });
 
-  $.each(dutyScheduleStatusMastersForUserUpdate, function (i, item) {
-    $("select[name=statusCodeModal]").append(
-      $("<option>", {
-        value: item.statusCode,
-        text: item.statusDesc,
-      })
-    );
-  });
+  //   $.each(dutyScheduleStatusMastersForUserUpdate, function (i, item) {
+  //     $("select[name=statusCodeModal]").append(
+  //       $("<option>", {
+  //         value: item.statusCode,
+  //         text: item.statusDesc,
+  //       })
+  //     );
+  //   });
 
   $("#dutyDateEditModal")
     .datepicker({
@@ -407,6 +408,33 @@ let renderPage = function () {
 
   $.each(departmentMaster, function (i, item) {
     $("select[name=departmentCodeModal]").append(
+      $("<option>", {
+        value: item.departmentCode,
+        text: item.departmentDesc,
+      })
+    );
+  });
+
+  $.each(hospitalMaster, function (i, item) {
+    $("select[name=hospitalCodeEditModal]").append(
+      $("<option>", {
+        value: item.hospitalCode,
+        text: item.hospitalDesc,
+      })
+    );
+  });
+
+  $.each(locationMaster, function (i, item) {
+    $("select[name=locationCodeEditModal]").append(
+      $("<option>", {
+        value: item.locationCode,
+        text: item.locationDesc,
+      })
+    );
+  });
+
+  $.each(departmentMaster, function (i, item) {
+    $("select[name=departmentCodeEditModal]").append(
       $("<option>", {
         value: item.departmentCode,
         text: item.departmentDesc,
@@ -815,6 +843,23 @@ $("#locationCodeModal").on("change", function () {
   }
 });
 
+$("#locationCodeEditModal").on("change", function () {
+  //   console.log("change");
+  // $("#timeDiv").show();
+  if ($(this).val() == locationCodeConstant.OPD) {
+    $("#editScheduleModal").find(`.ipd_editdiv .form-control`).val(0);
+    $(".ipd_editdiv").hide();
+    $(".opd_editdiv").show();
+  } else if ($(this).val() == locationCodeConstant.IPD) {
+    $(".ipd_editdiv").show();
+    $("#editScheduleModal").find(`.opd_editdiv .form-control`).val(0);
+    $(".opd_editdiv").hide();
+  } else {
+    $(".opd_editdiv").show();
+    $(".ipd_editdiv").show();
+  }
+});
+
 let CreateDatatable = (function () {
   let table;
   let currentPage = 0;
@@ -832,16 +877,16 @@ let CreateDatatable = (function () {
         { data: "locationCode", className: "text-center" },
         { data: "departmentCode", className: "text-center" },
         { data: "positionCode", className: "text-center" },
+        { data: "requestNumber1", className: "text-center" },
+        { data: "requestNumber2", className: "text-center" },
+        { data: "requestNumber3", className: "text-center" },
+        { data: "requestNumber4", className: "text-center" },
+        { data: "requestNumber5", className: "text-center" },
+        { data: "requestNumber6", className: "text-center" },
+        { data: "requestNumber7", className: "text-center" },
+        { data: "requestNumber8", className: "text-center" },
         { data: "positionCode", className: "text-center" },
-        { data: "positionCode", className: "text-center" },
-        { data: "positionCode", className: "text-center" },
-        { data: "positionCode", className: "text-center" },
-        { data: "positionCode", className: "text-center" },
-        { data: "positionCode", className: "text-center" },
-        { data: "positionCode", className: "text-center" },
-        { data: "positionCode", className: "text-center" },
-        { data: "positionCode", className: "text-center" },
-        { data: "remark", className: "text-center" },
+        { data: "active", className: "text-center" },
         { data: "remark", className: "text-center" },
         { data: "", className: "text-center" },
       ],
@@ -957,7 +1002,13 @@ let CreateDatatable = (function () {
           targets: 14,
           title: "อื่นๆ",
           render: function (data, type, full, meta) {
-            return data;
+            return (
+              full.shiftStart +
+              "-" +
+              full.shiftEnd +
+              ": " +
+              full.requestNumberOther
+            );
           },
         },
 
@@ -965,8 +1016,11 @@ let CreateDatatable = (function () {
           targets: 15,
           title: "สถานะ",
           render: function (data, type, full, meta) {
-            // return `<a class="btn btn-${dutyScheduleSStatusMap[data].state}" style="width: 90px;">${dutyScheduleSStatusMap[data].desc}</a>`;
-            return data;
+            if (data == 0) {
+              return `<i class="fa fa-circle"></i>`;
+            } else {
+              return `<i class="fa fa-circle text-success"></i>`;
+            }
           },
         },
         {
@@ -997,7 +1051,7 @@ let CreateDatatable = (function () {
         let rowIndex = table.row($(this).closest("tr")).index();
         let data = table.row($(this).closest("tr")).data();
         currentRow = $(this).closest("tr");
-        currentDutyScheduleId = data.dutyScheduleId;
+        currentDutyScheduleRequestId = data.dutyScheduleRequestId;
         $("#dutyDateEditModal")
           .val(
             isDateTime(data.dutyDate)
@@ -1005,38 +1059,158 @@ let CreateDatatable = (function () {
               : data.dutyDate
           )
           .change();
+        $("#hospitalCodeEditModal").val(data.hospitalCode);
+        $("#locationCodeEditModal").val(data.locationCode).trigger("change");
+        $("#departmentCodeEditModal").val(data.departmentCode);
         $("#positionCodeEditModal").val(data.positionCode);
+        $("#requestNumber1EditModal").val(data.requestNumber1);
+        $("#requestNumber1EditModal").attr(
+          "dutyScheduleRequestItemId1",
+          data.dutyScheduleRequestItemId1
+        );
+        $("#requestNumber2EditModal").val(data.requestNumber2);
+        $("#requestNumber2EditModal").attr(
+          "dutyScheduleRequestItemId2",
+          data.dutyScheduleRequestItemId2
+        );
+        $("#requestNumber3EditModal").val(data.requestNumber3);
+        $("#requestNumber3EditModal").attr(
+          "dutyScheduleRequestItemId3",
+          data.dutyScheduleRequestItemId3
+        );
+        $("#requestNumber4EditModal").val(data.requestNumber4);
+        $("#requestNumber4EditModal").attr(
+          "dutyScheduleRequestItemId4",
+          data.dutyScheduleRequestItemId4
+        );
+        $("#requestNumber5EditModal").val(data.requestNumber5);
+        $("#requestNumber5EditModal").attr(
+          "dutyScheduleRequestItemId5",
+          data.dutyScheduleRequestItemId5
+        );
+        $("#requestNumber6EditModal").val(data.requestNumber6);
+        $("#requestNumber6EditModal").attr(
+          "dutyScheduleRequestItemId6",
+          data.dutyScheduleRequestItemId6
+        );
+        $("#requestNumber7EditModal").val(data.requestNumber7);
+        $("#requestNumber7EditModal").attr(
+          "dutyScheduleRequestItemId7",
+          data.dutyScheduleRequestItemId7
+        );
+        $("#requestNumber8EditModal").val(data.requestNumber8);
+        $("#requestNumber8EditModal").attr(
+          "dutyScheduleRequestItemId8",
+          data.dutyScheduleRequestItemId8
+        );
+        $("#shiftStartEditModal").val(data.shiftStart);
+        $("#shiftStartEditModal").val(data.shiftStart);
+        $("#shiftEndEditModal").val(data.shiftEnd);
+        $("#requestNumberOtherEditModal").val(data.requestNumberOther);
+        $("#requestNumberOtherEditModal").attr(
+          "dutyScheduleRequestItemIdOther",
+          data.dutyScheduleRequestItemIdOther
+        );
         $("#remarkEditModal").val(data.remark);
-        $("#statusCodeModal").val(data.status);
-
+        $("#activeStatusEdit").prop("checked", data.active == 0 ? false : true);
         $("#editScheduleModal").modal();
       });
 
       $("#editScheduleBtnModal").on("click", function () {
         let dutyDate = $("#dutyDateEditModal").val();
+        let hospitalCode = parseInt($("#hospitalCodeEditModal").val());
+        let locationCode = parseInt($("#locationCodeEditModal").val());
+        let departmentCode = parseInt($("#departmentCodeEditModal").val());
         let positionCode = parseInt($("#positionCodeEditModal").val());
+        let requestNumber1 = parseInt($("#requestNumber1EditModal").val());
+        let requestNumber2 = parseInt($("#requestNumber2EditModal").val());
+        let requestNumber3 = parseInt($("#requestNumber3EditModal").val());
+        let requestNumber4 = parseInt($("#requestNumber4EditModal").val());
+        let requestNumber5 = parseInt($("#requestNumber5EditModal").val());
+        let requestNumber6 = parseInt($("#requestNumber6EditModal").val());
+        let requestNumber7 = parseInt($("#requestNumber7EditModal").val());
+        let requestNumber8 = parseInt($("#requestNumber8EditModal").val());
+        let shiftStart = $("#shiftStartEditModal").val();
+        let shiftEnd = $("#shiftEndEditModal").val();
+        let requestNumberOther = parseInt(
+          $("#requestNumberOtherEditModal").val()
+        );
         let remark = $("#remarkEditModal").val();
-        let status = $("#statusCodeModal").val();
+        let active = $("#activeStatusEdit").is(":checked") ? 1 : 0;
 
+        let dutyScheduleRequestItemId1 = parseInt(
+          $("#requestNumber1EditModal").attr("dutyScheduleRequestItemId1")
+        );
+        let dutyScheduleRequestItemId2 = parseInt(
+          $("#requestNumber2EditModal").attr("dutyScheduleRequestItemId2")
+        );
+        let dutyScheduleRequestItemId3 = parseInt(
+          $("#requestNumber3EditModal").attr("dutyScheduleRequestItemId3")
+        );
+        let dutyScheduleRequestItemId4 = parseInt(
+          $("#requestNumber4EditModal").attr("dutyScheduleRequestItemId4")
+        );
+        let dutyScheduleRequestItemId5 = parseInt(
+          $("#requestNumber5EditModal").attr("dutyScheduleRequestItemId5")
+        );
+        let dutyScheduleRequestItemId6 = parseInt(
+          $("#requestNumber6EditModal").attr("dutyScheduleRequestItemId6")
+        );
+        let dutyScheduleRequestItemId7 = parseInt(
+          $("#requestNumber7EditModal").attr("dutyScheduleRequestItemId7")
+        );
+        let dutyScheduleRequestItemId8 = parseInt(
+          $("#requestNumber8EditModal").attr("dutyScheduleRequestItemId8")
+        );
+        let dutyScheduleRequestItemIdOther = parseInt(
+          $("#requestNumberOtherEditModal").attr(
+            "dutyScheduleRequestItemIdOther"
+          )
+        );
         let objadddata = {
           dutyDate: dutyDate,
+          hospitalCode: hospitalCode,
+          locationCode: locationCode,
+          departmentCode: departmentCode,
           positionCode: positionCode,
+          requestNumber1: requestNumber1,
+          requestNumber2: requestNumber2,
+          requestNumber3: requestNumber3,
+          requestNumber4: requestNumber4,
+          requestNumber5: requestNumber5,
+          requestNumber6: requestNumber6,
+          requestNumber7: requestNumber7,
+          requestNumber8: requestNumber8,
+          shiftStart: shiftStart,
+          shiftEnd: shiftEnd,
+          requestNumberOther: requestNumberOther,
           remark: remark,
-          dutyScheduleId: currentDutyScheduleId,
-          status: status,
+          dutyScheduleRequestId: currentDutyScheduleRequestId,
+          active: active,
+          dutyScheduleRequestItemId1: dutyScheduleRequestItemId1,
+          dutyScheduleRequestItemId2: dutyScheduleRequestItemId2,
+          dutyScheduleRequestItemId3: dutyScheduleRequestItemId3,
+          dutyScheduleRequestItemId4: dutyScheduleRequestItemId4,
+          dutyScheduleRequestItemId5: dutyScheduleRequestItemId5,
+          dutyScheduleRequestItemId6: dutyScheduleRequestItemId6,
+          dutyScheduleRequestItemId7: dutyScheduleRequestItemId7,
+          dutyScheduleRequestItemId8: dutyScheduleRequestItemId8,
+          dutyScheduleRequestItemIdOther: dutyScheduleRequestItemIdOther,
         };
         isValidate = 0;
 
         if (objadddata["dutyDate"] == "" || objadddata["dutyDate"] == null) {
-          modal
-            .find(`.div-input-dutyDateModal .form-control`)
+          modalEdit
+            .find(`.div-input-dutyDateEditModal .form-control`)
             .addClass(isInvalidClass);
-          modal
-            .find(`.div-input-dutyDateModal .${validationErrorMessageClass}`)
+          modalEdit
+            .find(
+              `.div-input-dutyDateEditModal .${validationErrorMessageClass}`
+            )
             .html(`กรุณาระบุ`);
           isValidate = 1;
         } else {
-          $(`.div-input-dutyDateModal .form-control`).removeClass(
+          $(`.div-input-dutyDateEditModal .form-control`).removeClass(
             isInvalidClass
           );
         }
@@ -1046,43 +1220,258 @@ let CreateDatatable = (function () {
           objadddata["positionCode"] == null ||
           isNaN(objadddata["positionCode"])
         ) {
-          modal
-            .find(`.div-input-positionCodeModal .custom-select`)
+          modalEdit
+            .find(`.div-input-positionCodeEditModal .custom-select`)
             .addClass(isInvalidClass);
-          modal
+          modalEdit
             .find(
-              `.div-input-positionCodeModal .${validationErrorMessageClass}`
+              `.div-input-positionCodeEditModal .${validationErrorMessageClass}`
             )
             .html(`กรุณาระบุ`);
 
           isValidate = 1;
         } else {
-          $(`.div-input-positionCodeModal .custom-select`).removeClass(
+          $(`.div-input-positionCodeEditModal .custom-select`).removeClass(
             isInvalidClass
           );
+        }
+
+        if (
+          objadddata["hospitalCode"] == "" ||
+          objadddata["hospitalCode"] == null ||
+          isNaN(objadddata["hospitalCode"])
+        ) {
+          modalEdit
+            .find(`.div-input-hospitalCodeEditModal .custom-select`)
+            .addClass(isInvalidClass);
+          modalEdit
+            .find(
+              `.div-input-hospitalCodeEditModal .${validationErrorMessageClass}`
+            )
+            .html(`กรุณาระบุ`);
+
+          isValidate = 1;
+        } else {
+          $(`.div-input-hospitalCodeEditModal .custom-select`).removeClass(
+            isInvalidClass
+          );
+        }
+
+        if (
+          objadddata["locationCode"] == "" ||
+          objadddata["locationCode"] == null ||
+          isNaN(objadddata["locationCode"])
+        ) {
+          modalEdit
+            .find(`.div-input-locationCodeEditModal .custom-select`)
+            .addClass(isInvalidClass);
+          modalEdit
+            .find(
+              `.div-input-locationCodeEditModal .${validationErrorMessageClass}`
+            )
+            .html(`กรุณาระบุ`);
+
+          isValidate = 1;
+        } else {
+          $(`.div-input-locationCodeEditModal .custom-select`).removeClass(
+            isInvalidClass
+          );
+        }
+
+        if (
+          objadddata["departmentCode"] == "" ||
+          objadddata["departmentCode"] == null ||
+          isNaN(objadddata["departmentCode"])
+        ) {
+          modalEdit
+            .find(`.div-input-departmentCodeEditModal .custom-select`)
+            .addClass(isInvalidClass);
+          modalEdit
+            .find(
+              `.div-input-departmentCodeEditModal .${validationErrorMessageClass}`
+            )
+            .html(`กรุณาระบุ`);
+
+          isValidate = 1;
+        } else {
+          $(`.div-input-departmentCodeEditModal .custom-select`).removeClass(
+            isInvalidClass
+          );
+        }
+
+        if (
+          objadddata["requestNumber1"] < 0 ||
+          objadddata["requestNumber1"] == null ||
+          isNaN(objadddata["requestNumber1"])
+        ) {
+          modalEdit
+            .find(`.div-input-requestNumber1EditModal .form-control`)
+            .addClass(isInvalidClass);
+          modalEdit
+            .find(
+              `.div-input-requestNumber1EditModal .${validationErrorMessageClass}`
+            )
+            .html(`กรุณาระบุ และต้องไม่ติดลบ`);
+          isValidate = 1;
+        } else {
+          modalEdit
+            .find(`.div-input-requestNumber1EditModal .form-control`)
+            .removeClass(isInvalidClass);
+        }
+
+        if (
+          objadddata["requestNumber2"] < 0 ||
+          objadddata["requestNumber2"] == null ||
+          isNaN(objadddata["requestNumber2"])
+        ) {
+          modalEdit
+            .find(`.div-input-requestNumber2EditModal .form-control`)
+            .addClass(isInvalidClass);
+          modalEdit
+            .find(
+              `.div-input-requestNumber2EditModal .${validationErrorMessageClass}`
+            )
+            .html(`กรุณาระบุ และต้องไม่ติดลบ`);
+          isValidate = 1;
+        } else {
+          modalEdit
+            .find(`.div-input-requestNumber2EditModal .form-control`)
+            .removeClass(isInvalidClass);
+        }
+
+        if (
+          objadddata["requestNumber3"] < 0 ||
+          objadddata["requestNumber3"] == null ||
+          isNaN(objadddata["requestNumber3"])
+        ) {
+          modalEdit
+            .find(`.div-input-requestNumber3EditModal .form-control`)
+            .addClass(isInvalidClass);
+          modalEdit
+            .find(
+              `.div-input-requestNumber3EditModal .${validationErrorMessageClass}`
+            )
+            .html(`กรุณาระบุ และต้องไม่ติดลบ`);
+          isValidate = 1;
+        } else {
+          modalEdit
+            .find(`.div-input-requestNumber3EditModal .form-control`)
+            .removeClass(isInvalidClass);
+        }
+
+        if (
+          objadddata["requestNumber4"] < 0 ||
+          objadddata["requestNumber4"] == null ||
+          isNaN(objadddata["requestNumber4"])
+        ) {
+          modalEdit
+            .find(`.div-input-requestNumber4EditModal .form-control`)
+            .addClass(isInvalidClass);
+          modalEdit
+            .find(
+              `.div-input-requestNumber4EditModal .${validationErrorMessageClass}`
+            )
+            .html(`กรุณาระบุ และต้องไม่ติดลบ`);
+          isValidate = 1;
+        } else {
+          modalEdit
+            .find(`.div-input-requestNumber4EditModal .form-control`)
+            .removeClass(isInvalidClass);
+        }
+
+        if (
+          objadddata["requestNumber5"] < 0 ||
+          objadddata["requestNumber5"] == null ||
+          isNaN(objadddata["requestNumber5"])
+        ) {
+          modalEdit
+            .find(`.div-input-requestNumber5EditModal .form-control`)
+            .addClass(isInvalidClass);
+          modalEdit
+            .find(
+              `.div-input-requestNumber5EditModal .${validationErrorMessageClass}`
+            )
+            .html(`กรุณาระบุ และต้องไม่ติดลบ`);
+          isValidate = 1;
+        } else {
+          modalEdit
+            .find(`.div-input-requestNumber5EditModal .form-control`)
+            .removeClass(isInvalidClass);
+        }
+
+        if (
+          objadddata["requestNumber6"] < 0 ||
+          objadddata["requestNumber6"] == null ||
+          isNaN(objadddata["requestNumber6"])
+        ) {
+          modalEdit
+            .find(`.div-input-requestNumber6EditModal .form-control`)
+            .addClass(isInvalidClass);
+          modalEdit
+            .find(
+              `.div-input-requestNumber6EditModal .${validationErrorMessageClass}`
+            )
+            .html(`กรุณาระบุ และต้องไม่ติดลบ`);
+          isValidate = 1;
+        } else {
+          modalEdit
+            .find(`.div-input-requestNumber6EditModal .form-control`)
+            .removeClass(isInvalidClass);
+        }
+
+        if (
+          objadddata["requestNumber7"] < 0 ||
+          objadddata["requestNumber7"] == null ||
+          isNaN(objadddata["requestNumber7"])
+        ) {
+          modalEdit
+            .find(`.div-input-requestNumber7EditModal .form-control`)
+            .addClass(isInvalidClass);
+          modalEdit
+            .find(
+              `.div-input-requestNumber7EditModal .${validationErrorMessageClass}`
+            )
+            .html(`กรุณาระบุ และต้องไม่ติดลบ`);
+          isValidate = 1;
+        } else {
+          modalEdit
+            .find(`.div-input-requestNumber7EditModal .form-control`)
+            .removeClass(isInvalidClass);
+        }
+
+        if (
+          objadddata["requestNumber8"] < 0 ||
+          objadddata["requestNumber8"] == null ||
+          isNaN(objadddata["requestNumber8"])
+        ) {
+          modalEdit
+            .find(`.div-input-requestNumber8EditModal .form-control`)
+            .addClass(isInvalidClass);
+          modalEdit
+            .find(
+              `.div-input-requestNumber8EditModal .${validationErrorMessageClass}`
+            )
+            .html(`กรุณาระบุ และต้องไม่ติดลบ`);
+          isValidate = 1;
+        } else {
+          modalEdit
+            .find(`.div-input-requestNumber8EditModal .form-control`)
+            .removeClass(isInvalidClass);
         }
 
         if (isValidate == 1) {
           return;
         }
 
-        console.log(objadddata);
-
-        // table.row(currentRow).data(objadddata).draw();
-        let listObj = [];
-        listObj.push(objadddata);
-
-        let objData = {
-          dutyScheduleList: listObj,
-        };
+        // console.log(objadddata);
 
         $.ajax({
-          url: "https://localhost:7063/api/dutySchedule/update",
+          url: "https://localhost:7063/api/dutyScheduleRequest/update",
           type: "POST",
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
-          data: JSON.stringify(objData),
+          data: JSON.stringify(objadddata),
           contentType: "application/json; charset=utf-8",
           dataType: "json",
           success: function (res) {
@@ -1098,7 +1487,6 @@ let CreateDatatable = (function () {
             toastr.error("ไม่สามารถแก้ไขรายการได้");
           },
         });
-        // $("#editScheduleModal").modal("hide");
       });
     },
     data: function (data) {

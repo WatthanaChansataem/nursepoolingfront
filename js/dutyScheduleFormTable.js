@@ -50,6 +50,7 @@
 let isInvalidClass = "is-invalid";
 let validationErrorMessageClass = "validation-error-message";
 let modal = $("#addScheduleModal");
+let modalEdit = $("#editScheduleModal");
 
 let hospitalMap = new Map();
 let hospitalMaster;
@@ -694,17 +695,17 @@ let CreateDatatable = (function () {
         isValidate = 0;
 
         if (objadddata["dutyDate"] == "" || objadddata["dutyDate"] == null) {
-          modal
-            .find(`.div-input-dutyDateCodeModal .form-control`)
+          modalEdit
+            .find(`.div-input-dutyDateEditModal .form-control`)
             .addClass(isInvalidClass);
-          modal
+          modalEdit
             .find(
-              `.div-input-dutyDateCodeModal .${validationErrorMessageClass}`
+              `.div-input-dutyDateEditModal .${validationErrorMessageClass}`
             )
             .html(`กรุณาระบุ`);
           isValidate = 1;
         } else {
-          $(`.div-input-dutyDateCodeModal .form-control`).removeClass(
+          $(`.div-input-dutyDateEditModal .form-control`).removeClass(
             isInvalidClass
           );
         }
@@ -713,29 +714,33 @@ let CreateDatatable = (function () {
           objadddata["shiftStart"] == "" ||
           objadddata["shiftStart"] == null
         ) {
-          modal
-            .find(`.div-input-shiftStartModal .form-control`)
+          modalEdit
+            .find(`.div-input-shiftStartEditModal .form-control`)
             .addClass(isInvalidClass);
-          modal
-            .find(`.div-input-shiftStartModal .${validationErrorMessageClass}`)
+          modalEdit
+            .find(
+              `.div-input-shiftStartEditModal .${validationErrorMessageClass}`
+            )
             .html(`กรุณาระบุ`);
           isValidate = 1;
         } else {
-          $(`.div-input-shiftStartModal .form-control`).removeClass(
+          $(`.div-input-shiftStartEditModal .form-control`).removeClass(
             isInvalidClass
           );
         }
 
         if (objadddata["shiftEnd"] == "" || objadddata["shiftEnd"] == null) {
-          modal
-            .find(`.div-input-shiftEndModal .form-control`)
+          modalEdit
+            .find(`.div-input-shiftEndEditModal .form-control`)
             .addClass(isInvalidClass);
-          modal
-            .find(`.div-input-shiftEndModal .${validationErrorMessageClass}`)
+          modalEdit
+            .find(
+              `.div-input-shiftEndEditModal .${validationErrorMessageClass}`
+            )
             .html(`กรุณาระบุ`);
           isValidate = 1;
         } else {
-          $(`.div-input-shiftEndModal .form-control`).removeClass(
+          $(`.div-input-shiftEndEditModal .form-control`).removeClass(
             isInvalidClass
           );
         }
@@ -745,18 +750,18 @@ let CreateDatatable = (function () {
           objadddata["hospitalCode"] == null ||
           isNaN(objadddata["hospitalCode"])
         ) {
-          modal
-            .find(`.div-input-hospitalCodeModal .custom-select`)
+          modalEdit
+            .find(`.div-input-hospitalCodeEditModal .custom-select`)
             .addClass(isInvalidClass);
-          modal
+          modalEdit
             .find(
-              `.div-input-hospitalCodeModal .${validationErrorMessageClass}`
+              `.div-input-hospitalCodeEditModal .${validationErrorMessageClass}`
             )
             .html(`กรุณาระบุ`);
 
           isValidate = 1;
         } else {
-          $(`.div-input-hospitalCodeModal .custom-select`).removeClass(
+          $(`.div-input-hospitalCodeEditModal .custom-select`).removeClass(
             isInvalidClass
           );
         }
@@ -767,17 +772,17 @@ let CreateDatatable = (function () {
           isNaN(objadddata["locationCode"])
         ) {
           modal
-            .find(`.div-input-locationCodeModal .custom-select`)
+            .find(`.div-input-locationCodeEditModal .custom-select`)
             .addClass(isInvalidClass);
           modal
             .find(
-              `.div-input-locationCodeModal .${validationErrorMessageClass}`
+              `.div-input-locationCodeEditModal .${validationErrorMessageClass}`
             )
             .html(`กรุณาระบุ`);
 
           isValidate = 1;
         } else {
-          $(`.div-input-locationCodeModal .custom-select`).removeClass(
+          $(`.div-input-locationCodeEditModal .custom-select`).removeClass(
             isInvalidClass
           );
         }
@@ -788,17 +793,17 @@ let CreateDatatable = (function () {
           isNaN(objadddata["departmentCode1"])
         ) {
           modal
-            .find(`.div-input-departmentCode1Modal .custom-select`)
+            .find(`.div-input-departmentCode1EditModal .custom-select`)
             .addClass(isInvalidClass);
           modal
             .find(
-              `.div-input-departmentCode1Modal .${validationErrorMessageClass}`
+              `.div-input-departmentCode1EditModal .${validationErrorMessageClass}`
             )
             .html(`กรุณาระบุ`);
 
           isValidate = 1;
         } else {
-          $(`.div-input-departmentCode1Modal .custom-select`).removeClass(
+          $(`.div-input-departmentCode1EditModal .custom-select`).removeClass(
             isInvalidClass
           );
         }

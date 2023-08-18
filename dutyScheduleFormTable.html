@@ -914,7 +914,7 @@
               <label for="dutyDateEditModal" class="col-sm-3 col-form-label-sm"
                 >วันที่ขอเวร</label
               >
-              <div class="col-sm-6">
+              <div class="col-sm-6 div-input-dutyDateEditModal">
                 <input
                   type="text"
                   class="form-control form-control-sm"
@@ -922,6 +922,8 @@
                   id="dutyDateEditModal"
                   placeholder="วันที่ขอเวร"
                 />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
               </div>
             </div>
             <div class="form-group row">
@@ -930,24 +932,28 @@
                 class="col-sm-1 col-form-label-sm"
                 >เวลา</label
               >
-              <div class="col-sm-4">
+              <div class="col-sm-4 div-input-shiftStartEditModal">
                 <input
                   type="time"
                   class="form-control form-control-sm"
                   name="shiftStartEditModal"
                   id="shiftStartEditModal"
                 />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
               </div>
               <label for="shiftEndEditModal" class="col-sm-1 col-form-label-sm"
                 >ถึง</label
               >
-              <div class="col-sm-4">
+              <div class="col-sm-4 div-input-shiftEndEditModal">
                 <input
                   type="time"
                   class="form-control form-control-sm"
                   name="shiftEndEditModal"
                   id="shiftEndEditModal"
                 />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
               </div>
             </div>
 
@@ -967,7 +973,7 @@
                 <div class="invalid-feedback validation-error-message"></div>
                 <span class="form-text text-muted"></span>
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-6 div-input-locationCodeEditModal">
                 <label for="locationCodeEditModal" class="col-form-label-sm"
                   >Location</label
                 >
@@ -980,11 +986,13 @@
                 >
                   <option selected disabled hidden>กรุณาเลือก</option>
                 </select>
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
               </div>
             </div>
 
             <div class="form-group row">
-              <div class="col-sm-6">
+              <div class="col-sm-6 div-input-departmentCode1EditModal">
                 <label for="departmentCode1EditModal" class="col-form-label-sm"
                   >แผนกลำดับที่ 1</label
                 >
@@ -996,6 +1004,8 @@
                 >
                   <option selected disabled hidden>กรุณาเลือก</option>
                 </select>
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
               </div>
               <div class="col-sm-6">
                 <label for="departmentCode2EditModal" class="col-form-label-sm"

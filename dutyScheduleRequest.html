@@ -354,7 +354,7 @@
                         <th>23.00-07.00</th>
                         <th>07.00-19.00</th>
                         <th>19.00-07.00</th>
-                        <th></th>
+                        <th>08.00-16.00</th>
                         <th>08.00-20.00</th>
                         <th>09.00-17.00</th>
                         <th>อื่นๆ</th>
@@ -804,7 +804,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleEditModalLabel">
-              แก้ขรายการขอเวร
+              แก้ไขรายการขออัตรากำลัง
             </h5>
             <button
               class="close"
@@ -818,20 +818,71 @@
           <div class="modal-body">
             <div class="form-group row">
               <label for="dutyDateEditModal" class="col-sm-3 col-form-label-sm"
-                >วันที่ขอเวร</label
+                >วันที่ขออัตรากำลัง</label
               >
-              <div class="col-sm-6">
+              <div class="col-sm-6 div-input-dutyDateEditModal">
                 <input
                   type="text"
                   class="form-control form-control-sm"
                   name="dutyDateEditModal"
                   id="dutyDateEditModal"
-                  placeholder="วันที่ขอเวร"
+                  placeholder="วันที่ขออัตรากำลัง"
                 />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
               </div>
             </div>
 
             <div class="form-group row">
+              <div class="col-sm-6 div-input-hospitalCodeEditModal">
+                <label for="hospitalCodeEditModal" class="col-form-label-sm"
+                  >โรงพยาบาล</label
+                >
+                <select
+                  class="custom-select custom-select-sm hospitalCodeEditModal"
+                  name="hospitalCodeEditModal"
+                  id="hospitalCodeEditModal"
+                  data-size="4"
+                >
+                  <option selected disabled hidden>กรุณาเลือก</option>
+                </select>
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+              <div class="col-sm-6 div-input-locationCodeEditModal">
+                <label for="locationCodeEditModal" class="col-form-label-sm"
+                  >Location</label
+                >
+
+                <select
+                  class="custom-select custom-select-sm locationCodeEditModal"
+                  name="locationCodeEditModal"
+                  id="locationCodeEditModal"
+                  data-size="4"
+                >
+                  <option selected disabled hidden>กรุณาเลือก</option>
+                </select>
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-6 div-input-departmentCodeEditModal">
+                <label for="departmentCodeEditModal" class="col-form-label-sm"
+                  >แผนกลำดับที่</label
+                >
+                <select
+                  class="custom-select custom-select-sm departmentCodeEditModal"
+                  name="departmentCodeEditModal"
+                  id="departmentCodeEditModal"
+                  data-size="4"
+                >
+                  <option selected disabled hidden>กรุณาเลือก</option>
+                </select>
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
               <div class="col-sm-6 div-input-positionCodeEditModal">
                 <label for="positionCodeEditModal" class="col-form-label-sm"
                   >ตำแหน่ง</label
@@ -848,62 +899,201 @@
                 <span class="form-text text-muted"></span>
               </div>
             </div>
-
-            <div class="form-group row">
-              <div class="col-sm-6">
+            <div class="form-group row" id="timeDivEdit">
+              <div class="col-sm-6 div-input-requestNumber1EditModal">
                 <label for="requestNumber1EditModal" class="col-form-label-sm"
-                  >7.00 - 15.00</label
+                  >07.00-15.00</label
                 >
                 <input
                   type="number"
                   class="form-control form-control-sm"
                   id="requestNumber1EditModal"
                   placeholder="จำนวนอัตรากำลังที่ขอ"
+                  value="0"
+                  min="0"
                 />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
               </div>
-              <div class="col-sm-6">
-                <label for="departmentCode2EditModal" class="col-form-label-sm"
-                  >แผนกลำดับที่ 2</label
-                >
 
-                <select
-                  class="custom-select custom-select-sm departmentCode2EditModal"
-                  name="departmentCode2EditModal"
-                  id="departmentCode2EditModal"
-                  data-size="4"
+              <div
+                class="col-sm-6 div-input-requestNumber2EditModal ipd_editdiv"
+              >
+                <label for="requestNumber2EditModal" class="col-form-label-sm"
+                  >15.00-23.00</label
                 >
-                  <option selected disabled hidden>กรุณาเลือก</option>
-                </select>
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="requestNumber2EditModal"
+                  placeholder="จำนวนอัตรากำลังที่ขอ"
+                  value="0"
+                  min="0"
+                />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+
+              <div
+                class="col-sm-6 div-input-requestNumber3EditModal ipd_editdiv"
+              >
+                <label for="requestNumber3EditModal" class="col-form-label-sm"
+                  >23.00-07.00</label
+                >
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="requestNumber3EditModal"
+                  placeholder="จำนวนอัตรากำลังที่ขอ"
+                  value="0"
+                  min="0"
+                />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+
+              <div class="col-sm-6 div-input-requestNumber4EditModal">
+                <label for="requestNumber4EditModal" class="col-form-label-sm"
+                  >07.00-19.00</label
+                >
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="requestNumber4EditModal"
+                  placeholder="จำนวนอัตรากำลังที่ขอ"
+                  value="0"
+                  min="0"
+                />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+
+              <div
+                class="col-sm-6 div-input-requestNumber5EditModal ipd_editdiv"
+              >
+                <label for="requestNumber5EditModal" class="col-form-label-sm"
+                  >19.00-07.00</label
+                >
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="requestNumber5EditModal"
+                  placeholder="จำนวนอัตรากำลังที่ขอ"
+                  value="0"
+                  min="0"
+                />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+
+              <div
+                class="col-sm-6 div-input-requestNumber6EditModal opd_editdiv"
+              >
+                <label for="requestNumber6EditModal" class="col-form-label-sm"
+                  >08.00-16.00</label
+                >
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="requestNumber6EditModal"
+                  placeholder="จำนวนอัตรากำลังที่ขอ"
+                  value="0"
+                  min="0"
+                />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+
+              <div
+                class="col-sm-6 div-input-requestNumber7EditModal opd_editdiv"
+              >
+                <label for="requestNumber7EditModal" class="col-form-label-sm"
+                  >08.00-20.00</label
+                >
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="requestNumber7EditModal"
+                  placeholder="จำนวนอัตรากำลังที่ขอ"
+                  value="0"
+                  min="0"
+                />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+
+              <div
+                class="col-sm-6 div-input-requestNumber8EditModal opd_editdiv"
+              >
+                <label for="requestNumber8EditModal" class="col-form-label-sm"
+                  >09.00-17.00</label
+                >
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="requestNumber8EditModal"
+                  placeholder="จำนวนอัตรากำลังที่ขอ"
+                  value="0"
+                  min="0"
+                />
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
               </div>
             </div>
 
             <div class="form-group row">
-              <div class="col-sm-6">
-                <label for="departmentCode3EditModal" class="col-form-label-sm"
-                  >แผนกลำดับที่ 3</label
+              <div class="col-sm-12 div-input-requestOtherEditModal">
+                <label for="requestOtherEditModal" class="col-form-label-sm"
+                  >อื่นๆ</label
                 >
-                <select
-                  class="custom-select custom-select-sm departmentCode3EditModal"
-                  name="departmentCode3EditModal"
-                  id="departmentCode3EditModal"
-                  data-size="4"
-                >
-                  <option selected disabled hidden>กรุณาเลือก</option>
-                </select>
-              </div>
-              <div class="col-sm-6">
-                <label for="statusCodeModal" class="col-form-label-sm"
-                  >สถานะ</label
-                >
-
-                <select
-                  class="custom-select custom-select-sm statusCodeModal"
-                  name="statusCodeModal"
-                  id="statusCodeModal"
-                  data-size="4"
-                >
-                  <option selected disabled hidden>กรุณาเลือก</option>
-                </select>
+                <div class="form-group row">
+                  <label
+                    for="shiftStartEditModal"
+                    class="col-sm-1 col-form-label-sm"
+                    >เวลา</label
+                  >
+                  <div class="col-sm-4 div-input-shiftStartEditModal">
+                    <input
+                      type="time"
+                      class="form-control form-control-sm"
+                      name="shiftStartEditModal"
+                      id="shiftStartEditModal"
+                    />
+                    <div
+                      class="invalid-feedback validation-error-message"
+                    ></div>
+                    <span class="form-text text-muted"></span>
+                  </div>
+                  <label
+                    for="shiftEndEditModal"
+                    class="col-sm-1 col-form-label-sm"
+                    >ถึง</label
+                  >
+                  <div class="col-sm-4 div-input-shiftEndEditModal">
+                    <input
+                      type="time"
+                      class="form-control form-control-sm"
+                      name="shiftEndEditModal"
+                      id="shiftEndEditModal"
+                    />
+                    <div
+                      class="invalid-feedback validation-error-message"
+                    ></div>
+                    <span class="form-text text-muted"></span>
+                  </div>
+                </div>
+                <div class="col-sm-6 div-input-requestNumberOtherEditModal">
+                  <input
+                    type="number"
+                    class="form-control form-control-sm"
+                    id="requestNumberOtherEditModal"
+                    placeholder="จำนวนอัตรากำลังที่ขอ"
+                    value="0"
+                    min="0"
+                  />
+                </div>
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
               </div>
             </div>
 
@@ -917,6 +1107,19 @@
                   placeholder="หมายเหตุ"
                 ></textarea>
               </div>
+            </div>
+
+            <!-- Default switch -->
+            <div class="custom-control custom-switch">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="activeStatusEdit"
+                checked
+              />
+              <label class="custom-control-label" for="activeStatusEdit"
+                >สถานะ</label
+              >
             </div>
           </div>
           <div class="modal-footer">
