@@ -64,8 +64,8 @@ $("#loginButton").on("click", function () {
     dataType: "json",
     success: function (res) {
       if (res.status.code == 200) {
-        localStorage.setItem("token", res.data);
-        window.location.href = "dutyScheduleForm.html";
+        localStorage.setItem("token", res.data.token);
+        window.location.href = res.data.appRoleMenu;
       } else {
         toastr.error(res.status.message);
       }

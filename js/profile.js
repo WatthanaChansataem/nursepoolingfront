@@ -127,7 +127,10 @@ let SetupData = (function () {
         if (res.status.code == 200) {
           educationalQualificationMaster = res.data;
           for (let data of res.data) {
-            educationalQualificationMap.set(data.positionCode, data);
+            educationalQualificationMap.set(
+              data.educationalQualificationCode,
+              data
+            );
           }
           defered.resolve(true);
         } else {

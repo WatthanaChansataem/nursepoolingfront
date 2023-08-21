@@ -202,28 +202,28 @@
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
-          <a class="nav-link" href="dutyScheduleForm.html">
+          <a class="nav-link" href="dutyScheduleRequest.html">
             <i class="fas fa-fw fa-folder"></i>
-            <span>แบบฟอร์มส่งเวร</span></a
+            <span>ฟอร์มขออัตรากำลัง</span></a
           >
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="dutyScheduleFormTable.html">
+          <a class="nav-link" href="dutyScheduleRequestTable.html">
             <i class="fas fa-fw fa-table"></i>
-            <span>ตารางเวร</span></a
+            <span>ตารางเวรหน่วยงาน</span></a
           >
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="regulationsAndWelfare.html">
-            <i class="fas fa-fw fa-file"></i>
-            <span>ระเบียบปฏิบัติ สวัสดิการ</span></a
+          <a class="nav-link" href="employeeAppraisalForm.html">
+            <i class="fas fa-fw fa-address-book"></i>
+            <span>แบบประเมินพนักงาน</span></a
           >
         </li>
 
         <li class="nav-item active">
-          <a class="nav-link" href="profile.html">
+          <a class="nav-link" href="profileDepartment.html">
             <i class="fas fa-fw fa-user"></i>
             <span>ข้อมูลส่วนตัว</span></a
           >
@@ -256,6 +256,15 @@
                 <i class="fa fa-bars"></i>
               </button>
             </form>
+            <span>โรงพยาบาล:</span>&nbsp;<span id="navHospitalCode">-</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span>Location:</span>&nbsp;<span
+              id="navLocationCode"
+              >-</span
+            >
+            &nbsp;&nbsp;&nbsp;&nbsp;<span>แผนก:</span>&nbsp;<span
+              id="navDepartmentCode"
+              >-</span
+            >
 
             <!-- Topbar Search -->
             <!-- <form
@@ -582,25 +591,10 @@
                     <hr />
                     <form class="user">
                       <div class="form-group row">
-                        <div
-                          class="col-sm-3 mb-3 mb-sm-0 div-input-titleCode"
-                          style="padding-top: 5px"
-                        >
-                          <select
-                            class="custom-select titleCode"
-                            name="titleCode"
-                            id="titleCode"
-                            data-size="4"
+                        <div class="col-sm-6 mb-3 mb-sm-0 div-input-firstName">
+                          <label for="firstName" class="col-form-label-sm"
+                            >ชื่อ</label
                           >
-                            <option selected disabled>คำนำหน้า</option>
-                          </select>
-                          <div
-                            class="invalid-feedback validation-error-message"
-                          ></div>
-                          <span class="form-text text-muted"></span>
-                        </div>
-
-                        <div class="col-sm-4 mb-3 mb-sm-0 div-input-firstName">
                           <input
                             type="text"
                             class="form-control form-control-user"
@@ -612,7 +606,10 @@
                           ></div>
                           <span class="form-text text-muted"></span>
                         </div>
-                        <div class="col-sm-5 div-input-lastName">
+                        <div class="col-sm-6 div-input-lastName">
+                          <label for="lastName" class="col-form-label-sm"
+                            >นามสกุล</label
+                          >
                           <input
                             type="text"
                             class="form-control form-control-user"
@@ -625,29 +622,14 @@
                           <span class="form-text text-muted"></span>
                         </div>
                       </div>
-                      <div class="form-group div-input-identityCardId">
-                        <label for="identityCardId" class="col-form-label-sm"
-                          >หมายเลขบัตรประชาชน</label
+                      <div class="form-group div-input-agencyNo">
+                        <label for="agencyNo" class="col-form-label-sm"
+                          >รหัสหน่วยงาน</label
                         >
                         <input
                           class="form-control form-control-user"
-                          id="identityCardId"
-                          placeholder="หมายเลขบัตรประชาชน"
-                        />
-                        <div
-                          class="invalid-feedback validation-error-message"
-                        ></div>
-                        <span class="form-text text-muted"></span>
-                      </div>
-                      <div class="form-group div-input-email">
-                        <label for="email" class="col-form-label-sm"
-                          >Email</label
-                        >
-                        <input
-                          type="email"
-                          class="form-control form-control-user"
-                          id="email"
-                          placeholder="Email Address"
+                          id="agencyNo"
+                          placeholder="รหัสหน่วยงาน"
                         />
                         <div
                           class="invalid-feedback validation-error-message"
@@ -656,6 +638,21 @@
                       </div>
 
                       <div class="form-group row">
+                        <div class="col-sm-6 div-input-email">
+                          <label for="email" class="col-form-label-sm"
+                            >Email</label
+                          >
+                          <input
+                            type="email"
+                            class="form-control form-control-user"
+                            id="email"
+                            placeholder="Email Address"
+                          />
+                          <div
+                            class="invalid-feedback validation-error-message"
+                          ></div>
+                          <span class="form-text text-muted"></span>
+                        </div>
                         <div class="col-sm-6 mb-3 mb-sm-0 div-input-phone">
                           <label for="phone" class="col-form-label-sm"
                             >หมายเลขโทรศพท์</label
@@ -670,219 +667,46 @@
                           ></div>
                           <span class="form-text text-muted"></span>
                         </div>
-                        <div class="col-sm-6 div-input-lineID">
-                          <label for="lineID" class="col-form-label-sm"
-                            >LineID</label
-                          >
-                          <input
-                            class="form-control form-control-user"
-                            id="lineID"
-                            placeholder="LineID"
-                          />
-                          <div
-                            class="invalid-feedback validation-error-message"
-                          ></div>
-                          <span class="form-text text-muted"></span>
-                        </div>
                       </div>
 
                       <div class="form-group row">
-                        <div class="col-sm-6 mb-3 mb-sm-0 div-input-workplace">
-                          <label for="workplace" class="col-form-label-sm"
-                            >สถานที่ทำงาน</label
-                          >
-                          <input
-                            class="form-control form-control-user"
-                            id="workplace"
-                            placeholder="สถานที่ทำงาน"
-                          />
-                          <div
-                            class="invalid-feedback validation-error-message"
-                          ></div>
-                          <span class="form-text text-muted"></span>
-                        </div>
-                        <div
-                          class="col-sm-6 div-input-positionCode"
-                          style="padding-top: 6px"
-                        >
-                          <label for="positionCode" class="col-form-label-sm"
-                            >ตำแหน่ง</label
+                        <div class="col-sm-6 div-input-hospitalCode">
+                          <label for="hospitalCode" class="col-form-label-sm"
+                            >โรงพยาบาล</label
                           >
                           <select
-                            class="custom-select positionCode"
-                            name="positionCode"
-                            id="positionCode"
+                            class="custom-select hospitalCode"
+                            name="hospitalCode"
+                            id="hospitalCode"
                             data-size="4"
-                          >
-                            <option selected disabled>ตำแหน่ง</option>
-                          </select>
-                          <div
-                            class="invalid-feedback validation-error-message"
-                          ></div>
-                          <span class="form-text text-muted"></span>
+                          ></select>
                         </div>
-                      </div>
-
-                      <div class="form-group row">
-                        <div class="col-sm-6 mb-3 mb-sm-0">
-                          <label for="employeeNo" class="col-form-label-sm"
-                            >รหัสพนักงาน</label
+                        <div class="col-sm-6 div-input-locationCode">
+                          <label for="locationCode" class="col-form-label-sm"
+                            >Location</label
                           >
-                          <input
-                            class="form-control form-control-user"
-                            id="employeeNo"
-                            placeholder="รหัสพนักงาน"
-                          />
+                          <select
+                            class="custom-select locationCode"
+                            name="locationCode"
+                            id="locationCode"
+                            data-size="4"
+                          ></select>
                         </div>
-                        <div class="col-sm-6">
-                          <label for="vendorNo" class="col-form-label-sm"
-                            >เลข Vendor</label
+                        <div class="col-sm-6 div-input-departmentCode">
+                          <label for="departmentCode" class="col-form-label-sm"
+                            >แผนก</label
                           >
-                          <input
-                            class="form-control form-control-user"
-                            id="vendorNo"
-                            placeholder="เลข Vendor"
-                          />
-                        </div>
-                      </div>
-
-                      <div class="form-group row">
-                        <div class="col-sm-6 mb-3 mb-sm-0 div-input-iDCardCopy">
-                          <label for="iDCardCopy" class="col-form-label-sm"
-                            >สำเนาบัตรประชาชน</label
-                          >
-                          <div class="custom-file div-input-content">
-                            <input
-                              type="file"
-                              class="custom-file-input form-control"
-                              name="iDCardCopy"
-                            />
-                            <label
-                              class="custom-file-label iDCardCopyLabel"
-                            ></label>
-                          </div>
-                          <div
-                            class="invalid-feedback validation-error-message"
-                          ></div>
-                          <span class="form-text text-muted"></span>
-                          <a
-                            target="_blank"
-                            id="refFileUploadIDCardCopy"
-                            href="#"
-                            ><i
-                              class="fa flaticon2-file-1 kt-font-primary"
-                              id="fileNameIDCardCopy"
-                            ></i
-                          ></a>
-                        </div>
-
-                        <div
-                          class="col-sm-6 mb-3 mb-sm-0 div-input-professionalLicenseCopy"
-                        >
-                          <label
-                            for="professionalLicenseCopy"
-                            class="col-form-label-sm"
-                            >สำเนาใบประกอบวิชาชีพ</label
-                          >
-                          <div class="custom-file div-input-content">
-                            <input
-                              type="file"
-                              class="custom-file-input form-control"
-                              name="professionalLicenseCopy"
-                            />
-                            <label
-                              class="custom-file-label professionalLicenseCopyLabel"
-                            ></label>
-                          </div>
-                          <div
-                            class="invalid-feedback validation-error-message"
-                          ></div>
-                          <span class="form-text text-muted"></span>
-                          <a
-                            href="#"
-                            target="_blank"
-                            id="refFileUploadProfessionalLicenseCopy"
-                            ><i
-                              class="fa flaticon2-file-1 kt-font-primary"
-                              id="fileNameProfessionalLicenseCopy"
-                            ></i
-                          ></a>
+                          <select
+                            class="custom-select departmentCode"
+                            name="departmentCode"
+                            id="departmentCode"
+                            data-size="4"
+                          ></select>
                         </div>
                       </div>
                     </form>
                     <form class="user">
                       <br />
-                      <div class="card shadow mb-4">
-                        <a
-                          href="#collapseCardEducation"
-                          class="d-block card-header py-3"
-                          data-toggle="collapse"
-                          role="button"
-                          aria-expanded="true"
-                          aria-controls="collapseCardEducation"
-                        >
-                          <h6 class="m-0 text-primary">ประวัติการศึกษา</h6>
-                        </a>
-
-                        <div
-                          class="collapse show"
-                          id="collapseCardEducation"
-                        ></div>
-                      </div>
-                      <a
-                        class="btn btn-success btn-circle btn-sm"
-                        id="addEducation"
-                      >
-                        <i class="fas fa-plus"></i>
-                      </a>
-                      <div class="card shadow mb-4">
-                        <a
-                          href="#collapseCardExperience"
-                          class="d-block card-header py-3"
-                          data-toggle="collapse"
-                          role="button"
-                          aria-expanded="true"
-                          aria-controls="collapseCardExperience"
-                        >
-                          <h6 class="m-0 text-primary">ประสบการณ์</h6>
-                        </a>
-
-                        <div
-                          class="collapse show"
-                          id="collapseCardExperience"
-                        ></div>
-                      </div>
-                      <a
-                        class="btn btn-success btn-circle btn-sm"
-                        id="addExperience"
-                      >
-                        <i class="fas fa-plus"></i>
-                      </a>
-                      <div class="card shadow mb-4">
-                        <a
-                          href="#collapseCardCourse"
-                          class="d-block card-header py-3"
-                          data-toggle="collapse"
-                          role="button"
-                          aria-expanded="true"
-                          aria-controls="collapseCardCourse"
-                        >
-                          <h6 class="m-0 text-primary">
-                            คอร์สอบรม(เกี่ยวกับวิชาชีพ)
-                          </h6>
-                        </a>
-
-                        <div class="collapse show" id="collapseCardCourse">
-                          <!-- <div class="card-body">ไม่มีข้อมูล</div> -->
-                        </div>
-                      </div>
-                      <a
-                        class="btn btn-success btn-circle btn-sm"
-                        id="addCourse"
-                      >
-                        <i class="fas fa-plus"></i>
-                      </a>
-
                       <div class="form-group row">
                         <div
                           class="col-sm-12"
@@ -896,7 +720,6 @@
                           </a>
                         </div>
                       </div>
-
                       <hr />
                     </form>
                   </div>
@@ -991,7 +814,7 @@
 
     <!-- Custom scripts for all pages-->
     <!-- <script src="js/sb-admin-2.min.js"></script> -->
-    <script src="js/profile.js"></script>
+    <script src="js/profileDepartment.js"></script>
 
     <!-- Page level custom scripts -->
     <!-- <script src="js/demo/datatables-demo.js"></script> -->
