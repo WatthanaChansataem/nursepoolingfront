@@ -50,7 +50,6 @@
 let isInvalidClass = "is-invalid";
 let validationErrorMessageClass = "validation-error-message";
 let isValidate = 0;
-
 let hospitalMap = new Map();
 let hospitalMaster;
 let locationMap = new Map();
@@ -71,7 +70,6 @@ let experienceCount = 0;
 let experienceIdList = [];
 let courseCount = 0;
 let courseIdList = [];
-let userData;
 
 let DocumentTypeCode = {
   Other: 0,
@@ -83,9 +81,8 @@ let DocumentTypeCode = {
 
 $(document).ready(function () {
   let setupDataDefered = $.Deferred();
-  // LoadDutyFile();
   SetupData.init(setupDataDefered);
-  sessionStorage.setItem("test", "12356");
+  localStorage.setItem("test", "12356");
 
   $.when(setupDataDefered).done(function (success) {
     if (!success) {
@@ -100,9 +97,6 @@ let SetupData = (function () {
     $.ajax({
       url: "https://localhost:7063/api/title/list",
       type: "GET",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
       success: function (res) {
         if (res.status.code == 200) {
           titleMaster = res.data;
@@ -126,9 +120,6 @@ let SetupData = (function () {
     $.ajax({
       url: "https://localhost:7063/api/educationalQualification/list",
       type: "GET",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
       success: function (res) {
         if (res.status.code == 200) {
           educationalQualificationMaster = res.data;
@@ -155,14 +146,11 @@ let SetupData = (function () {
     $.ajax({
       url: "https://localhost:7063/api/experienceType/list",
       type: "GET",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
       success: function (res) {
         if (res.status.code == 200) {
           experienceTypeMaster = res.data;
           for (let data of res.data) {
-            experienceTypeMap.set(data.positionCode, data);
+            experienceTypeMap.set(data.experienceTypeCode, data);
           }
           defered.resolve(true);
         } else {
@@ -181,9 +169,6 @@ let SetupData = (function () {
     $.ajax({
       url: "https://localhost:7063/api/position/list",
       type: "GET",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
       success: function (res) {
         if (res.status.code == 200) {
           positionMaster = res.data;
@@ -203,37 +188,6 @@ let SetupData = (function () {
     });
   };
 
-  let loadUserData = function (defered) {
-    $.ajax({
-      url: "https://localhost:7063/api/user/details",
-      type: "GET",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-      success: function (res) {
-        if (res.status.code == 200) {
-          userData = res.data;
-          //   positionMaster = res.data;
-          //   for (let data of res.data) {
-          //     positionMap.set(data.positionCode, data);
-          //   }
-          $("#currentUserName").html(
-            userData.firstName + " " + userData.lastName
-          );
-          defered.resolve(true);
-        } else {
-          defered.resolve(false);
-          toastr.error("ไม่สามารถดึงข้อมูลผู้ใช้ได้", "Error");
-          window.location.href = "login.html";
-        }
-      },
-      error: function (res) {
-        defered.resolve(false);
-        toastr.error("ไม่สามารถดึงข้อมูลผู้ใช้ได้", "Error");
-        window.location.href = "login.html";
-      },
-    });
-  };
   let loadHospital = function (defered) {
     $.ajax({
       url: "https://localhost:7063/api/hospital/list",
@@ -317,7 +271,6 @@ let SetupData = (function () {
       let positionDefered = $.Deferred();
       let educationalQualificationDefered = $.Deferred();
       let experienceTypeDefer = $.Deferred();
-      let userProfileDefered = $.Deferred();
       let hospitalDefered = $.Deferred();
       let locationDefered = $.Deferred();
       let departmentDefered = $.Deferred();
@@ -325,7 +278,6 @@ let SetupData = (function () {
       loadPosition(positionDefered);
       loadEducationalQualification(educationalQualificationDefered);
       loadExperienceType(experienceTypeDefer);
-      loadUserData(userProfileDefered);
       loadHospital(hospitalDefered);
       loadLocation(locationDefered);
       loadDepartment(departmentDefered);
@@ -335,7 +287,6 @@ let SetupData = (function () {
         positionDefered,
         educationalQualificationDefered,
         experienceTypeDefer,
-        userProfileDefered,
         hospitalDefered,
         locationDefered,
         departmentDefered
@@ -344,7 +295,6 @@ let SetupData = (function () {
         positionDefered,
         educationalQualificationResult,
         experienceTypeResult,
-        userProfileResult,
         hospitalResult,
         locationResult,
         departmentResult
@@ -354,7 +304,6 @@ let SetupData = (function () {
           positionDefered &&
           educationalQualificationResult &&
           experienceTypeResult &&
-          userProfileResult &&
           hospitalResult &&
           locationResult &&
           departmentResult
@@ -369,16 +318,6 @@ let SetupData = (function () {
 })();
 
 let renderPage = function () {
-  $("#profileImg").attr(
-    "src",
-    `https://localhost:7063/api/document/avatar/${userData.userId}`
-  );
-
-  $("#navProfileImg").attr(
-    "src",
-    `https://localhost:7063/api/document/avatar/${userData.userId}`
-  );
-
   $.each(hospitalMaster, function (i, item) {
     $("select[name=hospitalCode]").append(
       $("<option>", {
@@ -405,29 +344,6 @@ let renderPage = function () {
       })
     );
   });
-
-  $(".alert").hide();
-
-  $("#firstName").val(userData.firstName);
-  $("#lastName").val(userData.lastName);
-  $("#agencyNo").val(userData.agencyNo);
-  $("#email").val(userData.email);
-  $("#phone").val(userData.phone);
-
-  $("#navHospitalCode").html(
-    hospitalMap.get(userData.hospitalCode).hospitalDesc
-  );
-
-  $("#navLocationCode").html(
-    locationMap.get(userData.locationCode).locationDesc
-  );
-
-  $("#navDepartmentCode").html(
-    departmentMap.get(userData.departmentCode).departmentDesc
-  );
-  $("#hospitalCode").val(userData.hospitalCode);
-  $("#locationCode").val(userData.locationCode);
-  $("#departmentCode").val(userData.departmentCode);
 };
 
 $("input[name=changeProfileImage]").on("change", function () {
@@ -436,7 +352,6 @@ $("input[name=changeProfileImage]").on("change", function () {
   uploadata.append("documentName", changeElement[0].files[0].name);
   uploadata.append("document", changeElement[0].files[0]);
   uploadata.append("documentTypeCode", DocumentTypeCode.ProfileImg);
-  uploadata.append("insertUserId", userData.userId);
 
   let defer = $.Deferred();
   upLoadFileWithContent(uploadata, defer);
@@ -507,50 +422,83 @@ function removeItemCourse(value) {
 
 $("#submitRegister").on("click", function () {
   isValidate = 0;
-
   let firstName = $("#firstName").val();
-  let lastName = $("#lastName").val();
   let agencyNo = $("#agencyNo").val();
   let email = $("#email").val();
   let phone = $("#phone").val();
+  let userName = $(`#userName`).val();
+  let password = $(`#password`).val();
+  let repeatPassword = $(`#repeatPassword`).val();
   let hospitalCode = $("#hospitalCode").val();
   let locationCode = $("#locationCode").val();
   let departmentCode = $("#departmentCode").val();
+  let profileDocumentId = parseInt(
+    $("input[name=changeProfileImage]").attr("documentId")
+  );
 
   let objadddata = {
-    userId: 0,
     firstName: firstName,
-    lastName: lastName,
     agencyNo: agencyNo,
     email: email,
     phone: phone,
+    userName: userName,
+    password: password,
+    repeatPassword: repeatPassword,
+    profileDocumentId: profileDocumentId,
     hospitalCode: hospitalCode,
     locationCode: locationCode,
     departmentCode: departmentCode,
   };
+  console.log(objadddata);
+
+  if (objadddata["userName"] == "" || objadddata["userName"] == null) {
+    $(`.div-input-userName .form-control`).addClass(isInvalidClass);
+    $(`.div-input-userName .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
+    // scrollToElement($(`.div-input-userName .form-control`));
+    isValidate = 1;
+  } else {
+    $(`.div-input-userName .form-control`).removeClass(isInvalidClass);
+  }
+
+  let pattern =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+!.=])[a-zA-Z0-9@#$%^&+!.=]{7,}$/;
+  let isValid = pattern.test(objadddata["password"]);
+
+  if (!isValid) {
+    $(`.div-input-password .form-control`).addClass(isInvalidClass);
+    $(`.div-input-password .${validationErrorMessageClass}`).html(
+      `ต้องมีอักษรตัวพิมพ์เล็กอย่างน้อยหนึ่งตัว มีอักษรตัวพิมพ์ใหญ่อย่างน้อยหนึ่งตัว มีตัวเลขอย่างน้อยหนึ่งตัว มีอักขระพิเศษ @#$%^&+!.= อย่างน้อยหนึ่งตัว และมีความยาวอย่างน้อย 7 ตัวอักษร`
+    );
+    // scrollToElement($(`.div-input-password .form-control`));
+    isValidate = 1;
+  } else {
+    $(`.div-input-password .form-control`).removeClass(isInvalidClass);
+  }
+
+  if (objadddata["repeatPassword"] != objadddata["password"]) {
+    $(`.div-input-repeatPassword .form-control`).addClass(isInvalidClass);
+    $(`.div-input-repeatPassword .${validationErrorMessageClass}`).html(
+      `รหัสผ่านไม่ตรงกัน`
+    );
+    // scrollToElement($(`.div-input-repeatPassword .form-control`));
+    isValidate = 1;
+  } else {
+    $(`.div-input-repeatPassword .form-control`).removeClass(isInvalidClass);
+  }
 
   if (objadddata["firstName"] == "" || objadddata["firstName"] == null) {
     $(`.div-input-firstName .form-control`).addClass(isInvalidClass);
     $(`.div-input-firstName .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
-    scrollToElement($(`.div-input-firstName .form-control`));
+    // scrollToElement($(`.div-input-firstName .form-control`));
     isValidate = 1;
   } else {
     $(`.div-input-firstName .form-control`).removeClass(isInvalidClass);
   }
 
-  //   if (objadddata["lastName"] == "" || objadddata["lastName"] == null) {
-  //     $(`.div-input-lastName .form-control`).addClass(isInvalidClass);
-  //     $(`.div-input-lastName .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
-  //     scrollToElement($(`.div-input-lastName .form-control`));
-  //     isValidate = 1;
-  //   } else {
-  //     $(`.div-input-lastName .form-control`).removeClass(isInvalidClass);
-  //   }
-
   if (objadddata["agencyNo"] == "" || objadddata["agencyNo"] == null) {
     $(`.div-input-agencyNo .form-control`).addClass(isInvalidClass);
     $(`.div-input-agencyNo .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
-    scrollToElement($(`.div-input-agencyNo .form-control`));
+    // scrollToElement($(`.div-input-agencyNo .form-control`));
     isValidate = 1;
   } else {
     $(`.div-input-agencyNo .form-control`).removeClass(isInvalidClass);
@@ -559,7 +507,7 @@ $("#submitRegister").on("click", function () {
   if (objadddata["email"] == "" || objadddata["email"] == null) {
     $(`.div-input-email .form-control`).addClass(isInvalidClass);
     $(`.div-input-email .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
-    scrollToElement($(`.div-input-email .form-control`));
+    // scrollToElement($(`.div-input-email .form-control`));
     isValidate = 1;
   } else {
     $(`.div-input-email .form-control`).removeClass(isInvalidClass);
@@ -568,14 +516,13 @@ $("#submitRegister").on("click", function () {
   if (objadddata["phone"] == "" || objadddata["phone"] == null) {
     $(`.div-input-phone .form-control`).addClass(isInvalidClass);
     $(`.div-input-phone .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
-    scrollToElement($(`.div-input-phone .form-control`));
+    // scrollToElement($(`.div-input-phone .form-control`));
     isValidate = 1;
   } else if (isNaN(Number(objadddata["phone"]))) {
     $(`.div-input-phone .form-control`).addClass(isInvalidClass);
     $(`.div-input-phone .${validationErrorMessageClass}`).html(
       `ไม่สามารถมีตัวอักษรได้`
     );
-    scrollToElement($(`.div-input-phone .form-control`));
     isValidate = 1;
   } else {
     $(`.div-input-phone .form-control`).removeClass(isInvalidClass);
@@ -590,7 +537,7 @@ $("#submitRegister").on("click", function () {
     $(`.div-input-hospitalCode .${validationErrorMessageClass}`).html(
       `กรุณาระบุ`
     );
-
+    // scrollToElement($(`.div-input-hospitalCode .custom-select`));
     isValidate = 1;
   } else {
     $(`.div-input-hospitalCode .custom-select`).removeClass(isInvalidClass);
@@ -605,7 +552,7 @@ $("#submitRegister").on("click", function () {
     $(`.div-input-locationCode .${validationErrorMessageClass}`).html(
       `กรุณาระบุ`
     );
-
+    // scrollToElement($(`.div-input-locationCode .custom-select`));
     isValidate = 1;
   } else {
     $(`.div-input-locationCode .custom-select`).removeClass(isInvalidClass);
@@ -620,7 +567,7 @@ $("#submitRegister").on("click", function () {
     $(`.div-input-departmentCode .${validationErrorMessageClass}`).html(
       `กรุณาระบุ`
     );
-
+    // scrollToElement($(`.div-input-departmentCode .custom-select`));
     isValidate = 1;
   } else {
     $(`.div-input-departmentCode .custom-select`).removeClass(isInvalidClass);
@@ -629,40 +576,25 @@ $("#submitRegister").on("click", function () {
   if (isValidate == 1) {
     return;
   }
-
   $.ajax({
-    url: "https://localhost:7063/api/user/updatedepartment",
+    url: "https://localhost:7063/api/user/createdepartment",
     type: "POST",
-    headers: {
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
     data: JSON.stringify(objadddata),
     contentType: "application/json; charset=utf-8",
     dataType: "json",
     success: function (res) {
       if (res.status.code == 200) {
-        toastr.success("บันทึกสำเร็จสำเร็จ");
+        toastr.success("ลงทะเบียนสำเร็จ");
+        window.location.href = "login.html";
       } else {
         toastr.error(res.status.message);
       }
     },
     error: function (res) {
-      toastr.error("ไม่สามารถบันทึกได้");
+      toastr.error("ไม่สามารถลงทะเบียนได้");
     },
   });
 });
-
-function readURL(input) {
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
-
-    reader.onload = function (e) {
-      $("#profileImg").attr("src", e.target.result).width(100).height(100);
-    };
-
-    reader.readAsDataURL(input.files[0]);
-  }
-}
 
 let upLoadFileWithContent = function (uploadFileData, defer) {
   $.ajax({
@@ -688,10 +620,26 @@ let upLoadFileWithContent = function (uploadFileData, defer) {
   });
 };
 
-$("#logoutConfirm").on("click", function () {
-  localStorage.clear();
-  window.location.href = "login.html";
-});
+function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+      $("#profileImg").attr("src", e.target.result).width(100).height(100);
+    };
+
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function showPassword() {
+  let element = document.getElementById("password");
+  if (element.type === "password") {
+    element.type = "text";
+  } else {
+    element.type = "password";
+  }
+}
 
 let scrollToElement = function (element) {
   let windowHeight = $(window).height();

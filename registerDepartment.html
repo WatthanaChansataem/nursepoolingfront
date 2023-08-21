@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>NursePooling - Register</title>
+
+    <!-- Custom fonts for this template-->
+    <link
+      href="vendor/fontawesome-free/css/all.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css"
+      rel="stylesheet"
+    />
+    <!-- Latest compiled and minified CSS -->
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css"
+    /> -->
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+
+    <!-- Include toastr CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"
+    />
+  </head>
+
+  <style>
+    .custom-select {
+      /* padding-top: 0.25rem; */
+      border-radius: 10px;
+      font-size: 15px;
+      /* max-height: 150px !important; */
+    }
+    .form-control-sm {
+      border-radius: 10px;
+    }
+    /* .custom-select {
+      display: inline-block;
+    } */
+  </style>
+
+  <body class="bg-gradient-primary">
+    <div class="container">
+      <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card-body p-0">
+          <!-- Nested Row within Card Body -->
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="p-3">
+                <div class="text-center">
+                  <h1 class="h4 text-gray-900 mb-4">ลงทะเบียนหน่วยงาน</h1>
+                </div>
+                <div class="text-center">
+                  <img
+                    class="img-profile rounded-circle"
+                    src="img/undraw_profile.svg"
+                    id="profileImg"
+                    width="100"
+                    height="100"
+                  />
+                  <br />
+                  <br />
+                  <div class="text-center" style="display: none">
+                    <input
+                      class="input-sm"
+                      type="file"
+                      onchange="readURL(this);"
+                      style="width: 200px; line-height: 1em"
+                      id="changeProfileImage"
+                      name="changeProfileImage"
+                      accept="image/*"
+                      alt="image"
+                    />
+                  </div>
+                  <a class="small" href="#" id="editProfile">รูปโปรไฟล์</a>
+                </div>
+                <br />
+                <form class="user">
+                  <div class="form-group row">
+                    <div class="col-sm-6 mb-3 mb-sm-0 div-input-firstName">
+                      <input
+                        type="text"
+                        class="form-control form-control-user"
+                        id="firstName"
+                        placeholder="ชื่อ"
+                      />
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
+                    </div>
+                    <div class="col-sm-6 div-input-agencyNo">
+                      <input
+                        class="form-control form-control-user"
+                        id="agencyNo"
+                        placeholder="รหัสหน่วยงาน"
+                      />
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
+                    </div>
+                    <!-- <div class="col-sm-6 div-input-lastName">
+                      <input
+                        type="text"
+                        class="form-control form-control-user"
+                        id="lastName"
+                        placeholder="นามสกุล"
+                      />
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
+                    </div> -->
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="col-sm-6 mb-3 mb-sm-0 div-input-email">
+                      <input
+                        type="email"
+                        class="form-control form-control-user"
+                        id="email"
+                        placeholder="Email Address"
+                      />
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
+                    </div>
+                    <div class="col-sm-6 mb-3 mb-sm-0 div-input-phone">
+                      <input
+                        class="form-control form-control-user"
+                        id="phone"
+                        placeholder="หมายเลขโทรศพท์"
+                      />
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <div class="col-sm-6 div-input-hospitalCode">
+                      <label for="hospitalCode" class="col-form-label-sm"
+                        >โรงพยาบาล</label
+                      >
+                      <select
+                        class="custom-select hospitalCode"
+                        name="hospitalCode"
+                        id="hospitalCode"
+                        data-size="4"
+                      >
+                        <option selected disabled hidden>กรุณาเลือก</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-6 div-input-locationCode">
+                      <label for="locationCode" class="col-form-label-sm"
+                        >Location</label
+                      >
+                      <select
+                        class="custom-select locationCode"
+                        name="locationCode"
+                        id="locationCode"
+                        data-size="4"
+                      >
+                        <option selected disabled hidden>กรุณาเลือก</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-6 div-input-departmentCode">
+                      <label for="departmentCode" class="col-form-label-sm"
+                        >แผนก</label
+                      >
+                      <select
+                        class="custom-select departmentCode"
+                        name="departmentCode"
+                        id="departmentCode"
+                        data-size="4"
+                      >
+                        <option selected disabled hidden>กรุณาเลือก</option>
+                      </select>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="p-3">
+                <form class="user">
+                  <div class="form-group div-input-userName">
+                    <input
+                      type="usernames"
+                      class="form-control form-control-user"
+                      id="userName"
+                      placeholder="Username"
+                    />
+                    <div
+                      class="invalid-feedback validation-error-message"
+                    ></div>
+                    <span class="form-text text-muted"></span>
+                  </div>
+                  <div class="form-group row">
+                    <div class="col-sm-6 div-input-password">
+                      <input
+                        type="password"
+                        class="form-control form-control-user"
+                        id="password"
+                        placeholder="Password"
+                      />
+                      <input type="checkbox" onclick="showPassword()" /><label
+                        class="small"
+                      >
+                        &nbsp;&nbsp;แสดง Password
+                      </label>
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
+                    </div>
+                    <div class="col-sm-6 div-input-repeatPassword">
+                      <input
+                        type="password"
+                        class="form-control form-control-user"
+                        id="repeatPassword"
+                        placeholder="Repeat Password"
+                      />
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
+                    </div>
+                  </div>
+
+                  <a
+                    class="btn btn-primary btn-user btn-block"
+                    id="submitRegister"
+                  >
+                    ลงทะเบียน
+                  </a>
+                  <hr />
+                  <div class="text-center">
+                    <a class="small" href="forgot-password.html"
+                      >ลืมรหัสผ่าน?</a
+                    >
+                  </div>
+                  <div class="text-center">
+                    <a class="small" href="login.html"
+                      >เคยลงทะเบียนแล้ว? ล็อกอิน!</a
+                    >
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> -->
+
+    <!--  -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
+    <!-- <script src="https://netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="js/registerDepartment.js"></script>
+  </body>
+</html>
