@@ -204,9 +204,7 @@ let SetupData = (function () {
       success: function (res) {
         if (res.status.code == 200) {
           userData = res.data;
-          $("#currentUserName").html(
-            userData.firstName + " " + userData.lastName
-          );
+          $("#currentUserName").html(userData.firstName);
           $("#navProfileImg").attr(
             "src",
             `https://localhost:7063/api/document/avatar/${userData.userId}`

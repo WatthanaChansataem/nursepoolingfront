@@ -217,9 +217,7 @@ let SetupData = (function () {
           //   for (let data of res.data) {
           //     positionMap.set(data.positionCode, data);
           //   }
-          $("#currentUserName").html(
-            userData.firstName + " " + userData.lastName
-          );
+          $("#currentUserName").html(userData.firstName);
           defered.resolve(true);
         } else {
           defered.resolve(false);
