@@ -64,6 +64,11 @@ let positionMap = new Map();
 let positionMaster;
 let userData;
 
+let educationalQualificationMap = new Map();
+let educationalQualificationMaster;
+let experienceTypeMap = new Map();
+let experienceTypeMaster;
+
 let dutyScheduleStatusMasters = [
   { statusCode: "N", statusDesc: "Normal" },
   { statusCode: "A", statusDesc: "Approve" },
@@ -249,6 +254,56 @@ let SetupData = (function () {
       },
     });
   };
+
+  let loadEducationalQualification = function (defered) {
+    $.ajax({
+      url: "https://localhost:7063/api/educationalQualification/list",
+      type: "GET",
+      success: function (res) {
+        if (res.status.code == 200) {
+          educationalQualificationMaster = res.data;
+          for (let data of res.data) {
+            educationalQualificationMap.set(
+              data.educationalQualificationCode,
+              data
+            );
+          }
+          defered.resolve(true);
+        } else {
+          defered.resolve(false);
+          toastr.error("ไม่สามารถดึงข้อมูลวุฒิการศึกษาได้", "Error");
+        }
+      },
+      error: function (res) {
+        defered.resolve(false);
+        toastr.error("ไม่สามารถดึงข้อมูลวุฒิการศึกษาได้", "Error");
+      },
+    });
+  };
+
+  let loadExperienceType = function (defered) {
+    $.ajax({
+      url: "https://localhost:7063/api/experienceType/list",
+      type: "GET",
+      success: function (res) {
+        if (res.status.code == 200) {
+          experienceTypeMaster = res.data;
+          for (let data of res.data) {
+            experienceTypeMap.set(data.experienceTypeCode, data);
+          }
+          defered.resolve(true);
+        } else {
+          defered.resolve(false);
+          toastr.error("ไม่สามารถดึงข้อมูลประเภทประสบการณ์ได้", "Error");
+        }
+      },
+      error: function (res) {
+        defered.resolve(false);
+        toastr.error("ไม่สามารถดึงข้อมูลประเภทประสบการณ์ได้", "Error");
+      },
+    });
+  };
+
   return {
     init: function (defered) {
       let hospitalDefered = $.Deferred();
@@ -256,31 +311,41 @@ let SetupData = (function () {
       let departmentDefered = $.Deferred();
       let userDataDefered = $.Deferred();
       let positionDefered = $.Deferred();
+      let educationalQualificationDefered = $.Deferred();
+      let experienceTypeDefer = $.Deferred();
       loadHospital(hospitalDefered);
       loadLocation(locationDefered);
       loadDepartment(departmentDefered);
       loadUserData(userDataDefered);
       loadPosition(positionDefered);
+      loadEducationalQualification(educationalQualificationDefered);
+      loadExperienceType(experienceTypeDefer);
 
       $.when(
         hospitalDefered,
         locationDefered,
         departmentDefered,
         userDataDefered,
-        positionDefered
+        positionDefered,
+        educationalQualificationDefered,
+        experienceTypeDefer
       ).done(function (
         hospitalResult,
         locationDefered,
         departmentDefered,
         userDataResult,
-        positionResult
+        positionResult,
+        educationalQualificationResult,
+        experienceTypeResult
       ) {
         if (
           hospitalResult &&
           locationDefered &&
           departmentDefered &&
           userDataResult &&
-          positionResult
+          positionResult &&
+          educationalQualificationResult &&
+          experienceTypeResult
         ) {
           defered.resolve(true);
         } else {
@@ -331,6 +396,37 @@ $("#generalSearch").on("click", function () {
 
 $("#sidebarToggle").on("click", function () {
   CreateDatatable.adjust();
+});
+
+$("#submit").off("click");
+$("#submit").on("click", function () {
+  let data = CreateDatatableDetail.getData();
+  console.log(data);
+  let objData = {
+    dutyDate: $("#dutyDateDisplayModal").html(),
+    approveDutyScheduleList: data,
+  };
+  $.ajax({
+    url: "https://localhost:7063/api/dutySchedule/approvedutySchedule",
+    type: "POST",
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+    data: JSON.stringify(objData),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (res) {
+      if (res.status.code == 200) {
+        toastr.success("บันทึกสำเร็จ");
+        modal.modal("hide");
+      } else {
+        toastr.error(res.status.message);
+      }
+    },
+    error: function (res) {
+      toastr.error("ไม่สามารถบันทึกได้");
+    },
+  });
 });
 
 let CreateDatatable = (function () {
@@ -959,25 +1055,97 @@ let loadUserDateForApproveModal = function (day, data) {
     dataType: "json",
     success: function (res) {
       if (res.status.code == 200) {
+        let approvalDetaildata = res.data;
+        // modal.find("label").text("");
         $("#dutyDateDisplayModal").html(
-          moment(res.data.dutyDate).format("DD/MM/YYYY")
+          moment(approvalDetaildata.dutyDate).format("DD/MM/YYYY")
         );
         $("#profileImg").attr(
           "src",
-          `https://localhost:7063/api/document/avatar/${res.data.userId}`
+          `https://localhost:7063/api/document/avatar/${approvalDetaildata.userId}`
         );
 
         $("#firstNameModal").html(
-          "ชื่อ: " + res.data.firstName + " " + res.data.lastName
+          '<strong class="text-gray-900">ชื่อ:  </strong> ' +
+            approvalDetaildata.firstName +
+            " " +
+            approvalDetaildata.lastName
         );
 
-        $("#positionCodeModal").html("ตำแหน่ง: " + res.data.positionDesc);
+        $("#positionCodeModal").html(
+          '<strong class="text-gray-900">ตำแหน่ง:  </strong> ' +
+            approvalDetaildata.positionDesc
+        );
 
-        $("#workplaceModal").html("สถานที่ทำงาน: " + res.data.workplace);
+        $("#workplaceModal").html(
+          '<strong class="text-gray-900">สถานที่ทำงาน:  </strong> ' +
+            approvalDetaildata.workplace
+        );
 
-        $("#userLevelCode").html("Level: " + res.data.userLevelCode);
+        $("#userLevelCode").html(
+          '<strong class="text-gray-900">Level:  </strong> ' +
+            approvalDetaildata.userLevelCode
+        );
 
-        CreateDatatableDetail.data(res.data.dutyScheduleList);
+        $("#phone").html(
+          '<strong class="text-gray-900">หมายเลขโทรศพท์:  </strong> ' +
+            approvalDetaildata.phone
+        );
+
+        $("#email").html(
+          '<strong class="text-gray-900">Email:  </strong> ' +
+            approvalDetaildata.email
+        );
+
+        console.log(approvalDetaildata);
+        if (approvalDetaildata.educationList.length != 0) {
+          $("#educationalQualificationCode").html(
+            '<strong class="text-gray-900">วุฒิการศึกษา:  </strong> ' +
+              educationalQualificationMap.get(
+                approvalDetaildata.educationList[0].educationalQualificationCode
+              ).educationalQualificationDesc
+          );
+
+          $("#majorCode").html(
+            '<strong class="text-gray-900">สาขา:  </strong> ' +
+              approvalDetaildata.educationList[0].majorCode
+          );
+
+          $("#graduationYear").html(
+            '<strong class="text-gray-900">ปีที่จบ:  </strong> ' +
+              approvalDetaildata.educationList[0].graduationYear
+          );
+
+          $("#university").html(
+            '<strong class="text-gray-900">มหาวิทยาลัย:  </strong> ' +
+              approvalDetaildata.educationList[0].university
+          );
+        }
+
+        if (approvalDetaildata.experienceList.length != 0) {
+          $("#experienceTypeCode").html(
+            '<strong class="text-gray-900">ประสบการณ์:  </strong> ' +
+              experienceTypeMap.get(
+                approvalDetaildata.experienceList[0].experienceTypeCode
+              ).experienceTypeDesc
+          );
+
+          $("#positionCode").html(
+            '<strong class="text-gray-900">ตำแหน่ง:  </strong> ' +
+              approvalDetaildata.experienceList[0].positionCode
+          );
+
+          $("#beginYear").html(
+            '<strong class="text-gray-900">ปีที่เริ่ม:  </strong> ' +
+              approvalDetaildata.experienceList[0].beginYear
+          );
+
+          $("#endYear").html(
+            '<strong class="text-gray-900">ปีที่สิ้นสุด:  </strong> ' +
+              approvalDetaildata.experienceList[0].endYear
+          );
+        }
+        CreateDatatableDetail.data(approvalDetaildata.dutyScheduleList);
         modal.modal("show");
       } else {
         toastr.error(res.status.message);
@@ -1016,11 +1184,9 @@ let CreateDatatableDetail = (function () {
         { data: "departmentCode1", className: "text-center" },
         { data: "shiftStart", className: "text-center" },
         { data: "hospitalCode", className: "text-center" },
-
         { data: "hospitalCode", className: "text-center" },
         { data: "hospitalCode", className: "text-center" },
         { data: "hospitalCode", className: "text-center" },
-
         { data: "status", className: "text-center" },
         { data: "adminRemark", className: "text-center" },
         { data: "", className: "text-center" },
@@ -1143,7 +1309,10 @@ let CreateDatatableDetail = (function () {
                         <option selected disabled>ตำแหน่ง</option>
                     </select>`;
             } else {
-              return hospitalMap.get(full.approveHospitalCode).hospitalDesc;
+              return full.approveHospitalCode == null ||
+                isNaN(full.approveHospitalCode)
+                ? "-"
+                : hospitalMap.get(full.approveHospitalCode).hospitalDesc;
             }
           },
         },
@@ -1151,14 +1320,32 @@ let CreateDatatableDetail = (function () {
           targets: 12,
           title: "Locationที่อนุมัติ",
           render: function (data, type, full, meta) {
-            return "-";
+            if (full.isUpdate === true) {
+              return `<select class="custom-select locationCode" name="locationCode" id="locationCode" data-size="4">
+                          <option selected disabled>Location</option>
+                      </select>`;
+            } else {
+              return full.approveLocationCode == null ||
+                isNaN(full.approveLocationCode)
+                ? "-"
+                : locationMap.get(full.approveLocationCode).locationDesc;
+            }
           },
         },
         {
           targets: 13,
           title: "แผนกที่อนุมัติ",
           render: function (data, type, full, meta) {
-            return "-";
+            if (full.isUpdate === true) {
+              return `<select class="custom-select departmentCode" name="departmentCode" id="departmentCode" data-size="4">
+                            <option selected disabled>แผนก</option>
+                        </select>`;
+            } else {
+              return full.approveDepartmentCode == null ||
+                isNaN(full.approveDepartmentCode)
+                ? "-"
+                : departmentMap.get(full.approveDepartmentCode).departmentDesc;
+            }
           },
         },
         {
@@ -1166,10 +1353,13 @@ let CreateDatatableDetail = (function () {
           title: "ช่วงเวลาที่อนุมัติ",
           render: function (data, type, full, meta) {
             if (full.isUpdate === true) {
-              return `<input type="time" class="form-control form-control-sm" name="shiftStartEdit" id="shiftStartEdit" value="${full.shiftStart}" /> 
-            <input type="time" class="form-control form-control-sm" name="shiftEndEdit" id="shiftEndEdit" value="${full.shiftEnd}" />`;
+              return `<input type="time" class="form-control form-control-sm" name="shiftStartEdit" id="shiftStartEdit" value="${full.approveShiftStart}" /> 
+            <input type="time" class="form-control form-control-sm" name="shiftEndEdit" id="shiftEndEdit" value="${full.approveShiftEnd}" />`;
             } else {
-              return full.shiftStart + "-" + full.shiftEnd;
+              return full.approveShiftStart != null &&
+                full.approveShiftEnd != null
+                ? full.approveShiftStart + "-" + full.approveShiftEnd
+                : "-";
             }
           },
         },
@@ -1177,14 +1367,26 @@ let CreateDatatableDetail = (function () {
           targets: 15,
           title: "สถานะ",
           render: function (data, type, full, meta) {
-            return `<a class="btn btn-${dutyScheduleSStatusMap[data].state}" style="width: 90px;">${dutyScheduleSStatusMap[data].desc}</a>`;
+            if (full.isUpdate === true) {
+              return `<select class="custom-select statusCode" name="statusCode" id="statusCode" data-size="4">
+                <option selected disabled>สถานะ</option>
+            </select>`;
+            } else {
+              return `<a class="btn btn-${dutyScheduleSStatusMap[data].state}" style="width: 90px;">${dutyScheduleSStatusMap[data].desc}</a>`;
+            }
           },
         },
         {
           targets: 16,
           title: "หมายเหตุ",
           render: function (data, type, full, meta) {
-            return data;
+            if (full.isUpdate === true) {
+              return `<input type="text" class="form-control form-control-sm" name="remarkEdit" id="remarkEdit" value="${
+                data == null ? "" : data
+              }" />`;
+            } else {
+              return data;
+            }
           },
         },
         {
@@ -1192,6 +1394,7 @@ let CreateDatatableDetail = (function () {
           title: "แก้ไข",
           render: function (data, type, full, meta) {
             if (
+              full.status == dutyScheduleStatusConstant.Off ||
               full.status == dutyScheduleStatusConstant.Normal ||
               full.status == dutyScheduleStatusConstant.Approve
             ) {
@@ -1199,7 +1402,7 @@ let CreateDatatableDetail = (function () {
                 return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`;
               } else {
                 return `
-                <a class="btn btn-success btn-circle btn-sm add-button"><i class="fas fa-check"></i></a>
+                <a class="btn btn-success btn-circle btn-sm confirm-button"><i class="fas fa-check"></i></a>
                 <a class="btn btn-danger btn-circle btn-sm cancel-button" ><i class="fas fa-times"></i></a>`;
               }
             } else {
@@ -1223,7 +1426,6 @@ let CreateDatatableDetail = (function () {
         let row = $(this).closest("tr");
         if (row !== undefined) {
           let isChanged = table.table().row(row).data();
-          console.log(isChanged);
           if (isChanged !== undefined) {
             table.row(row).data({ ...isChanged, isUpdate: true });
             renderRowEdit(table);
@@ -1238,12 +1440,18 @@ let CreateDatatableDetail = (function () {
         let row = $(this).closest("tr");
         if (row !== undefined) {
           let isChanged = table.table().row(row).data();
-          console.log(isChanged);
           if (isChanged !== undefined) {
             table.row(row).data({ ...isChanged, isUpdate: false });
             // renderRowEdit(table);
             table.page(currentPage).draw(false);
           }
+        }
+      });
+      table.off("click", ".confirm-button");
+      table.on("click", ".confirm-button", function () {
+        let row = $(this).closest("tr");
+        if (row !== undefined) {
+          updateDutySchedule(table, row);
         }
       });
 
@@ -1356,42 +1564,47 @@ let renderRowEdit = function (table) {
         })
       );
     });
-    row.find("select[name=hospitalCode]").val(isChanged.approveHospitalCode);
+    if (isChanged.approveHospitalCode != null) {
+      row.find("select[name=hospitalCode]").val(isChanged.approveHospitalCode);
+    }
 
-    // SelectElement.initSelect2ByMapMasterData(
-    //   row.find("select[name=debtorCode]"),
-    //   debtorMaster,
-    //   "debtorCode",
-    //   "debtorDesc",
-    //   isChanged.debtorCode === "" || isChanged.debtorCode === null
-    //     ? ""
-    //     : isChanged.debtorCode,
-    //   "",
-    //   "กรุณาเลือก..."
-    // );
-    // row
-    //   .find("input[name=debtorAmount]")
-    //   .val(
-    //     isChanged.debtorAmount === "" || isChanged.debtorAmount === null
-    //       ? 0
-    //       : isChanged.debtorAmount
-    //   );
-    // row
-    //   .find("input[name=vatAmount]")
-    //   .val(
-    //     isChanged.vatAmount === "" || isChanged.vatAmount === null
-    //       ? 0
-    //       : isChanged.vatAmount
-    //   );
-    // row
-    //   .find("input[name=debtorWithVatAmount]")
-    //   .val(
-    //     isChanged.debtorWithVatAmount === "" ||
-    //       isChanged.debtorWithVatAmount === null
-    //       ? 0
-    //       : isChanged.debtorWithVatAmount
-    //   );
-    //
+    $.each(locationMaster, function (i, item) {
+      row.find("select[name=locationCode]").append(
+        $("<option>", {
+          value: item.locationCode,
+          text: item.locationDesc,
+        })
+      );
+    });
+
+    if (isChanged.approveLocationCode != null) {
+      row.find("select[name=locationCode]").val(isChanged.approveLocationCode);
+    }
+
+    $.each(departmentMaster, function (i, item) {
+      row.find("select[name=departmentCode]").append(
+        $("<option>", {
+          value: item.departmentCode,
+          text: item.departmentDesc,
+        })
+      );
+    });
+
+    if (isChanged.approveDepartmentCode != null) {
+      row
+        .find("select[name=departmentCode]")
+        .val(isChanged.approveDepartmentCode);
+    }
+
+    $.each(dutyScheduleStatusMasters, function (i, item) {
+      row.find("select[name=statusCode]").append(
+        $("<option>", {
+          value: item.statusCode,
+          text: item.statusDesc,
+        })
+      );
+    });
+    row.find("select[name=statusCode]").val(isChanged.status);
   });
 };
 
@@ -1419,4 +1632,43 @@ let CreateRowParentBody = function () {
       </div>
       `;
   return childRow;
+};
+
+let updateDutySchedule = function (eTable, eRow) {
+  let isChanged = eTable.table().row(eRow).data();
+  if (isChanged !== undefined) {
+    let newDutySchedule = {
+      hospitalCode: parseInt(eRow.find("select[name=hospitalCode]").val()),
+      locationCode: parseInt(eRow.find("select[name=locationCode]").val()),
+      departmentCode: parseInt(eRow.find("select[name=departmentCode]").val()),
+      shiftStart: eRow.find("input[name=shiftStartEdit]").val(),
+      shiftEnd: eRow.find("input[name=shiftEndEdit]").val(),
+      status: eRow.find("select[name=statusCode]").val(),
+      adminRemark: eRow.find("input[name=remarkEdit]").val(),
+    };
+
+    if (
+      newDutySchedule.hospitalCode == null ||
+      newDutySchedule.locationCode == null ||
+      newDutySchedule.departmentCode == null ||
+      newDutySchedule.shiftStart == "" ||
+      newDutySchedule.shiftEnd == "" ||
+      newDutySchedule.status == ""
+    ) {
+      toastr.error("กรอกข้อมูลไม่ครบ");
+    } else {
+      eTable.row(eRow).data({
+        ...isChanged,
+        approveHospitalCode: newDutySchedule.hospitalCode,
+        approveLocationCode: newDutySchedule.locationCode,
+        approveDepartmentCode: newDutySchedule.departmentCode,
+        approveShiftStart: newDutySchedule.shiftStart,
+        approveShiftEnd: newDutySchedule.shiftEnd,
+        status: newDutySchedule.status,
+        adminRemark: newDutySchedule.adminRemark,
+        isUpdate: false,
+      });
+      eTable.draw(false);
+    }
+  }
 };

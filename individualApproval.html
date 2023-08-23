@@ -339,7 +339,7 @@
               </div>
             </div>
             <div class="form-group row" style="display: none">
-              <div
+              <!-- <div
                 class="col-sm-12"
                 style="display: flex; justify-content: flex-end"
               >
@@ -349,7 +349,7 @@
                   </span>
                   <span class="text">บันทึก</span>
                 </a>
-              </div>
+              </div> -->
             </div>
           </div>
           <!-- /.container-fluid -->
@@ -456,37 +456,70 @@
                   <a class="small" href="#" id="editProfile">ข้อมูลส่วนตัว</a>
                 </div>
               </div>
-              <div class="col-sm-3">
+              <div class="col-sm-4">
                 <label class="col-sm-12 col-form-label-sm" id="firstNameModal"
-                  >ชื่อ:</label
+                  >ชื่อ: -</label
                 >
                 <label
                   class="col-sm-12 col-form-label-sm"
                   id="positionCodeModal"
-                  >ตำแหน่ง:</label
+                  >ตำแหน่ง: -</label
                 >
                 <label class="col-sm-12 col-form-label-sm" id="workplaceModal"
-                  >สถานที่ทำงาน:</label
+                  >สถานที่ทำงาน: -</label
                 >
                 <label class="col-sm-12 col-form-label-sm" id="userLevelCode"
-                  >Level:</label
+                  >Level: -</label
+                >
+                <label class="col-sm-12 col-form-label-sm" id="phone"
+                  >หมายเลขโทรศพท์: -</label
+                >
+                <label class="col-sm-12 col-form-label-sm" id="email"
+                  >Email: -</label
                 >
               </div>
               <div class="col-sm-3">
-                <label class="col-sm-12 col-form-label-sm">เพศ:</label>
-
-                <label class="col-sm-12 col-form-label-sm">อายุ:</label>
-
-                <!-- <label class="col-sm-12 col-form-label-sm">สถานที่ทำงาน</label> -->
-              </div>
-              <div class="col-sm-4">
                 <label class="col-sm-12 col-form-label-sm"
-                  >ประวัติการศึกษา</label
+                  ><strong class="text-gray-900">ประวัติการศึกษา</strong></label
                 >
-
-                <label class="col-sm-12 col-form-label-sm">ตำแหน่ง</label>
-
-                <label class="col-sm-12 col-form-label-sm">สถานที่ทำงาน</label>
+                <!-- <div class="col-sm-6 "> -->
+                <div class="form-group row">
+                  <label
+                    class="col-sm-12 col-form-label-sm"
+                    id="educationalQualificationCode"
+                    >วุฒิการศึกษา: -</label
+                  >
+                  <label class="col-sm-12 col-form-label-sm" id="majorCode"
+                    >สาขา: -</label
+                  >
+                  <label class="col-sm-12 col-form-label-sm" id="graduationYear"
+                    >ปีที่จบ: -</label
+                  >
+                  <label class="col-sm-12 col-form-label-sm" id="university"
+                    >มหาวิทยาลัย: -</label
+                  >
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <label class="col-sm-12 col-form-label-sm"
+                  ><strong class="text-gray-900">ประสบการณ์</strong></label
+                >
+                <div class="form-group row">
+                  <label
+                    class="col-sm-12 col-form-label-sm"
+                    id="experienceTypeCode"
+                    >ประสบการณ์: -</label
+                  >
+                  <label class="col-sm-12 col-form-label-sm" id="positionCode"
+                    >ตำแหน่ง: -</label
+                  >
+                  <label class="col-sm-6 col-form-label-sm" id="beginYear"
+                    >ปีที่เริ่ม: -</label
+                  >
+                  <label class="col-sm-6 col-form-label-sm" id="endYear"
+                    >ปีที่สิ้นสุด: -</label
+                  >
+                </div>
               </div>
             </div>
             <div class="card shadow mb-4">
@@ -529,6 +562,9 @@
             </div>
           </div>
           <div class="modal-footer">
+            <button class="btn btn-success" type="button" id="submit">
+              บันทึก
+            </button>
             <button
               class="btn btn-secondary"
               type="button"

@@ -120,7 +120,7 @@ let SetupData = (function () {
         if (res.status.code == 200) {
           educationalQualificationMaster = res.data;
           for (let data of res.data) {
-            educationalQualificationMap.set(data.positionCode, data);
+            educationalQualificationMap.set(data.educationalQualificationCode, data);
           }
           defered.resolve(true);
         } else {
@@ -143,7 +143,7 @@ let SetupData = (function () {
         if (res.status.code == 200) {
           experienceTypeMaster = res.data;
           for (let data of res.data) {
-            experienceTypeMap.set(data.positionCode, data);
+            experienceTypeMap.set(data.experienceTypeCode, data);
           }
           defered.resolve(true);
         } else {
