@@ -436,9 +436,95 @@
             </button>
           </div>
           <div class="modal-body">
+            <div class="col-sm-12">
+              <p id="dutyDateDisplayModal"></p>
+            </div>
             <div class="form-group row">
-              <div class="col-sm-12">
-                <p id="dutyDateDisplayModal"></p>
+              <div class="col-sm-2">
+                <div class="col-lg-1 text-center">
+                  <img
+                    class="img-profile rounded-circle"
+                    src="img/undraw_profile.svg"
+                    id="profileImg"
+                    width="100"
+                    height="100"
+                    alt="image"
+                  />
+                </div>
+                <br />
+                <div class="col-lg-8 text-center">
+                  <a class="small" href="#" id="editProfile">ข้อมูลส่วนตัว</a>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <label class="col-sm-12 col-form-label-sm" id="firstNameModal"
+                  >ชื่อ:</label
+                >
+                <label
+                  class="col-sm-12 col-form-label-sm"
+                  id="positionCodeModal"
+                  >ตำแหน่ง:</label
+                >
+                <label class="col-sm-12 col-form-label-sm" id="workplaceModal"
+                  >สถานที่ทำงาน:</label
+                >
+                <label class="col-sm-12 col-form-label-sm" id="userLevelCode"
+                  >Level:</label
+                >
+              </div>
+              <div class="col-sm-3">
+                <label class="col-sm-12 col-form-label-sm">เพศ:</label>
+
+                <label class="col-sm-12 col-form-label-sm">อายุ:</label>
+
+                <!-- <label class="col-sm-12 col-form-label-sm">สถานที่ทำงาน</label> -->
+              </div>
+              <div class="col-sm-4">
+                <label class="col-sm-12 col-form-label-sm"
+                  >ประวัติการศึกษา</label
+                >
+
+                <label class="col-sm-12 col-form-label-sm">ตำแหน่ง</label>
+
+                <label class="col-sm-12 col-form-label-sm">สถานที่ทำงาน</label>
+              </div>
+            </div>
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">รายการ</h6>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table
+                    class="table table-bordered nowrap"
+                    id="dataTableDetail"
+                    width="100%"
+                    cellspacing="0"
+                  >
+                    <thead>
+                      <tr>
+                        <th>No.</th>
+                        <th>โรงพยาบาล</th>
+                        <th>Location</th>
+                        <th>แผนกลำดับที่ 1</th>
+                        <th>แผนกลำดับที่ 2</th>
+                        <th>แผนกลำดับที่ 3</th>
+                        <th>ช่วงเวลา</th>
+                        <th>โรงพยาบาลที่ขอ</th>
+                        <th>Locationที่ขอ</th>
+                        <th>แผนกที่ขอ</th>
+                        <th>ช่วงเวลาที่ขอ</th>
+                        <th>โรงพยาบาลที่อนุมัติ</th>
+                        <th>Locationที่อนุมัติ</th>
+                        <th>แผนกที่อนุมัติ</th>
+                        <th>ช่วงเวลาที่อนุมัติ</th>
+                        <th>สถานะ</th>
+                        <th>หมายเหตุ</th>
+                        <th>แก้ไข</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
               </div>
             </div>
           </div>

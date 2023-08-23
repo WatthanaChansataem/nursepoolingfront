@@ -101,6 +101,7 @@ let locationCodeConstant = {
 
 $(document).ready(function () {
   CreateDatatable.init();
+  CreateDatatableDetail.init();
 
   let setupDataDefered = $.Deferred();
   SetupData.init(setupDataDefered);
@@ -933,7 +934,7 @@ let LoadDutyScheduleForIndividualApproval = function () {
       }
     },
     error: function (res) {
-      toastr.error("ไม่สามารถดึงข้อมูลรายการขออัตรากำลังได้");
+      toastr.error("ไม่สามารถดึงข้อมูลได้");
     },
   });
 };
@@ -947,5 +948,475 @@ let loadUserDateForApproveModal = function (day, data) {
     dutyDate: moment(data.dutyDate).format("DD/MM/YYYY"),
     userId: data.insertUserId,
   };
-  modal.modal("show");
+  $.ajax({
+    url: "https://localhost:7063/api/dutySchedule/searchDutyScheduleForIndividualApprovalDetail",
+    type: "POST",
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+    data: JSON.stringify(objData),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (res) {
+      if (res.status.code == 200) {
+        $("#dutyDateDisplayModal").html(
+          moment(res.data.dutyDate).format("DD/MM/YYYY")
+        );
+        $("#profileImg").attr(
+          "src",
+          `https://localhost:7063/api/document/avatar/${res.data.userId}`
+        );
+
+        $("#firstNameModal").html(
+          "ชื่อ: " + res.data.firstName + " " + res.data.lastName
+        );
+
+        $("#positionCodeModal").html("ตำแหน่ง: " + res.data.positionDesc);
+
+        $("#workplaceModal").html("สถานที่ทำงาน: " + res.data.workplace);
+
+        $("#userLevelCode").html("Level: " + res.data.userLevelCode);
+
+        CreateDatatableDetail.data(res.data.dutyScheduleList);
+        modal.modal("show");
+      } else {
+        toastr.error(res.status.message);
+      }
+    },
+    error: function (res) {
+      toastr.error("ไม่สามารถดึงข้อมูลได้");
+    },
+  });
+};
+
+modal.on("shown.bs.modal", function () {
+  CreateDatatableDetail.adjust();
+});
+
+let CreateDatatableDetail = (function () {
+  let table;
+  let currentPage = 0;
+  let initTable1 = function () {
+    table = $("#dataTableDetail").DataTable({
+      responsive: false,
+      data: [],
+      scrollY: "50vh",
+      scrollX: true,
+      scrollCollapse: true,
+      columns: [
+        { data: "", className: "text-center" },
+        { data: "hospitalCode", className: "text-center" },
+        { data: "locationCode", className: "text-center" },
+        { data: "departmentCode1", className: "text-center" },
+        { data: "departmentCode2", className: "text-center" },
+        { data: "departmentCode3", className: "text-center" },
+        { data: "shiftStart", className: "text-center" },
+        { data: "hospitalCode", className: "text-center" },
+        { data: "locationCode", className: "text-center" },
+        { data: "departmentCode1", className: "text-center" },
+        { data: "shiftStart", className: "text-center" },
+        { data: "hospitalCode", className: "text-center" },
+
+        { data: "hospitalCode", className: "text-center" },
+        { data: "hospitalCode", className: "text-center" },
+        { data: "hospitalCode", className: "text-center" },
+
+        { data: "status", className: "text-center" },
+        { data: "adminRemark", className: "text-center" },
+        { data: "", className: "text-center" },
+      ],
+      order: [[0, "asc"]],
+      columnDefs: [
+        {
+          targets: 0,
+          title: "No.",
+          render: function (data, type, full, meta) {
+            return parseInt(meta.row) + 1;
+          },
+        },
+        {
+          targets: 1,
+          title: "โรงพยาบาล",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? "-"
+              : hospitalMap.get(data).hospitalDesc;
+          },
+        },
+        {
+          targets: 2,
+          title: "Location",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? "-"
+              : locationMap.get(data).locationDesc;
+          },
+        },
+        {
+          targets: 3,
+          title: "แผนกลำดับที่ 1",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? "-"
+              : departmentMap.get(data).departmentDesc;
+          },
+        },
+        {
+          targets: 4,
+          title: "แผนกลำดับที่ 2",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? "-"
+              : departmentMap.get(data).departmentDesc;
+          },
+        },
+        {
+          targets: 5,
+          title: "แผนกลำดับที่ 3",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? "-"
+              : departmentMap.get(data).departmentDesc;
+          },
+        },
+        {
+          targets: 6,
+          title: "ช่วงเวลา",
+          render: function (data, type, full, meta) {
+            return full.shiftStart + "-" + full.shiftEnd;
+          },
+        },
+        {
+          targets: 7,
+          title: "โรงพยาบาลที่ขอ",
+          render: function (data, type, full, meta) {
+            if (full.dutyScheduleRequestList != null) {
+              return hospitalMap.get(full.dutyScheduleRequestList.hospitalCode)
+                .hospitalDesc;
+            } else {
+              return "-";
+            }
+          },
+        },
+        {
+          targets: 8,
+          title: "Locationที่ขอ",
+          render: function (data, type, full, meta) {
+            if (full.dutyScheduleRequestList != null) {
+              return locationMap.get(full.dutyScheduleRequestList.locationCode)
+                .locationDesc;
+            } else {
+              return "-";
+            }
+          },
+        },
+        {
+          targets: 9,
+          title: "แผนกที่ขอ",
+          render: function (data, type, full, meta) {
+            if (full.dutyScheduleRequestList != null) {
+              return departmentMap.get(
+                full.dutyScheduleRequestList.departmentCode
+              ).departmentDesc;
+            } else {
+              return "-";
+            }
+          },
+        },
+        {
+          targets: 10,
+          title: "ช่วงเวลาที่ขอ",
+          render: function (data, type, full, meta) {
+            if (full.dutyScheduleRequestList != null) {
+              return `<a href="#" class="btn btn-info btn-circle btn-sm choose-button">${full.dutyScheduleRequestList.dutyScheduleRequestItemList.length}</a>`;
+            } else {
+              return "-";
+            }
+          },
+        },
+        {
+          targets: 11,
+          title: "โรงพยาบาลที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            if (full.isUpdate === true) {
+              return `<select class="custom-select hospitalCode" name="hospitalCode" id="hospitalCode" data-size="4">
+                        <option selected disabled>ตำแหน่ง</option>
+                    </select>`;
+            } else {
+              return hospitalMap.get(full.approveHospitalCode).hospitalDesc;
+            }
+          },
+        },
+        {
+          targets: 12,
+          title: "Locationที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return "-";
+          },
+        },
+        {
+          targets: 13,
+          title: "แผนกที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return "-";
+          },
+        },
+        {
+          targets: 14,
+          title: "ช่วงเวลาที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            if (full.isUpdate === true) {
+              return `<input type="time" class="form-control form-control-sm" name="shiftStartEdit" id="shiftStartEdit" value="${full.shiftStart}" /> 
+            <input type="time" class="form-control form-control-sm" name="shiftEndEdit" id="shiftEndEdit" value="${full.shiftEnd}" />`;
+            } else {
+              return full.shiftStart + "-" + full.shiftEnd;
+            }
+          },
+        },
+        {
+          targets: 15,
+          title: "สถานะ",
+          render: function (data, type, full, meta) {
+            return `<a class="btn btn-${dutyScheduleSStatusMap[data].state}" style="width: 90px;">${dutyScheduleSStatusMap[data].desc}</a>`;
+          },
+        },
+        {
+          targets: 16,
+          title: "หมายเหตุ",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+        {
+          targets: 17,
+          title: "แก้ไข",
+          render: function (data, type, full, meta) {
+            if (
+              full.status == dutyScheduleStatusConstant.Normal ||
+              full.status == dutyScheduleStatusConstant.Approve
+            ) {
+              if (full.isUpdate == false) {
+                return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`;
+              } else {
+                return `
+                <a class="btn btn-success btn-circle btn-sm add-button"><i class="fas fa-check"></i></a>
+                <a class="btn btn-danger btn-circle btn-sm cancel-button" ><i class="fas fa-times"></i></a>`;
+              }
+            } else {
+              return "-";
+            }
+          },
+        },
+      ],
+    });
+  };
+
+  return {
+    init: function () {
+      initTable1();
+      let containerTable = $(table.table().container());
+
+      containerTable.on("click", ".edit-button", function () {
+        let rowIndex = table.row($(this).closest("tr")).index();
+        let data = table.row($(this).closest("tr")).data();
+        currentRow = $(this).closest("tr");
+        let row = $(this).closest("tr");
+        if (row !== undefined) {
+          let isChanged = table.table().row(row).data();
+          console.log(isChanged);
+          if (isChanged !== undefined) {
+            table.row(row).data({ ...isChanged, isUpdate: true });
+            renderRowEdit(table);
+            table.page(currentPage).draw(false);
+          }
+        }
+      });
+
+      table.on("click", ".cancel-button", function () {
+        currentRow = $(this).closest("tr");
+        currentRow.find("input,select").prop("disabled", true);
+        let row = $(this).closest("tr");
+        if (row !== undefined) {
+          let isChanged = table.table().row(row).data();
+          console.log(isChanged);
+          if (isChanged !== undefined) {
+            table.row(row).data({ ...isChanged, isUpdate: false });
+            // renderRowEdit(table);
+            table.page(currentPage).draw(false);
+          }
+        }
+      });
+
+      table.on("click", ".choose-button", function () {
+        let tr = $(this).closest("tr");
+        if (tr !== undefined) {
+          let row = table.table().row(tr);
+          let data = table.row(row).data();
+          let dutyScheduleRequestItemList =
+            data.dutyScheduleRequestList == null
+              ? []
+              : data.dutyScheduleRequestList.dutyScheduleRequestItemList;
+          if (row.child.isShown()) {
+            row.child.hide();
+            $(this).closest("td").css("border-left", "none");
+            tr.removeClass("shown");
+          } else {
+            row.child(CreateRowParentBody()).show();
+            if (row.child() !== undefined) {
+              let elementAccountParent1 = row.child().find(`#table-rowparent`);
+              tr.addClass("shown");
+              elementAccountParent1.DataTable({
+                responsive: false,
+                data: dutyScheduleRequestItemList,
+                order: [0, "asc"],
+                dom: `<'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>`,
+                language: {
+                  emptyTable: "ไม่มีข้อมูล",
+                },
+                lengthChange: false,
+                info: false,
+                paginate: false,
+                columns: [
+                  { data: "", className: "text-center" },
+                  { data: "shiftStart", className: "text-right" },
+                  { data: "requestNumber", className: "text-right" },
+                  { data: "approveNumber", className: "text-right" },
+                ],
+                columnDefs: [
+                  {
+                    targets: 0,
+                    orderable: false,
+                    render: function (data, type, full, meta) {
+                      return parseInt(meta.row) + 1;
+                    },
+                  },
+                  {
+                    targets: 1,
+                    orderable: false,
+                    render: function (data, type, full, meta) {
+                      return full.shiftStart + "-" + full.shiftEnd;
+                    },
+                  },
+                  {
+                    targets: 2,
+                    orderable: false,
+                    render: function (data, type, full, meta) {
+                      return data;
+                    },
+                  },
+                  {
+                    targets: 3,
+                    orderable: false,
+                    render: function (data, type, full, meta) {
+                      return data;
+                    },
+                  },
+                ],
+              });
+            }
+          }
+          CreateDatatableDetail.adjust();
+        }
+      });
+    },
+    data: function (data) {
+      table.clear();
+      table.rows.add(data);
+      table.draw();
+    },
+    addData: function (data) {
+      table.rows.add(data);
+      table.draw();
+    },
+    getData: function (index) {
+      if (index) {
+        return table.row(index).data();
+      }
+      return table.rows().data().toArray();
+    },
+    datatable: function () {
+      return table;
+    },
+    adjust: function () {
+      table.columns.adjust();
+    },
+  };
+})();
+
+let renderRowEdit = function (table) {
+  table.rows().every(function (rowIdx, tableLoop, rowLoop) {
+    var row = $(this.node());
+    let isChanged = table.table().row(row).data();
+
+    $.each(hospitalMaster, function (i, item) {
+      row.find("select[name=hospitalCode]").append(
+        $("<option>", {
+          value: item.hospitalCode,
+          text: item.hospitalDesc,
+        })
+      );
+    });
+    row.find("select[name=hospitalCode]").val(isChanged.approveHospitalCode);
+
+    // SelectElement.initSelect2ByMapMasterData(
+    //   row.find("select[name=debtorCode]"),
+    //   debtorMaster,
+    //   "debtorCode",
+    //   "debtorDesc",
+    //   isChanged.debtorCode === "" || isChanged.debtorCode === null
+    //     ? ""
+    //     : isChanged.debtorCode,
+    //   "",
+    //   "กรุณาเลือก..."
+    // );
+    // row
+    //   .find("input[name=debtorAmount]")
+    //   .val(
+    //     isChanged.debtorAmount === "" || isChanged.debtorAmount === null
+    //       ? 0
+    //       : isChanged.debtorAmount
+    //   );
+    // row
+    //   .find("input[name=vatAmount]")
+    //   .val(
+    //     isChanged.vatAmount === "" || isChanged.vatAmount === null
+    //       ? 0
+    //       : isChanged.vatAmount
+    //   );
+    // row
+    //   .find("input[name=debtorWithVatAmount]")
+    //   .val(
+    //     isChanged.debtorWithVatAmount === "" ||
+    //       isChanged.debtorWithVatAmount === null
+    //       ? 0
+    //       : isChanged.debtorWithVatAmount
+    //   );
+    //
+  });
+};
+
+let CreateRowParentBody = function () {
+  let childRow = `
+      <div class="row">
+      <div class="col-lg-7"></div>
+      <div class="col-lg-5">
+      <div style="height : auto;">
+      <table class="table table-striped-table-hover table-checkable" id="table-rowparent">
+        <thead class="thead-light">
+            <tr>
+                <th>ลำดับ</th>
+                <th>เวลา</th>
+                <th>จำนวนที่ขอ</th>
+                <th>จำนวนที่อนุมัติ</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+      
+      </div>
+    
+      </div>
+      `;
+  return childRow;
 };
