@@ -223,13 +223,6 @@
             <br />
             <div class="form-group row">
               <div class="col-sm-3">
-                <!-- <label for="searchName" class="col-form-label-sm">ชื่อ</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="searchName"
-                  id="searchName"
-                /> -->
                 <div class="form-group row">
                   <label for="searchName" class="col-sm-2 col-form-label-sm"
                     >ชื่อ</label
@@ -257,8 +250,26 @@
                 />
               </div>
 
+              <div class="col-sm-3">
+                <div class="form-group row">
+                  <label for="searchName" class="col-sm-2 col-form-label-sm"
+                    >ตำแหน่ง</label
+                  >
+                  <div class="col-sm-10 div-input-positionCodeSearch">
+                    <select
+                      class="custom-select positionCodeSearch"
+                      name="positionCodeSearch"
+                      id="positionCodeSearch"
+                      data-size="4"
+                    >
+                      <option selected value="-1">ทั้งหมด</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
               <div
-                class="col-sm-6"
+                class="col-sm-3"
                 style="display: flex; justify-content: flex-end"
               >
                 <a

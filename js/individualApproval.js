@@ -376,6 +376,14 @@ let renderPage = function () {
   //   todayBtn: true,
   // })
   // .datepicker("setDate", new Date());
+  $.each(positionMaster, function (i, item) {
+    $("select[name=positionCodeSearch]").append(
+      $("<option>", {
+        value: item.positionCode,
+        text: item.positionDesc,
+      })
+    );
+  });
 
   $("#navHospitalCode").html(
     hospitalMap.get(userData.hospitalCode).hospitalDesc
@@ -419,6 +427,7 @@ $("#submit").on("click", function () {
       if (res.status.code == 200) {
         toastr.success("บันทึกสำเร็จ");
         modal.modal("hide");
+        LoadDutyScheduleForIndividualApproval();
       } else {
         toastr.error(res.status.message);
       }
@@ -1008,10 +1017,12 @@ let scrollToElement = function (element) {
 let LoadDutyScheduleForIndividualApproval = function () {
   let dutyDate = $("#beginDate").val();
   let searchName = $("#searchName").val();
+  let positionCode = parseInt($("select[name=positionCodeSearch]").val());
 
   let objData = {
     dutyDate: dutyDate,
     name: searchName,
+    positionCode: positionCode,
   };
   $.ajax({
     url: "https://localhost:7063/api/dutySchedule/searchDutyScheduleForIndividualApproval",
