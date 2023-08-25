@@ -107,6 +107,7 @@ let locationCodeConstant = {
 $(document).ready(function () {
   CreateDatatable.init();
   CreateDatatableDetail.init();
+  TimeDataTable.init();
 
   let setupDataDefered = $.Deferred();
   SetupData.init(setupDataDefered);
@@ -450,48 +451,109 @@ let CreateDatatable = (function () {
       scrollCollapse: true,
       columns: [
         { data: "", className: "text-center" },
-        { data: "firstName", className: "text-center" },
+        { data: "hospitalCode", className: "text-center" },
+        { data: "locationCode", className: "text-center" },
+        { data: "departmentCode", className: "text-center" },
         { data: "positionCode", className: "text-center" },
-        { data: "dutyScheduleNumberDayOne", className: "text-center" },
-        { data: "dutyScheduleNumberDayTwo", className: "text-center" },
-        { data: "dutyScheduleNumberDayThree", className: "text-center" },
-        { data: "dutyScheduleNumberDayFour", className: "text-center" },
-        { data: "dutyScheduleNumberDayFive", className: "text-center" },
-        { data: "dutyScheduleNumberDaySix", className: "text-center" },
-        { data: "dutyScheduleNumberDaySeven", className: "text-center" },
-        { data: "dutyScheduleNumberDayEight", className: "text-center" },
-        { data: "dutyScheduleNumberDayNine", className: "text-center" },
-        { data: "dutyScheduleNumberDayTen", className: "text-center" },
-        { data: "dutyScheduleNumberDayEleven", className: "text-center" },
-        { data: "dutyScheduleNumberDayTwelve", className: "text-center" },
-        { data: "dutyScheduleNumberDayThirteen", className: "text-center" },
-        { data: "dutyScheduleNumberDayFourteen", className: "text-center" },
-        { data: "dutyScheduleNumberDayFifteen", className: "text-center" },
-        { data: "dutyScheduleNumberDaySixteen", className: "text-center" },
-        { data: "dutyScheduleNumberDaySeventeen", className: "text-center" },
-        { data: "dutyScheduleNumberDayEighteen", className: "text-center" },
-        { data: "dutyScheduleNumberDayNineteen", className: "text-center" },
-        { data: "dutyScheduleNumberDayTwenty", className: "text-center" },
-        { data: "dutyScheduleNumberDayTwentyOne", className: "text-center" },
-        { data: "dutyScheduleNumberDayTwentyTwo", className: "text-center" },
-        { data: "dutyScheduleNumberDayTwentyThree", className: "text-center" },
-        { data: "dutyScheduleNumberDayTwentyFour", className: "text-center" },
-        { data: "dutyScheduleNumberDayTwentyFive", className: "text-center" },
-        { data: "dutyScheduleNumberDayTwentySix", className: "text-center" },
-        { data: "dutyScheduleNumberDayTwentySeven", className: "text-center" },
-        { data: "dutyScheduleNumberDayTwentyEight", className: "text-center" },
-        { data: "dutyScheduleNumberDayTwentyNine", className: "text-center" },
-        { data: "dutyScheduleNumberDayThirty", className: "text-center" },
-        { data: "dutyScheduleNumberDayThirtyOne", className: "text-center" },
-        { data: "totalDutyScheduleNumber", className: "text-center" },
-        { data: "totalApproveDutyScheduleNumber", className: "text-center" },
+        { data: "dutyScheduleRequestNumberDayOne", className: "text-center" },
+        { data: "dutyScheduleRequestNumberDayTwo", className: "text-center" },
+        { data: "dutyScheduleRequestNumberDayThree", className: "text-center" },
+        { data: "dutyScheduleRequestNumberDayFour", className: "text-center" },
+        { data: "dutyScheduleRequestNumberDayFive", className: "text-center" },
+        { data: "dutyScheduleRequestNumberDaySix", className: "text-center" },
+        { data: "dutyScheduleRequestNumberDaySeven", className: "text-center" },
+        { data: "dutyScheduleRequestNumberDayEight", className: "text-center" },
+        { data: "dutyScheduleRequestNumberDayNine", className: "text-center" },
+        { data: "dutyScheduleRequestNumberDayTen", className: "text-center" },
         {
-          data: "totalCancelAndOffDutyScheduleNumber",
+          data: "dutyScheduleRequestNumberDayEleven",
           className: "text-center",
         },
+        {
+          data: "dutyScheduleRequestNumberDayTwelve",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDayThirteen",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDayFourteen",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDayFifteen",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDaySixteen",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDaySeventeen",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDayEighteen",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDayNineteen",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDayTwenty",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDayTwentyOne",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDayTwentyTwo",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDayTwentyThree",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDayTwentyFour",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDayTwentyFive",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDayTwentySix",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDayTwentySeven",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDayTwentyEight",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDayTwentyNine",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDayThirty",
+          className: "text-center",
+        },
+        {
+          data: "dutyScheduleRequestNumberDayThirtyOne",
+          className: "text-center",
+        },
+        { data: "totalDutyScheduleRequestNumber", className: "text-center" },
+        { data: "totalDutyScheduleApproveNumber", className: "text-center" },
         { data: "totalDuration", className: "text-center" },
         { data: "totalApproveDuration", className: "text-center" },
-        { data: "totalRealDuration", className: "text-center" },
+        // { data: "totalRealDuration", className: "text-center" },
       ],
       order: [[0, "asc"]],
       columnDefs: [
@@ -504,20 +566,34 @@ let CreateDatatable = (function () {
         },
         {
           targets: 1,
-          title: "ชื่อ - นามสกุล",
+          title: "โรงพยาบาล",
           render: function (data, type, full, meta) {
-            return full.firstName + " " + full.lastName;
+            return hospitalMap.get(data).hospitalDesc;
           },
         },
         {
           targets: 2,
+          title: "Location",
+          render: function (data, type, full, meta) {
+            return locationMap.get(data).locationDesc;
+          },
+        },
+        {
+          targets: 3,
+          title: "แผนก",
+          render: function (data, type, full, meta) {
+            return departmentMap.get(data).departmentDesc;
+          },
+        },
+        {
+          targets: 4,
           title: "ตำแหน่ง",
           render: function (data, type, full, meta) {
             return positionMap.get(full.positionCode).positionDesc;
           },
         },
         {
-          targets: 3,
+          targets: 5,
           title: "1",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -529,7 +605,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 4,
+          targets: 6,
           title: "2",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -541,7 +617,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 5,
+          targets: 7,
           title: "3",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -553,7 +629,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 6,
+          targets: 8,
           title: "4",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -565,7 +641,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 7,
+          targets: 9,
           title: "5",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -577,7 +653,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 8,
+          targets: 10,
           title: "6",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -589,7 +665,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 9,
+          targets: 11,
           title: "7",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -601,7 +677,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 10,
+          targets: 12,
           title: "8",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -613,7 +689,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 11,
+          targets: 13,
           title: "9",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -625,7 +701,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 12,
+          targets: 14,
           title: "10",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -637,7 +713,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 13,
+          targets: 15,
           title: "11",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -649,7 +725,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 14,
+          targets: 16,
           title: "12",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -661,7 +737,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 15,
+          targets: 17,
           title: "13",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -674,7 +750,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 16,
+          targets: 18,
           title: "14",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -687,7 +763,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 17,
+          targets: 19,
           title: "15",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -700,7 +776,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 18,
+          targets: 20,
           title: "16",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -713,7 +789,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 19,
+          targets: 21,
           title: "17",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -726,7 +802,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 20,
+          targets: 22,
           title: "18",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -739,7 +815,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 21,
+          targets: 23,
           title: "19",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -752,7 +828,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 22,
+          targets: 24,
           title: "20",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -764,7 +840,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 23,
+          targets: 25,
           title: "21",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -777,7 +853,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 24,
+          targets: 26,
           title: "22",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -790,7 +866,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 25,
+          targets: 27,
           title: "23",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -803,7 +879,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 26,
+          targets: 28,
           title: "24",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -816,7 +892,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 27,
+          targets: 29,
           title: "25",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -829,7 +905,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 28,
+          targets: 30,
           title: "26",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -842,7 +918,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 29,
+          targets: 31,
           title: "27",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -855,7 +931,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 30,
+          targets: 32,
           title: "28",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -868,7 +944,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 31,
+          targets: 33,
           title: "29",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -881,7 +957,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 32,
+          targets: 34,
           title: "30",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -893,7 +969,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 33,
+          targets: 35,
           title: "31",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -906,7 +982,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 34,
+          targets: 36,
           title: "จำนวนเวรที่ขอ",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -914,7 +990,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 35,
+          targets: 37,
           title: "จำนวนเวรที่อนุมัติ",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -922,15 +998,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 36,
-          title: "จำนวนเวรที่ยกเลิก หรือ Off",
-          orderable: false,
-          render: function (data, type, full, meta) {
-            return data;
-          },
-        },
-        {
-          targets: 37,
+          targets: 38,
           title: "จำนวนชั่วโมงที่ขอ",
           orderable: false,
           render: function (data, type, full, meta) {
@@ -938,21 +1006,21 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 38,
+          targets: 39,
           title: "จำนวนชั่วโมงที่อนุมัติ",
           orderable: false,
           render: function (data, type, full, meta) {
             return data;
           },
         },
-        {
-          targets: 39,
-          title: "จำนวนชั่วโมงเข้า",
-          orderable: false,
-          render: function (data, type, full, meta) {
-            return data;
-          },
-        },
+        // {
+        //   targets: 40,
+        //   title: "จำนวนชั่วโมงเข้า",
+        //   orderable: false,
+        //   render: function (data, type, full, meta) {
+        //     return data;
+        //   },
+        // },
       ],
     });
   };
@@ -1033,7 +1101,7 @@ let LoadDutyScheduleForIndividualApproval = function () {
     positionCode: positionCode,
   };
   $.ajax({
-    url: "https://localhost:7063/api/dutySchedule/searchDutyScheduleForIndividualApproval",
+    url: "https://localhost:7063/api/dutySchedule/searchDutyScheduleForAgencyApproval",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -1043,7 +1111,6 @@ let LoadDutyScheduleForIndividualApproval = function () {
     dataType: "json",
     success: function (res) {
       if (res.status.code == 200) {
-        console.log(res.data);
         CreateDatatable.data(res.data);
       } else {
         toastr.error(res.status.message);
@@ -1056,16 +1123,16 @@ let LoadDutyScheduleForIndividualApproval = function () {
 };
 
 let loadUserDateForApproveModal = function (day, data) {
-  //   console.log(day);
-  //   console.log(moment(data.dutyDate).format("DD/MM/YYYY"));
-
   let objData = {
     day: day,
     dutyDate: moment(data.dutyDate).format("DD/MM/YYYY"),
-    userId: data.insertUserId,
+    positionCode: data.positionCode,
+    hospitalCode: data.hospitalCode,
+    locationCode: data.locationCode,
+    departmentCode: data.departmentCode,
   };
   $.ajax({
-    url: "https://localhost:7063/api/dutySchedule/searchDutyScheduleForIndividualApprovalDetail",
+    url: "https://localhost:7063/api/dutySchedule/searchDutyScheduleForAgencyApprovalDetail",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -1076,95 +1143,114 @@ let loadUserDateForApproveModal = function (day, data) {
     success: function (res) {
       if (res.status.code == 200) {
         let approvalDetaildata = res.data;
-        // modal.find("label").text("");
+
         $("#dutyDateDisplayModal").html(
           moment(approvalDetaildata.dutyDate).format("DD/MM/YYYY")
         );
-        $("#profileImg").attr(
-          "src",
-          `https://localhost:7063/api/document/avatar/${approvalDetaildata.userId}`
+
+        $("#hospitalCodeModal").html(
+          '<strong class="text-gray-900">โรงพยาบาล:  </strong> ' +
+            hospitalMap.get(approvalDetaildata.hospitalCode).hospitalDesc
         );
 
-        $("#firstNameModal").html(
-          '<strong class="text-gray-900">ชื่อ:  </strong> ' +
-            approvalDetaildata.firstName +
-            " " +
-            approvalDetaildata.lastName
+        $("#locationCodeModal").html(
+          '<strong class="text-gray-900">Location:  </strong> ' +
+            locationMap.get(approvalDetaildata.locationCode).locationDesc
+        );
+
+        $("#departmentCodeModal").html(
+          '<strong class="text-gray-900">แผนก:  </strong> ' +
+            departmentMap.get(approvalDetaildata.departmentCode).departmentDesc
         );
 
         $("#positionCodeModal").html(
           '<strong class="text-gray-900">ตำแหน่ง:  </strong> ' +
-            approvalDetaildata.positionDesc
+            positionMap.get(approvalDetaildata.positionCode).positionDesc
         );
 
-        $("#workplaceModal").html(
-          '<strong class="text-gray-900">สถานที่ทำงาน:  </strong> ' +
-            approvalDetaildata.workplace
+        $("#requestNumberModal").html(
+          '<strong class="text-gray-900">จำนวนที่ขอ:  </strong> ' +
+            approvalDetaildata.allRequestNumber
         );
 
-        $("#userLevelCode").html(
-          '<strong class="text-gray-900">Level:  </strong> ' +
-            approvalDetaildata.userLevelCode
+        $("#approveNumberModal").html(
+          '<strong class="text-gray-900">จำนวนที่อนุมัติแล้ว:  </strong> ' +
+            approvalDetaildata.allApproveNumber
         );
 
-        $("#phone").html(
-          '<strong class="text-gray-900">หมายเลขโทรศพท์:  </strong> ' +
-            approvalDetaildata.phone
-        );
-
-        $("#email").html(
-          '<strong class="text-gray-900">Email:  </strong> ' +
-            approvalDetaildata.email
-        );
-
-        console.log(approvalDetaildata);
-        if (approvalDetaildata.educationList.length != 0) {
-          $("#educationalQualificationCode").html(
-            '<strong class="text-gray-900">วุฒิการศึกษา:  </strong> ' +
-              educationalQualificationMap.get(
-                approvalDetaildata.educationList[0].educationalQualificationCode
-              ).educationalQualificationDesc
+        if (approvalDetaildata.dutyScheduleRequestItemList != null) {
+          $("#requestNumber1").html(
+            '<strong class="text-gray-900">07.00-15.00:&emsp;&emsp;&emsp;</strong> ' +
+              approvalDetaildata.dutyScheduleRequestItemList[0].requestNumber +
+              "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;" +
+              approvalDetaildata.dutyScheduleRequestItemList[0].approveNumber
           );
 
-          $("#majorCode").html(
-            '<strong class="text-gray-900">สาขา:  </strong> ' +
-              approvalDetaildata.educationList[0].majorCode
+          $("#requestNumber2").html(
+            '<strong class="text-gray-900">15.00-23.00:&emsp;&emsp;&emsp;</strong> ' +
+              approvalDetaildata.dutyScheduleRequestItemList[1].requestNumber +
+              "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;" +
+              approvalDetaildata.dutyScheduleRequestItemList[1].approveNumber
           );
 
-          $("#graduationYear").html(
-            '<strong class="text-gray-900">ปีที่จบ:  </strong> ' +
-              approvalDetaildata.educationList[0].graduationYear
+          $("#requestNumber3").html(
+            '<strong class="text-gray-900">23.00-07.00:&emsp;&emsp;&emsp;</strong> ' +
+              approvalDetaildata.dutyScheduleRequestItemList[2].requestNumber +
+              "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;" +
+              approvalDetaildata.dutyScheduleRequestItemList[2].approveNumber
           );
 
-          $("#university").html(
-            '<strong class="text-gray-900">มหาวิทยาลัย:  </strong> ' +
-              approvalDetaildata.educationList[0].university
+          $("#requestNumber4").html(
+            '<strong class="text-gray-900">07.00-19.00:&emsp;&emsp;&emsp;</strong> ' +
+              approvalDetaildata.dutyScheduleRequestItemList[3].requestNumber +
+              "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;" +
+              approvalDetaildata.dutyScheduleRequestItemList[3].approveNumber
+          );
+
+          $("#requestNumber5").html(
+            '<strong class="text-gray-900">19.00-07.00:&emsp;&emsp;&emsp;</strong> ' +
+              approvalDetaildata.dutyScheduleRequestItemList[4].requestNumber +
+              "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;" +
+              approvalDetaildata.dutyScheduleRequestItemList[4].approveNumber
+          );
+
+          $("#requestNumber6").html(
+            '<strong class="text-gray-900">08.00-16.00:&emsp;&emsp;&emsp;</strong> ' +
+              approvalDetaildata.dutyScheduleRequestItemList[5].requestNumber +
+              "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;" +
+              approvalDetaildata.dutyScheduleRequestItemList[5].approveNumber
+          );
+
+          $("#requestNumber7").html(
+            '<strong class="text-gray-900">08.00-20.00:&emsp;&emsp;&emsp;</strong> ' +
+              approvalDetaildata.dutyScheduleRequestItemList[6].requestNumber +
+              "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;" +
+              approvalDetaildata.dutyScheduleRequestItemList[6].approveNumber
+          );
+
+          $("#requestNumber8").html(
+            '<strong class="text-gray-900">09.00-17.00:&emsp;&emsp;&emsp;</strong> ' +
+              approvalDetaildata.dutyScheduleRequestItemList[7].requestNumber +
+              "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;" +
+              approvalDetaildata.dutyScheduleRequestItemList[7].approveNumber
+          );
+
+          $("#shiftStartModal").html(
+            approvalDetaildata.dutyScheduleRequestItemList[8].shiftStart +
+              "-" +
+              approvalDetaildata.dutyScheduleRequestItemList[8].shiftEnd
+          );
+          $("#requestNumberOther").html(
+            approvalDetaildata.dutyScheduleRequestItemList[8].requestNumber +
+              "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;" +
+              approvalDetaildata.dutyScheduleRequestItemList[8].approveNumber
           );
         }
 
-        if (approvalDetaildata.experienceList.length != 0) {
-          $("#experienceTypeCode").html(
-            '<strong class="text-gray-900">ประสบการณ์:  </strong> ' +
-              experienceTypeMap.get(
-                approvalDetaildata.experienceList[0].experienceTypeCode
-              ).experienceTypeDesc
-          );
+        TimeDataTable.data(approvalDetaildata.dutyScheduleRequestItemList);
 
-          $("#positionCode").html(
-            '<strong class="text-gray-900">ตำแหน่ง:  </strong> ' +
-              approvalDetaildata.experienceList[0].positionCode
-          );
+        // console.log(approvalDetaildata);
 
-          $("#beginYear").html(
-            '<strong class="text-gray-900">ปีที่เริ่ม:  </strong> ' +
-              approvalDetaildata.experienceList[0].beginYear
-          );
-
-          $("#endYear").html(
-            '<strong class="text-gray-900">ปีที่สิ้นสุด:  </strong> ' +
-              approvalDetaildata.experienceList[0].endYear
-          );
-        }
         CreateDatatableDetail.data(approvalDetaildata.dutyScheduleList);
         modal.modal("show");
       } else {
@@ -1179,6 +1265,7 @@ let loadUserDateForApproveModal = function (day, data) {
 
 modal.on("shown.bs.modal", function () {
   CreateDatatableDetail.adjust();
+  TimeDataTable.adjust();
 });
 
 let CreateDatatableDetail = (function () {
@@ -1193,6 +1280,7 @@ let CreateDatatableDetail = (function () {
       scrollCollapse: true,
       columns: [
         { data: "", className: "text-center" },
+        { data: "firstName", className: "text-center" },
         { data: "hospitalCode", className: "text-center" },
         { data: "locationCode", className: "text-center" },
         { data: "departmentCode1", className: "text-center" },
@@ -1203,10 +1291,10 @@ let CreateDatatableDetail = (function () {
         { data: "locationCode", className: "text-center" },
         { data: "departmentCode1", className: "text-center" },
         { data: "shiftStart", className: "text-center" },
-        { data: "hospitalCode", className: "text-center" },
-        { data: "hospitalCode", className: "text-center" },
-        { data: "hospitalCode", className: "text-center" },
-        { data: "hospitalCode", className: "text-center" },
+        // { data: "hospitalCode", className: "text-center" },
+        // { data: "hospitalCode", className: "text-center" },
+        // { data: "hospitalCode", className: "text-center" },
+        // { data: "hospitalCode", className: "text-center" },
         { data: "status", className: "text-center" },
         { data: "adminRemark", className: "text-center" },
         { data: "", className: "text-center" },
@@ -1222,6 +1310,13 @@ let CreateDatatableDetail = (function () {
         },
         {
           targets: 1,
+          title: "ชื่อ-นามสกุล",
+          render: function (data, type, full, meta) {
+            return full.firstName + " " + full.lastName;
+          },
+        },
+        {
+          targets: 2,
           title: "โรงพยาบาล",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -1230,7 +1325,7 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 2,
+          targets: 3,
           title: "Location",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -1239,7 +1334,7 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 3,
+          targets: 4,
           title: "แผนกลำดับที่ 1",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -1248,7 +1343,7 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 4,
+          targets: 5,
           title: "แผนกลำดับที่ 2",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -1257,7 +1352,7 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 5,
+          targets: 6,
           title: "แผนกลำดับที่ 3",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -1266,68 +1361,68 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 6,
+          targets: 7,
           title: "ช่วงเวลา",
           render: function (data, type, full, meta) {
             return full.shiftStart + "-" + full.shiftEnd;
           },
         },
-        {
-          targets: 7,
-          title: "โรงพยาบาลที่ขอ",
-          render: function (data, type, full, meta) {
-            if (full.dutyScheduleRequestList != null) {
-              return hospitalMap.get(full.dutyScheduleRequestList.hospitalCode)
-                .hospitalDesc;
-            } else {
-              return "-";
-            }
-          },
-        },
+        // {
+        //   targets: 7,
+        //   title: "โรงพยาบาลที่ขอ",
+        //   render: function (data, type, full, meta) {
+        //     if (full.dutyScheduleRequestList != null) {
+        //       return hospitalMap.get(full.dutyScheduleRequestList.hospitalCode)
+        //         .hospitalDesc;
+        //     } else {
+        //       return "-";
+        //     }
+        //   },
+        // },
+        // {
+        //   targets: 8,
+        //   title: "Locationที่ขอ",
+        //   render: function (data, type, full, meta) {
+        //     if (full.dutyScheduleRequestList != null) {
+        //       return locationMap.get(full.dutyScheduleRequestList.locationCode)
+        //         .locationDesc;
+        //     } else {
+        //       return "-";
+        //     }
+        //   },
+        // },
+        // {
+        //   targets: 9,
+        //   title: "แผนกที่ขอ",
+        //   render: function (data, type, full, meta) {
+        //     if (full.dutyScheduleRequestList != null) {
+        //       return departmentMap.get(
+        //         full.dutyScheduleRequestList.departmentCode
+        //       ).departmentDesc;
+        //     } else {
+        //       return "-";
+        //     }
+        //   },
+        // },
+        // {
+        //   targets: 10,
+        //   title: "ช่วงเวลาที่ขอ",
+        //   render: function (data, type, full, meta) {
+        //     if (full.dutyScheduleRequestList != null) {
+        //       return `<a href="#" class="btn btn-info btn-circle btn-sm choose-button">${full.dutyScheduleRequestList.dutyScheduleRequestItemList.length}</a>`;
+        //     } else {
+        //       return "-";
+        //     }
+        //   },
+        // },
         {
           targets: 8,
-          title: "Locationที่ขอ",
-          render: function (data, type, full, meta) {
-            if (full.dutyScheduleRequestList != null) {
-              return locationMap.get(full.dutyScheduleRequestList.locationCode)
-                .locationDesc;
-            } else {
-              return "-";
-            }
-          },
-        },
-        {
-          targets: 9,
-          title: "แผนกที่ขอ",
-          render: function (data, type, full, meta) {
-            if (full.dutyScheduleRequestList != null) {
-              return departmentMap.get(
-                full.dutyScheduleRequestList.departmentCode
-              ).departmentDesc;
-            } else {
-              return "-";
-            }
-          },
-        },
-        {
-          targets: 10,
-          title: "ช่วงเวลาที่ขอ",
-          render: function (data, type, full, meta) {
-            if (full.dutyScheduleRequestList != null) {
-              return `<a href="#" class="btn btn-info btn-circle btn-sm choose-button">${full.dutyScheduleRequestList.dutyScheduleRequestItemList.length}</a>`;
-            } else {
-              return "-";
-            }
-          },
-        },
-        {
-          targets: 11,
           title: "โรงพยาบาลที่อนุมัติ",
           render: function (data, type, full, meta) {
             if (full.isUpdate === true) {
               return `<select class="custom-select hospitalCode" name="hospitalCode" id="hospitalCode" data-size="4">
-                        <option selected disabled>ตำแหน่ง</option>
-                    </select>`;
+                          <option selected disabled>ตำแหน่ง</option>
+                      </select>`;
             } else {
               return full.approveHospitalCode == null ||
                 isNaN(full.approveHospitalCode)
@@ -1337,13 +1432,13 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 12,
+          targets: 9,
           title: "Locationที่อนุมัติ",
           render: function (data, type, full, meta) {
             if (full.isUpdate === true) {
               return `<select class="custom-select locationCode" name="locationCode" id="locationCode" data-size="4">
-                          <option selected disabled>Location</option>
-                      </select>`;
+                            <option selected disabled>Location</option>
+                        </select>`;
             } else {
               return full.approveLocationCode == null ||
                 isNaN(full.approveLocationCode)
@@ -1353,13 +1448,13 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 13,
+          targets: 10,
           title: "แผนกที่อนุมัติ",
           render: function (data, type, full, meta) {
             if (full.isUpdate === true) {
               return `<select class="custom-select departmentCode" name="departmentCode" id="departmentCode" data-size="4">
-                            <option selected disabled>แผนก</option>
-                        </select>`;
+                              <option selected disabled>แผนก</option>
+                          </select>`;
             } else {
               return full.approveDepartmentCode == null ||
                 isNaN(full.approveDepartmentCode)
@@ -1369,12 +1464,12 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 14,
+          targets: 11,
           title: "ช่วงเวลาที่อนุมัติ",
           render: function (data, type, full, meta) {
             if (full.isUpdate === true) {
               return `<input type="time" class="form-control form-control-sm" name="shiftStartEdit" id="shiftStartEdit" value="${full.approveShiftStart}" /> 
-            <input type="time" class="form-control form-control-sm" name="shiftEndEdit" id="shiftEndEdit" value="${full.approveShiftEnd}" />`;
+              <input type="time" class="form-control form-control-sm" name="shiftEndEdit" id="shiftEndEdit" value="${full.approveShiftEnd}" />`;
             } else {
               return full.approveShiftStart != null &&
                 full.approveShiftEnd != null
@@ -1384,20 +1479,20 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 15,
+          targets: 12,
           title: "สถานะ",
           render: function (data, type, full, meta) {
             if (full.isUpdate === true) {
               return `<select class="custom-select statusCode" name="statusCode" id="statusCode" data-size="4">
-                <option selected disabled>สถานะ</option>
-            </select>`;
+                  <option selected disabled>สถานะ</option>
+              </select>`;
             } else {
               return `<a class="btn btn-${dutyScheduleSStatusMap[data].state}" style="width: 90px;">${dutyScheduleSStatusMap[data].desc}</a>`;
             }
           },
         },
         {
-          targets: 16,
+          targets: 13,
           title: "หมายเหตุ",
           render: function (data, type, full, meta) {
             if (full.isUpdate === true) {
@@ -1410,7 +1505,7 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 17,
+          targets: 14,
           title: "แก้ไข",
           render: function (data, type, full, meta) {
             if (
@@ -1422,8 +1517,8 @@ let CreateDatatableDetail = (function () {
                 return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`;
               } else {
                 return `
-                <a class="btn btn-success btn-circle btn-sm confirm-button"><i class="fas fa-check"></i></a>
-                <a class="btn btn-danger btn-circle btn-sm cancel-button" ><i class="fas fa-times"></i></a>`;
+                  <a class="btn btn-success btn-circle btn-sm confirm-button"><i class="fas fa-check"></i></a>
+                  <a class="btn btn-danger btn-circle btn-sm cancel-button" ><i class="fas fa-times"></i></a>`;
               }
             } else {
               return "-";
@@ -1630,27 +1725,27 @@ let renderRowEdit = function (table) {
 
 let CreateRowParentBody = function () {
   let childRow = `
-      <div class="row">
-      <div class="col-lg-7"></div>
-      <div class="col-lg-5">
-      <div style="height : auto;">
-      <table class="table table-striped-table-hover table-checkable" id="table-rowparent">
-        <thead class="thead-light">
-            <tr>
-                <th>ลำดับ</th>
-                <th>เวลา</th>
-                <th>จำนวนที่ขอ</th>
-                <th>จำนวนที่อนุมัติ</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+        <div class="row">
+        <div class="col-lg-7"></div>
+        <div class="col-lg-5">
+        <div style="height : auto;">
+        <table class="table table-striped-table-hover table-checkable" id="table-rowparent">
+          <thead class="thead-light">
+              <tr>
+                  <th>ลำดับ</th>
+                  <th>เวลา</th>
+                  <th>จำนวนที่ขอ</th>
+                  <th>จำนวนที่อนุมัติ</th>
+              </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+        
+        </div>
       
-      </div>
-    
-      </div>
-      `;
+        </div>
+        `;
   return childRow;
 };
 
@@ -1692,3 +1787,85 @@ let updateDutySchedule = function (eTable, eRow) {
     }
   }
 };
+
+let TimeDataTable = (function () {
+  let table;
+  let currentPage = 0;
+  let initTable1 = function () {
+    table = $("#timeTable").DataTable({
+      responsive: false,
+      data: [],
+      scrollY: "50vh",
+      scrollX: true,
+      scrollCollapse: true,
+      //   order: [0, "asc"],
+      language: {
+        emptyTable: "ไม่มีข้อมูล",
+      },
+      dom: `<'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>`,
+      lengthChange: false,
+      info: false,
+      //   paginate: false,
+      fixedColumns: {
+        heightMatch: "none",
+      },
+      pageLength: 4,
+      columns: [
+        { data: "shiftStart", className: "text-right" },
+        { data: "requestNumber", className: "text-right" },
+        { data: "approveNumber", className: "text-right" },
+      ],
+      columnDefs: [
+        {
+          targets: 0,
+          orderable: false,
+          render: function (data, type, full, meta) {
+            return full.shiftStart + "-" + full.shiftEnd;
+          },
+        },
+        {
+          targets: 1,
+          orderable: false,
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+        {
+          targets: 2,
+          orderable: false,
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+      ],
+    });
+  };
+
+  return {
+    init: function () {
+      initTable1();
+      let containerTable = $(table.table().container());
+    },
+    data: function (data) {
+      table.clear();
+      table.rows.add(data);
+      table.draw();
+    },
+    addData: function (data) {
+      table.rows.add(data);
+      table.draw();
+    },
+    getData: function (index) {
+      if (index) {
+        return table.row(index).data();
+      }
+      return table.rows().data().toArray();
+    },
+    datatable: function () {
+      return table;
+    },
+    adjust: function () {
+      table.columns.adjust();
+    },
+  };
+})();

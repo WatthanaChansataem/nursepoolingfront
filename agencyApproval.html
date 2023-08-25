@@ -74,14 +74,14 @@
         <div class="sidebar-heading">MENU</div>
         <!-- Nav Item - Tables -->
 
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="nav-link" href="individualApproval.html">
             <i class="fas fa-fw fa-address-book"></i>
             <span>อนุมัติเวรรายบุคคล</span></a
           >
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item active">
           <a class="nav-link" href="agencyApproval.html">
             <i class="fas fa-fw fa-h-square"></i>
             <span>อนุมัติเวรตามหน่วยงาน</span></a
@@ -309,7 +309,9 @@
                     <thead>
                       <tr>
                         <th>No.</th>
-                        <th>ชื่อ - นามสกุล</th>
+                        <th>โรงพยาบาล</th>
+                        <th>Location</th>
+                        <th>แผนก</th>
                         <th>ตำแหน่ง</th>
                         <th>1</th>
                         <th>2</th>
@@ -344,32 +346,16 @@
                         <th>31</th>
                         <th>เวรที่ขอ</th>
                         <th>เวรที่อนุมัติ</th>
-                        <th>เวรที่ยกเลิก</th>
                         <th>ชั่วโมงที่ขอ</th>
                         <th>ชั่วโมงที่อนุมัติ</th>
-                        <th>ชั่วโมงเข้า</th>
-                        <!-- <th>สถานะ</th>
-                        <th>หมายเหตุ</th>
-                        <th>แก้ไข</th> -->
+                        <!-- <th>ชั่วโมงเข้า</th> -->
                       </tr>
                     </thead>
                   </table>
                 </div>
               </div>
             </div>
-            <div class="form-group row" style="display: none">
-              <!-- <div
-                class="col-sm-12"
-                style="display: flex; justify-content: flex-end"
-              >
-                <a class="btn btn-primary btn-icon-split" id="submit">
-                  <span class="icon text-white-50">
-                    <i class="fa fa-check"></i>
-                  </span>
-                  <span class="text">บันทึก</span>
-                </a>
-              </div> -->
-            </div>
+            <div class="form-group row" style="display: none"></div>
           </div>
           <!-- /.container-fluid -->
         </div>
@@ -459,85 +445,131 @@
               <p id="dutyDateDisplayModal"></p>
             </div>
             <div class="form-group row">
-              <div class="col-sm-2">
-                <div class="col-lg-1 text-center">
-                  <img
-                    class="img-profile rounded-circle"
-                    src="img/undraw_profile.svg"
-                    id="profileImg"
-                    width="100"
-                    height="100"
-                    alt="image"
-                  />
-                </div>
-                <br />
-                <div class="col-lg-8 text-center">
-                  <a class="small" href="#" id="editProfile">ข้อมูลส่วนตัว</a>
-                </div>
-              </div>
               <div class="col-sm-4">
-                <label class="col-sm-12 col-form-label-sm" id="firstNameModal"
-                  >ชื่อ: -</label
+                <label
+                  class="col-sm-12 col-form-label-sm"
+                  id="hospitalCodeModal"
+                  >โรงพยาบาล: -</label
+                >
+                <label
+                  class="col-sm-12 col-form-label-sm"
+                  id="locationCodeModal"
+                  >Location: -</label
+                >
+                <label
+                  class="col-sm-12 col-form-label-sm"
+                  id="departmentCodeModal"
+                  >แผนก: -</label
                 >
                 <label
                   class="col-sm-12 col-form-label-sm"
                   id="positionCodeModal"
                   >ตำแหน่ง: -</label
                 >
-                <label class="col-sm-12 col-form-label-sm" id="workplaceModal"
-                  >สถานที่ทำงาน: -</label
-                >
-                <label class="col-sm-12 col-form-label-sm" id="userLevelCode"
-                  >Level: -</label
-                >
-                <label class="col-sm-12 col-form-label-sm" id="phone"
-                  >หมายเลขโทรศพท์: -</label
-                >
-                <label class="col-sm-12 col-form-label-sm" id="email"
-                  >Email: -</label
-                >
-              </div>
-              <div class="col-sm-3">
-                <label class="col-sm-12 col-form-label-sm"
-                  ><strong class="text-gray-900">ประวัติการศึกษา</strong></label
-                >
-                <!-- <div class="col-sm-6 "> -->
-                <div class="form-group row">
+                <div class="col row">
                   <label
-                    class="col-sm-12 col-form-label-sm"
-                    id="educationalQualificationCode"
-                    >วุฒิการศึกษา: -</label
+                    class="col-sm-6 col-form-label-sm"
+                    id="requestNumberModal"
+                    >จำนวนที่ขอ: -</label
                   >
-                  <label class="col-sm-12 col-form-label-sm" id="majorCode"
-                    >สาขา: -</label
-                  >
-                  <label class="col-sm-12 col-form-label-sm" id="graduationYear"
-                    >ปีที่จบ: -</label
-                  >
-                  <label class="col-sm-12 col-form-label-sm" id="university"
-                    >มหาวิทยาลัย: -</label
+                  <label
+                    class="col-sm-6 col-form-label-sm"
+                    id="approveNumberModal"
+                    >จำนวนที่อนุมัติแล้ว: -</label
                   >
                 </div>
               </div>
-              <div class="col-sm-3">
+              <div class="col-sm-8 row">
                 <label class="col-sm-12 col-form-label-sm"
-                  ><strong class="text-gray-900">ประสบการณ์</strong></label
+                  ><strong class="text-gray-900">การขออัตรากำลัง</strong></label
                 >
-                <div class="form-group row">
-                  <label
-                    class="col-sm-12 col-form-label-sm"
-                    id="experienceTypeCode"
-                    >ประสบการณ์: -</label
+
+                <!-- <div class="table-responsive">
+                  <table
+                    class="table table-bordered nowrap"
+                    id="timeTable"
+                    width="100%"
+                    cellspacing="0"
+                    style="font-size: 0.6em"
                   >
-                  <label class="col-sm-12 col-form-label-sm" id="positionCode"
-                    >ตำแหน่ง: -</label
-                  >
-                  <label class="col-sm-6 col-form-label-sm" id="beginYear"
-                    >ปีที่เริ่ม: -</label
-                  >
-                  <label class="col-sm-6 col-form-label-sm" id="endYear"
-                    >ปีที่สิ้นสุด: -</label
-                  >
+                    <thead>
+                      <tr>
+                        <th>เวเลา</th>
+                        <th>จำนวนที่ขอ</th>
+                        <th>จำนวนที่อนุมัติ</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div> -->
+
+                <!-- <div class="col-sm-6 "> -->
+                <label class="col-sm-12 col-form-label-sm"
+                  ><strong class="text-gray-900"
+                    >&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;จำนวนที่ขอ&emsp;จำนวนที่อนุมัติ&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;จำนวนที่ขอ&emsp;จำนวนที่อนุมัติ</strong
+                  ></label
+                >
+                <div class="col row">
+                  <div class="col-sm-5">
+                    <label
+                      class="col-sm-12 col-form-label-sm"
+                      id="requestNumber1"
+                      >07.00-15.00: -<label id="requestNumber1R"></label
+                      ><label id="requestNumber1A"></label
+                    ></label>
+                    <label
+                      class="col-sm-12 col-form-label-sm"
+                      id="requestNumber2"
+                      >15.00-23.00: -</label
+                    >
+                    <label
+                      class="col-sm-12 col-form-label-sm"
+                      id="requestNumber3"
+                      >23.00-07.00: -</label
+                    >
+                    <label
+                      class="col-sm-12 col-form-label-sm"
+                      id="requestNumber4"
+                      >07.00-19.00: -</label
+                    >
+                  </div>
+
+                  <div class="col-sm-5">
+                    <label
+                      class="col-sm-12 col-form-label-sm"
+                      id="requestNumber5"
+                      >19.00-07.00: -
+                    </label>
+                    <label
+                      class="col-sm-12 col-form-label-sm"
+                      id="requestNumber6"
+                      >08.00-16.00: -</label
+                    >
+                    <label
+                      class="col-sm-12 col-form-label-sm"
+                      id="requestNumber7"
+                      >08.00-20.00: -</label
+                    >
+                    <label
+                      class="col-sm-12 col-form-label-sm"
+                      id="requestNumber8"
+                      >09.00-17.00: -</label
+                    >
+                  </div>
+
+                  <div class="col-sm-6">
+                    <label class="col-sm-12 col-form-label-sm"
+                      ><strong class="text-gray-900"></strong
+                      ><label
+                        class="col-form-label-sm"
+                        id="shiftStartModal"
+                      ></label>
+                      &emsp;&emsp;&emsp;
+                      <label
+                        class="col-form-label-sm"
+                        id="requestNumberOther"
+                      ></label>
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -556,16 +588,17 @@
                     <thead>
                       <tr>
                         <th>No.</th>
+                        <th>ชื่อ</th>
                         <th>โรงพยาบาล</th>
                         <th>Location</th>
                         <th>แผนกลำดับที่ 1</th>
                         <th>แผนกลำดับที่ 2</th>
                         <th>แผนกลำดับที่ 3</th>
                         <th>ช่วงเวลา</th>
-                        <th>โรงพยาบาลที่ขอ</th>
+                        <!-- <th>โรงพยาบาลที่ขอ</th>
                         <th>Locationที่ขอ</th>
                         <th>แผนกที่ขอ</th>
-                        <th>ช่วงเวลาที่ขอ</th>
+                        <th>ช่วงเวลาที่ขอ</th> -->
                         <th>โรงพยาบาลที่อนุมัติ</th>
                         <th>Locationที่อนุมัติ</th>
                         <th>แผนกที่อนุมัติ</th>
@@ -622,7 +655,7 @@
 
     <!-- Custom scripts for all pages-->
     <!-- <script src="js/sb-admin-2.min.js"></script> -->
-    <script src="js/individualApproval.js"></script>
+    <script src="js/agencyApproval.js"></script>
 
     <!-- Page level custom scripts -->
     <!-- <script src="js/demo/datatables-demo.js"></script> -->
