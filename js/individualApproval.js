@@ -1617,12 +1617,14 @@ let renderRowEdit = function (table) {
     }
 
     $.each(dutyScheduleStatusMasters, function (i, item) {
-      row.find("select[name=statusCode]").append(
-        $("<option>", {
-          value: item.statusCode,
-          text: item.statusDesc,
-        })
-      );
+      if (item.statusCode != "C") {
+        row.find("select[name=statusCode]").append(
+          $("<option>", {
+            value: item.statusCode,
+            text: item.statusDesc,
+          })
+        );
+      }
     });
     row.find("select[name=statusCode]").val(isChanged.status);
   });
