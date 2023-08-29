@@ -591,35 +591,45 @@ let CreateDatatable = (function () {
           targets: 10,
           title: "โรงพยาบาลที่อนุมัติ",
           render: function (data, type, full, meta) {
-            return data;
+            return data == null || isNaN(data)
+              ? ""
+              : hospitalMap.get(data).hospitalDesc;
           },
         },
         {
           targets: 11,
           title: "Locationที่อนุมัติ",
           render: function (data, type, full, meta) {
-            return data;
+            return data == null || isNaN(data)
+              ? ""
+              : locationMap.get(data).locationDesc;
           },
         },
         {
           targets: 12,
           title: "แผนกที่อนุมัติ",
           render: function (data, type, full, meta) {
-            return data;
+            return data == null || isNaN(data)
+              ? ""
+              : departmentMap.get(data).departmentDesc;
           },
         },
         {
           targets: 13,
           title: "ช่วงเวลาที่อนุมัติ",
           render: function (data, type, full, meta) {
-            return data;
+            return full.approveShiftStart == null
+              ? "-"
+              : full.approveShiftStart + "-" + full.approveShiftEnd;
           },
         },
         {
           targets: 14,
           title: "ช่วงเวลาที่เข้างาน",
           render: function (data, type, full, meta) {
-            return data;
+            return full.realShiftStart == null
+              ? "-"
+              : full.realShiftStart + "-" + full.realShiftEnd;
           },
         },
         {
