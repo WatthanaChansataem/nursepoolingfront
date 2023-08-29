@@ -667,9 +667,54 @@ let LoadDutyScheduleRequest = function () {
     dataType: "json",
     success: function (res) {
       if (res.status.code == 200) {
-        CreateDatatable.data(res.data.dutyScheduleList);
+        let dashboardData = res.data;
+        CreateDatatable.data(dashboardData.dutyScheduleList);
 
-        $("#requestNumberProgress").attr("style", "width: 80%");
+        $("#requestNumberProgress").attr("style", "width: 100%");
+        $("#allRequestNumber").html(dashboardData.allRequestNumber);
+        $("#totalDuration").html(
+          "คิดเป็นจำนวนชั่วโมง : " + dashboardData.totalDuration + " ชัวโมง"
+        );
+
+        $("#approveNumberProgress").attr(
+          "style",
+          `width: ${FindPercenOf(
+            dashboardData.allApproveNumber,
+            dashboardData.allRequestNumber
+          )}%`
+        );
+        $("#allApproveNumber").html(dashboardData.allApproveNumber);
+        $("#totalApproveDuration").html(
+          "คิดเป็นจำนวนชั่วโมง : " +
+            dashboardData.totalApproveDuration +
+            " ชัวโมง"
+        );
+
+        $("#allRealNumberProgress").attr(
+          "style",
+          `width: ${FindPercenOf(
+            dashboardData.allRealNumber,
+            dashboardData.allRequestNumber
+          )}%`
+        );
+        $("#allRealNumber").html(dashboardData.allRealNumber);
+        $("#totalAllRealDuration").html(
+          "คิดเป็นจำนวนชั่วโมง : " +
+            dashboardData.totalAllRealDuration +
+            " ชัวโมง"
+        );
+
+        $("#allOffNumberProgress").attr(
+          "style",
+          `width: ${FindPercenOf(
+            dashboardData.allOffNumber,
+            dashboardData.allRequestNumber
+          )}%`
+        );
+        $("#allOffNumber").html(dashboardData.allOffNumber);
+        $("#totalOffDuration").html(
+          "คิดเป็นจำนวนชั่วโมง : " + dashboardData.totalOffDuration + " ชัวโมง"
+        );
       } else {
         toastr.error(res.status.message);
       }
@@ -713,4 +758,8 @@ let removeStar = function () {
   });
   //   });
   // });
+};
+
+let FindPercenOf = function (x, y) {
+  return (x * 100) / y;
 };

@@ -1765,12 +1765,13 @@ let updateDutySchedule = function (eTable, eRow) {
     };
 
     if (
-      newDutySchedule.hospitalCode == null ||
-      newDutySchedule.locationCode == null ||
-      newDutySchedule.departmentCode == null ||
-      newDutySchedule.shiftStart == "" ||
-      newDutySchedule.shiftEnd == "" ||
-      newDutySchedule.status == ""
+      dutyScheduleStatusConstant.Approve == newDutySchedule.status &&
+      (newDutySchedule.hospitalCode == null ||
+        newDutySchedule.locationCode == null ||
+        newDutySchedule.departmentCode == null ||
+        newDutySchedule.shiftStart == "" ||
+        newDutySchedule.shiftEnd == "" ||
+        newDutySchedule.status == "")
     ) {
       toastr.error("กรอกข้อมูลไม่ครบ");
     } else {
