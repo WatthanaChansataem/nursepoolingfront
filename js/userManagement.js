@@ -49,6 +49,7 @@
 
 let isInvalidClass = "is-invalid";
 let validationErrorMessageClass = "validation-error-message";
+let modal = $("#addUserModal");
 let modalEdit = $("#editScheduleModal");
 
 let hospitalMap = new Map();
@@ -124,9 +125,18 @@ let userRoleConstant = {
   Admin: "A",
   Department: "D",
 };
+let userData;
+let DocumentTypeCode = {
+  Other: 0,
+  TrainingCourse: 1,
+  IDCardCopy: 2,
+  ProfessionalLicenseCopy: 3,
+  ProfileImg: 4,
+};
 
 $(document).ready(function () {
   CreateDatatable.init();
+  readURL = function (input) {};
 
   let setupDataDefered = $.Deferred();
   SetupData.init(setupDataDefered);
@@ -227,7 +237,7 @@ let SetupData = (function () {
       },
       success: function (res) {
         if (res.status.code == 200) {
-          let userData = res.data;
+          userData = res.data;
           $("#currentUserName").html(userData.firstName);
           $("#navProfileImg").attr(
             "src",
@@ -605,6 +615,7 @@ let CreateDatatable = (function () {
         }
 
         modalEdit.find("#editScheduleBtnModal").attr("rowIndex", rowIndex);
+        $("#editProfile").attr("userId", data.userId);
         modalEdit.modal();
       });
 
@@ -740,3 +751,148 @@ $("#logoutConfirm").on("click", function () {
   localStorage.clear();
   window.location.href = "login.html";
 });
+
+$("#editProfile").on("click", function () {
+  let userId = $(this).attr("userId");
+  if (userId == userData.userId) {
+    $("#changeProfileImage").trigger("click");
+  }
+});
+
+$("input[name=changeProfileImage]").on("change", function () {
+  let changeElement = $("input[name=changeProfileImage]");
+  var uploadata = new FormData();
+  uploadata.append("documentName", changeElement[0].files[0].name);
+  uploadata.append("document", changeElement[0].files[0]);
+  uploadata.append("documentTypeCode", DocumentTypeCode.ProfileImg);
+  uploadata.append("insertUserId", userData.userId);
+  let defer = $.Deferred();
+  upLoadFileWithContent(uploadata, defer);
+  $.when(defer).done(function (result) {
+    if (result) {
+      resData = result;
+      changeElement.attr("documentId", resData.documentId);
+      location.reload();
+    }
+  });
+});
+
+let upLoadFileWithContent = function (uploadFileData, defer) {
+  $.ajax({
+    url: "https://localhost:7063/api/document/createWithContent",
+    method: "POST",
+    data: uploadFileData,
+    dataType: "json",
+    contentType: false,
+    processData: false,
+    success: function (res) {
+      if (res.status.code == 200) {
+        toastr.success("บันทึกสำเร็จ");
+        $("#editScheduleModal").modal("hide");
+        defer.resolve(res.data);
+      } else {
+        toastr.error(res.status.message);
+        defer.resolve(false);
+      }
+    },
+    error: function (res) {
+      toastr.error("ไม่สามารถบันทึกได้");
+      defer.resolve(false);
+    },
+  });
+};
+
+$("#addUser").on("click", function () {
+  modal.modal();
+});
+
+$("#addUserBtnModal").on("click", function () {
+  let firstName = $("#firstNameAdd").val();
+  let userName = $("#userName").val();
+  let password = $("#password").val();
+  let repeatPassword = $("#repeatPassword").val();
+
+  let objadddata = {
+    firstName: firstName,
+    userName: userName,
+    password: password,
+    repeatPassword: repeatPassword,
+  };
+  let isValidate = 0;
+
+  if (objadddata["firstName"] == "" || objadddata["firstName"] == null) {
+    $(`.div-input-firstNameAdd .form-control`).addClass(isInvalidClass);
+    $(`.div-input-firstNameAdd .${validationErrorMessageClass}`).html(
+      `กรุณาระบุ`
+    );
+    isValidate = 1;
+  } else {
+    $(`.div-input-firstNameAdd .form-control`).removeClass(isInvalidClass);
+  }
+  if (objadddata["userName"] == "" || objadddata["userName"] == null) {
+    $(`.div-input-userName .form-control`).addClass(isInvalidClass);
+    $(`.div-input-userName .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
+    isValidate = 1;
+  } else {
+    $(`.div-input-userName .form-control`).removeClass(isInvalidClass);
+  }
+  let pattern =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+!.=])[a-zA-Z0-9@#$%^&+!.=]{7,}$/;
+  let isValid = pattern.test(objadddata["password"]);
+
+  if (!isValid) {
+    $(`.div-input-password .form-control`).addClass(isInvalidClass);
+    $(`.div-input-password .${validationErrorMessageClass}`).html(
+      `ต้องมีอักษรตัวพิมพ์เล็กอย่างน้อยหนึ่งตัว มีอักษรตัวพิมพ์ใหญ่อย่างน้อยหนึ่งตัว มีตัวเลขอย่างน้อยหนึ่งตัว มีอักขระพิเศษ @#$%^&+!.= อย่างน้อยหนึ่งตัว และมีความยาวอย่างน้อย 7 ตัวอักษร`
+    );
+    isValidate = 1;
+  } else {
+    $(`.div-input-password .form-control`).removeClass(isInvalidClass);
+  }
+
+  if (objadddata["repeatPassword"] != objadddata["password"]) {
+    $(`.div-input-repeatPassword .form-control`).addClass(isInvalidClass);
+    $(`.div-input-repeatPassword .${validationErrorMessageClass}`).html(
+      `รหัสผ่านไม่ตรงกัน`
+    );
+    isValidate = 1;
+  } else {
+    $(`.div-input-repeatPassword .form-control`).removeClass(isInvalidClass);
+  }
+
+  if (isValidate == 1) {
+    return;
+  }
+
+  $.ajax({
+    url: "https://localhost:7063/api/User/createAdmin",
+    type: "POST",
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+    data: JSON.stringify(objadddata),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (res) {
+      if (res.status.code == 200) {
+        toastr.success("แก้ไขรายการสำเร็จ");
+        modal.modal("hide");
+        LoadDutySchedule();
+      } else {
+        toastr.error(res.status.message);
+      }
+    },
+    error: function (res) {
+      toastr.error("ไม่สามารถแก้ไขรายการได้");
+    },
+  });
+});
+
+function showPassword() {
+  let element = document.getElementById("password");
+  if (element.type === "password") {
+    element.type = "text";
+  } else {
+    element.type = "password";
+  }
+}
