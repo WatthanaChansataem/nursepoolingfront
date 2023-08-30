@@ -73,7 +73,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadTitle = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/title/list",
+      url: "http://10.104.10.243:8082/api/title/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -96,7 +96,7 @@ let SetupData = (function () {
 
   let loadPosition = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/position/list",
+      url: "http://10.104.10.243:8082/api/position/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
