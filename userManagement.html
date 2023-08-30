@@ -722,21 +722,96 @@
               <div class="col-sm-9">
                 <br />
                 <br />
-                <label class="col-sm-12" id="firstName">ชื่อ: </label>
+                <div class="col-sm-8 adminDis">
+                  <label for="adminName" class="col-form-label-sm"
+                    ><strong class="text-gray-900">ชื่อ </strong></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    id="adminName"
+                    placeholder="adminName"
+                  />
+                </div>
+                <label class="col-sm-12 userDis departmentDis" id="firstName"
+                  >ชื่อ:
+                </label>
                 <label class="col-sm-12 userDis" id="positionDescModal"
                   >ตำแหน่ง:
+                </label>
+                <label class="col-sm-12 departmentDis" id="agencyNo"
+                  >รหัสหน่วยงาน:
                 </label>
               </div>
             </div>
 
             <div class="form-group row">
-              <label class="col-sm-12 userDis" id="email">Email: </label>
-              <label class="col-sm-12 userDis" id="phone">โทรศัพท์: </label>
+              <div
+                class="col-sm-6 departmentDis div-input-hospitalCodeEditModal"
+              >
+                <label for="hospitalCodeEditModal" class="col-form-label-sm"
+                  >โรงพยาบาล</label
+                >
+                <select
+                  class="custom-select custom-select-sm hospitalCodeEditModal"
+                  name="hospitalCodeEditModal"
+                  id="hospitalCodeEditModal"
+                  data-size="4"
+                >
+                  <option selected disabled hidden>กรุณาเลือก</option>
+                </select>
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+              <div
+                class="col-sm-6 departmentDis div-input-locationCodeEditModal"
+              >
+                <label for="locationCodeEditModal" class="col-form-label-sm"
+                  >Location</label
+                >
+
+                <select
+                  class="custom-select custom-select-sm locationCodeEditModal"
+                  name="locationCodeEditModal"
+                  id="locationCodeEditModal"
+                  data-size="4"
+                >
+                  <option selected disabled hidden>กรุณาเลือก</option>
+                </select>
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+              <div
+                class="col-sm-6 departmentDis div-input-departmentCodeEditModal"
+              >
+                <label for="departmentCodeEditModal" class="col-form-label-sm"
+                  >แผนก</label
+                >
+                <select
+                  class="custom-select custom-select-sm departmentCodeEditModal"
+                  name="departmentCodeEditModal"
+                  id="departmentCodeEditModal"
+                  data-size="4"
+                >
+                  <option selected disabled hidden>กรุณาเลือก</option>
+                </select>
+                <div class="invalid-feedback validation-error-message"></div>
+                <span class="form-text text-muted"></span>
+              </div>
+
+              <label
+                class="col-sm-12 userDis departmentDis col-form-label"
+                id="email"
+                >Email:
+              </label>
+              <label class="col-sm-12 userDis departmentDis" id="phone"
+                >โทรศัพท์:
+              </label>
               <label class="col-sm-12 userDis" id="lineId">LINE ID: </label>
-              <label class="col-sm-12 userDis" id="insertDateTime"
+              <label class="col-sm-12 userDis departmentDis" id="insertDateTime"
                 >วันที่ลงทะเบียน:
               </label>
-              <div class="col-sm-8">
+              <div class="col-sm-8 userDis">
                 <label for="vendorNo" class="col-form-label-sm"
                   ><strong class="text-gray-900">VendorNo </strong></label
                 >
@@ -747,7 +822,7 @@
                   placeholder="VendorNo"
                 />
               </div>
-              <div class="col-sm-8">
+              <div class="col-sm-8 userDis">
                 <label for="userLevelCode" class="col-form-label-sm"
                   ><strong class="text-gray-900">UserLevel </strong></label
                 >
@@ -758,7 +833,7 @@
                   data-size="4"
                 ></select>
               </div>
-              <div class="col-sm-8">
+              <div class="col-sm-8 userDis departmentDis">
                 <label for="isApprove" class="col-form-label-sm"
                   ><strong class="text-gray-900"
                     >สถานะการอนุมัติ
@@ -773,7 +848,7 @@
               </div>
             </div>
 
-            <div class="custom-control custom-switch">
+            <div class="custom-control custom-switch userDis departmentDis">
               <input
                 type="checkbox"
                 class="custom-control-input"

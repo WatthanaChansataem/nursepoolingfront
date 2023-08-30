@@ -368,6 +368,33 @@ let renderPage = function () {
       })
     );
   });
+
+  $.each(hospitalMaster, function (i, item) {
+    $("select[name=hospitalCodeEditModal]").append(
+      $("<option>", {
+        value: item.hospitalCode,
+        text: item.hospitalDesc,
+      })
+    );
+  });
+
+  $.each(locationMaster, function (i, item) {
+    $("select[name=locationCodeEditModal]").append(
+      $("<option>", {
+        value: item.locationCode,
+        text: item.locationDesc,
+      })
+    );
+  });
+
+  $.each(departmentMaster, function (i, item) {
+    $("select[name=departmentCodeEditModal]").append(
+      $("<option>", {
+        value: item.departmentCode,
+        text: item.departmentDesc,
+      })
+    );
+  });
 };
 
 $("#sidebarToggle").on("click", function () {
@@ -512,8 +539,6 @@ let CreateDatatable = (function () {
         let rowIndex = table.row($(this).closest("tr")).index();
         let data = table.row($(this).closest("tr")).data();
         currentRow = $(this).closest("tr");
-
-        console.log(data);
         $("#profileImg").attr(
           "src",
           `https://localhost:7063/api/document/avatar/${data.userId}`
@@ -525,59 +550,127 @@ let CreateDatatable = (function () {
             " " +
             (data.lastName == null ? "" : data.lastName)
         );
+
         if (data.role == userRoleConstant.User) {
+          $(".adminDis").hide();
+          $(".departmentDis").hide();
+          $(".userDis").show();
+
           $("#positionDescModal").html(
             '<strong class="text-gray-900">ตำแหน่ง:  </strong>' +
               positionMap.get(data.positionCode).positionDesc
           );
-
-          $("#email").html(
-            '<strong class="text-gray-900">Email:  </strong>' + data.email
-          );
-          $("#phone").html(
-            '<strong class="text-gray-900">โทรศัพท์:  </strong>' + data.phone
-          );
           $("#lineId").html(
             '<strong class="text-gray-900">Line ID:  </strong>' + data.lineID
-          );
-          $("#insertDateTime").html(
-            '<strong class="text-gray-900">วันที่ลงทะเบียน:  </strong>' +
-              moment(data.insertDateTime).format("DD/MM/YYYY")
           );
 
           $("#vendorNo").val(data.vendorNo);
 
           $("#userLevelCode").val(data.userLevelCode);
         }
+
+        if (data.role == userRoleConstant.Department) {
+          $(".adminDis").hide();
+          $(".userDis").hide();
+          $(".departmentDis").show();
+
+          $("#agencyNo").html(
+            '<strong class="text-gray-900">รหัสหน่วยงาน:  </strong>' +
+              data.agencyNo
+          );
+
+          $("#hospitalCodeEditModal").val(data.hospitalCode);
+          $("#locationCodeEditModal").val(data.locationCode);
+          $("#departmentCodeEditModal").val(data.departmentCode);
+        }
+        $("#email").html(
+          '<strong class="text-gray-900">Email:  </strong>' + data.email
+        );
+        $("#phone").html(
+          '<strong class="text-gray-900">โทรศัพท์:  </strong>' + data.phone
+        );
+        $("#insertDateTime").html(
+          '<strong class="text-gray-900">วันที่ลงทะเบียน:  </strong>' +
+            moment(data.insertDateTime).format("DD/MM/YYYY")
+        );
         $("#isApprove").val(data.isApprove);
         $("#activeStatusEdit").prop("checked", data.active == 0 ? false : true);
 
+        if (data.role == userRoleConstant.Admin) {
+          $(".userDis").hide();
+          $(".departmentDis").hide();
+          $(".adminDis").show();
+
+          $("#adminName").val(data.firstName);
+        }
+
+        modalEdit.find("#editScheduleBtnModal").attr("rowIndex", rowIndex);
         modalEdit.modal();
       });
 
       $("#editScheduleBtnModal").on("click", function () {
-        // $.ajax({
-        //   url: "https://localhost:7063/api/dutySchedule/update",
-        //   type: "POST",
-        //   headers: {
-        //     Authorization: "Bearer " + localStorage.getItem("token"),
-        //   },
-        //   data: JSON.stringify(objData),
-        //   contentType: "application/json; charset=utf-8",
-        //   dataType: "json",
-        //   success: function (res) {
-        //     if (res.status.code == 200) {
-        //       toastr.success("แก้ไขรายการสำเร็จ");
-        //       $("#editScheduleModal").modal("hide");
-        //       LoadDutySchedule();
-        //     } else {
-        //       toastr.error(res.status.message);
-        //     }
-        //   },
-        //   error: function (res) {
-        //     toastr.error("ไม่สามารถแก้ไขรายการได้");
-        //   },
-        // });
+        let rowIndex = $(this).attr("rowIndex");
+        let rowData = table.row(rowIndex).data();
+        let objData = {};
+        let vendorNo = $("#vendorNo").val();
+        let userLevelCode = parseInt($("#userLevelCode").val());
+        let isApprove = parseInt($("#isApprove").val());
+        let active = $("#activeStatusEdit").is(":checked") ? 1 : 0;
+        let hospitalCode = parseInt($("#hospitalCodeEditModal").val());
+        let locationCode = parseInt($("#locationCodeEditModal").val());
+        let departmentCode = parseInt($("#departmentCodeEditModal").val());
+
+        if (rowData.role == userRoleConstant.User) {
+          objData = {
+            userId: rowData.userId,
+            vendorNo: vendorNo,
+            userLevelCode: userLevelCode,
+            isApprove: isApprove,
+            active: active,
+          };
+        }
+
+        if (rowData.role == userRoleConstant.Department) {
+          objData = {
+            userId: rowData.userId,
+            hospitalCode: hospitalCode,
+            locationCode: locationCode,
+            departmentCode: departmentCode,
+            isApprove: isApprove,
+            active: active,
+          };
+        }
+        if (rowData.role == userRoleConstant.Admin) {
+          objData = {
+            userId: rowData.userId,
+            firstName: $("#adminName").val(),
+          };
+        }
+
+        console.log(objData);
+
+        $.ajax({
+          url: "https://localhost:7063/api/User/userManagement",
+          type: "POST",
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+          data: JSON.stringify(objData),
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          success: function (res) {
+            if (res.status.code == 200) {
+              toastr.success("แก้ไขรายการสำเร็จ");
+              $("#editScheduleModal").modal("hide");
+              LoadDutySchedule();
+            } else {
+              toastr.error(res.status.message);
+            }
+          },
+          error: function (res) {
+            toastr.error("ไม่สามารถแก้ไขรายการได้");
+          },
+        });
       });
     },
     data: function (data) {
@@ -612,7 +705,7 @@ let LoadDutySchedule = function () {
     positionCode: parseInt($("#positionCode").val()),
   };
   $.ajax({
-    url: "https://localhost:7063/api/User/userManagement",
+    url: "https://localhost:7063/api/User/searchForUserManagement",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
