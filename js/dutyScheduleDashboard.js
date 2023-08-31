@@ -63,6 +63,13 @@ let positionMap = new Map();
 let positionMaster;
 let userData;
 let currentDutyScheduleId;
+
+let userRoleConstant = {
+  User: "U",
+  Admin: "A",
+  Department: "D",
+};
+
 let dutyScheduleStatusMasters = [
   { statusCode: "N", statusDesc: "Normal" },
   { statusCode: "A", statusDesc: "Approve" },
@@ -140,7 +147,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadHospital = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/hospital/list",
+      url: "https://localhost:7063/api/hospital/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -166,7 +173,7 @@ let SetupData = (function () {
 
   let loadLocation = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/location/list",
+      url: "https://localhost:7063/api/location/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -192,7 +199,7 @@ let SetupData = (function () {
 
   let loadDepartment = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/department/list",
+      url: "https://localhost:7063/api/department/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -218,7 +225,7 @@ let SetupData = (function () {
 
   let loadUserData = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/user/details",
+      url: "https://localhost:7063/api/user/details",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -229,18 +236,24 @@ let SetupData = (function () {
           $("#currentUserName").html(userData.firstName);
           $("#navProfileImg").attr(
             "src",
-            `http://10.104.10.243:8082/api/document/avatar/${userData.userId}`
+            `https://localhost:7063/api/document/avatar/${userData.userId}`
           );
+          if (userData.role != userRoleConstant.Admin) {
+            localStorage.clear();
+            window.location.href = "login.html";
+          }
           defered.resolve(true);
         } else {
           defered.resolve(false);
           toastr.error("ไม่สามารถดึงข้อมูลผู้ใช้ได้", "Error");
+          localStorage.clear();
           window.location.href = "login.html";
         }
       },
       error: function (res) {
         defered.resolve(false);
         toastr.error("ไม่สามารถดึงข้อมูลผู้ใช้ได้", "Error");
+        localStorage.clear();
         window.location.href = "login.html";
       },
     });
@@ -248,7 +261,7 @@ let SetupData = (function () {
 
   let loadPosition = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/position/list",
+      url: "https://localhost:7063/api/position/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -590,7 +603,7 @@ let CreateDatatable = (function () {
         }
 
         $.ajax({
-          url: "http://10.104.10.243:8082/api/dutySchedule/updateEmployeeAppraisal",
+          url: "https://localhost:7063/api/dutySchedule/updateEmployeeAppraisal",
           type: "POST",
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -657,7 +670,7 @@ let LoadDutyScheduleRequest = function () {
   };
   console.log(objData);
   $.ajax({
-    url: "http://10.104.10.243:8082/api/dutySchedule/searchDutyScheduleDashboard",
+    url: "https://localhost:7063/api/dutySchedule/searchDutyScheduleDashboard",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
