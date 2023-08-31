@@ -1089,6 +1089,10 @@ let loadUserDateForApproveModal = function (day, data) {
       if (res.status.code == 200) {
         let approvalDetaildata = res.data;
         // modal.find("label").text("");
+        $("#previewProfile").attr(
+          "href",
+          "profilePreview.html?userId=" + approvalDetaildata.userId
+        );
         $("#dutyDateDisplayModal").html(
           moment(approvalDetaildata.dutyDate).format("DD/MM/YYYY")
         );

@@ -459,11 +459,13 @@ let CreateDatatable = (function () {
           targets: 1,
           title: "ชื่อ",
           render: function (data, type, full, meta) {
-            return (
-              full.firstName +
-              " " +
-              (full.lastName == null ? "" : full.lastName)
-            );
+            if (full.role == userRoleConstant.User) {
+              return `<a class="" href="profilePreview.html?userId=${
+                full.userId
+              }" target="_blank">${full.firstName + " " + full.lastName}</a>`;
+            } else {
+              return full.firstName;
+            }
           },
         },
         {
@@ -572,6 +574,10 @@ let CreateDatatable = (function () {
           $(".departmentDis").hide();
           $(".userDis").show();
 
+          $("#previewProfile").attr(
+            "href",
+            "profilePreview.html?userId=" + data.userId
+          );
           $("#positionDescModal").html(
             '<strong class="text-gray-900">ตำแหน่ง:  </strong>' +
               positionMap.get(data.positionCode).positionDesc
@@ -589,6 +595,8 @@ let CreateDatatable = (function () {
           $(".adminDis").hide();
           $(".userDis").hide();
           $(".departmentDis").show();
+
+          $("#previewProfile").attr("href", "");
 
           $("#agencyNo").html(
             '<strong class="text-gray-900">รหัสหน่วยงาน:  </strong>' +

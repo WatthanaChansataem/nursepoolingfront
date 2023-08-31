@@ -1324,7 +1324,9 @@ let CreateDatatableDetail = (function () {
           targets: 1,
           title: "ชื่อ-นามสกุล",
           render: function (data, type, full, meta) {
-            return full.firstName + " " + full.lastName;
+            return `<a class="" href="profilePreview.html?userId=${
+              full.userId
+            }" target="_blank">${full.firstName + " " + full.lastName}</a>`;
           },
         },
         {
