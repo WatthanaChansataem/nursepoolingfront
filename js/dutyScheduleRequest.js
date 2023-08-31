@@ -1017,13 +1017,13 @@ let CreateDatatable = (function () {
           targets: 14,
           title: "อื่นๆ",
           render: function (data, type, full, meta) {
-            return (
-              full.shiftStart +
-              "-" +
-              full.shiftEnd +
-              ": " +
-              full.requestNumberOther
-            );
+            return full.shiftStart == null || full.shiftStart == ""
+              ? "-"
+              : full.shiftStart +
+                  "-" +
+                  full.shiftEnd +
+                  ": " +
+                  full.requestNumberOther;
           },
         },
 
