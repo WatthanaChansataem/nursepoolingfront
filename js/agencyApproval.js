@@ -613,7 +613,7 @@ let CreateDatatable = (function () {
               ? "-"
               : `<a  class="btn btn-${
                   dutyScheduleSStatusMap[full.dutyScheduleStatusDayOne].state
-                } btn-circle btn-sm edit-button" days="1" ${data}</i></a>`;
+                } btn-circle btn-sm edit-button" days="1"> ${data}</i></a>`;
           },
         },
         {
@@ -625,7 +625,7 @@ let CreateDatatable = (function () {
               ? "-"
               : `<a  class="btn btn-${
                   dutyScheduleSStatusMap[full.dutyScheduleStatusDayTwo].state
-                } btn-circle btn-sm edit-button" days="2" ${data}</i></a>`;
+                } btn-circle btn-sm edit-button" days="2"> ${data}</i></a>`;
           },
         },
         {
