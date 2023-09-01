@@ -1104,7 +1104,7 @@ $("#submitRegister").on("click", function () {
       $(`.div-input-positionCode .custom-select`).removeClass(isInvalidClass);
     }
 
-    if (isNaN(objadddata["iDCardCopy"])) {
+    if (isNaN(objadddata["iDCardCopyDocumentId"])) {
       $(`.div-input-iDCardCopy .form-control`).addClass(isInvalidClass);
       $(`.div-input-iDCardCopy .${validationErrorMessageClass}`).html(
         `กรุณาระบุ`
@@ -1114,7 +1114,7 @@ $("#submitRegister").on("click", function () {
       $(`.div-input-iDCardCopy .form-control`).removeClass(isInvalidClass);
     }
 
-    if (isNaN(objadddata["professionalLicenseCopy"])) {
+    if (isNaN(objadddata["professionalLicenseCopyDocumentId"])) {
       $(`.div-input-professionalLicenseCopy .form-control`).addClass(
         isInvalidClass
       );
