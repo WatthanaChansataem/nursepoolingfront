@@ -249,6 +249,9 @@ let renderPage = function () {
   });
 
   //   $("select[name=titleCode]").val(2);
+  $("#addEducation").trigger("click");
+  $("#addExperience").trigger("click");
+  $("#addCourse").trigger("click");
 };
 
 $("input[name=iDCardCopy]").on("change", function () {
