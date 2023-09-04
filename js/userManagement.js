@@ -633,6 +633,7 @@ let CreateDatatable = (function () {
         modalEdit.modal();
       });
 
+      $("#editScheduleBtnModal").off("click");
       $("#editScheduleBtnModal").on("click", function () {
         let rowIndex = $(this).attr("rowIndex");
         let rowData = table.row(rowIndex).data();
@@ -674,6 +675,7 @@ let CreateDatatable = (function () {
 
         console.log(objData);
 
+        // Spinner.activateSpinner($(this));
         $.ajax({
           url: "https://localhost:7063/api/User/userManagement",
           type: "POST",
@@ -685,6 +687,7 @@ let CreateDatatable = (function () {
           dataType: "json",
           success: function (res) {
             if (res.status.code == 200) {
+              // Spinner.deactivateSpinner($(this));
               toastr.success("แก้ไขรายการสำเร็จ");
               $("#editScheduleModal").modal("hide");
               LoadDutySchedule();
@@ -693,6 +696,7 @@ let CreateDatatable = (function () {
             }
           },
           error: function (res) {
+            // Spinner.deactivateSpinner($(this));
             toastr.error("ไม่สามารถแก้ไขรายการได้");
           },
         });
@@ -910,3 +914,35 @@ function showPassword() {
     element.type = "password";
   }
 }
+
+var Spinner = (function () {
+  let leftInputSpinnerClass =
+    "kt-spinner kt-spinner--v2 kt-spinner--sm kt-spinner--success kt-spinner--left kt-spinner--input";
+  let spinnerClass =
+    "kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light";
+
+  return {
+    getSpinnerClass: function () {
+      return spinnerClass;
+    },
+    getLeftInputSpinnerClass: function () {
+      return leftInputSpinnerClass;
+    },
+    activateSpinner: function (buttonElement) {
+      buttonElement.addClass(spinnerClass);
+      buttonElement.prop("disabled", true);
+    },
+    deactivateSpinner: function (buttonElement) {
+      buttonElement.removeClass(spinnerClass);
+      buttonElement.prop("disabled", false);
+    },
+    activateCenterSpinner: function (buttonElement) {
+      buttonElement.addClass(centerSpinnerClass);
+      buttonElement.prop("disabled", true);
+    },
+    deactivateCenterSpinner: function (buttonElement) {
+      buttonElement.removeClass(centerSpinnerClass);
+      buttonElement.prop("disabled", false);
+    },
+  };
+})();
