@@ -115,7 +115,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadHospital = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/hospital/list",
+      url: "https://localhost:7063/api/hospital/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -141,7 +141,7 @@ let SetupData = (function () {
 
   let loadLocation = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/location/list",
+      url: "https://localhost:7063/api/location/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -167,7 +167,7 @@ let SetupData = (function () {
 
   let loadDepartment = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/department/list",
+      url: "https://localhost:7063/api/department/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -193,7 +193,7 @@ let SetupData = (function () {
 
   let loadUserData = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/user/details",
+      url: "https://localhost:7063/api/user/details",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -544,7 +544,7 @@ $("#addScheduleBtnModal").on("click", function () {
   };
 
   $.ajax({
-    url: "http://10.104.10.243:8082/api/dutySchedule/create",
+    url: "https://localhost:7063/api/dutySchedule/create",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -576,7 +576,7 @@ $("#submit").on("click", function () {
     };
 
     $.ajax({
-      url: "http://10.104.10.243:8082/api/dutySchedule/create",
+      url: "https://localhost:7063/api/dutySchedule/create",
       type: "POST",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -915,7 +915,7 @@ let CreateDatatable = (function () {
         };
 
         $.ajax({
-          url: "http://10.104.10.243:8082/api/dutySchedule/update",
+          url: "https://localhost:7063/api/dutySchedule/update",
           type: "POST",
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -968,7 +968,7 @@ let LoadDutyScheduleForm = function () {
     dutyDate: $("#beginDate").val(),
   };
   $.ajax({
-    url: "http://10.104.10.243:8082/api/dutySchedule/searchDutyScheduleForDutyScheduleForm",
+    url: "https://localhost:7063/api/dutySchedule/searchDutyScheduleForDutyScheduleForm",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),

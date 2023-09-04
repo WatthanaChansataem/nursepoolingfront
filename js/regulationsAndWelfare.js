@@ -62,7 +62,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadUserData = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/user/details",
+      url: "https://localhost:7063/api/user/details",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
