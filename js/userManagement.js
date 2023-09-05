@@ -675,7 +675,7 @@ let CreateDatatable = (function () {
 
         console.log(objData);
 
-        // Spinner.activateSpinner($(this));
+        Spinner.activateSpinner($(this));
         $.ajax({
           url: "https://localhost:7063/api/User/userManagement",
           type: "POST",
@@ -687,7 +687,7 @@ let CreateDatatable = (function () {
           dataType: "json",
           success: function (res) {
             if (res.status.code == 200) {
-              // Spinner.deactivateSpinner($(this));
+              Spinner.deactivateSpinner($(this));
               toastr.success("แก้ไขรายการสำเร็จ");
               $("#editScheduleModal").modal("hide");
               LoadDutySchedule();
@@ -696,7 +696,7 @@ let CreateDatatable = (function () {
             }
           },
           error: function (res) {
-            // Spinner.deactivateSpinner($(this));
+            Spinner.deactivateSpinner($(this));
             toastr.error("ไม่สามารถแก้ไขรายการได้");
           },
         });

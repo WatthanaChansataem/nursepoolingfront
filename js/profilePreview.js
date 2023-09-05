@@ -351,6 +351,10 @@ let renderPage = function () {
   });
 
   $("#titleCode").val(userData.titleCode);
+  if (userData.titleCode == 4) {
+    $("#titleOther").show();
+    $("#titleOther").val(userData.titleOther);
+  }
   $("#firstName").val(userData.firstName);
   $("#lastName").val(userData.lastName);
   $("#identityCardId").val(userData.identityCardId);
@@ -1270,6 +1274,7 @@ let renderEducation = function (educationList) {
                                     name="educationalQualificationCode${educationCount}"
                                     id="educationalQualificationCode${educationCount}"
                                     data-size="4"
+                                    disabled
                                   >
                                     <option selected disabled>วุฒิการศึกษา</option>
                                   </select>
@@ -1284,6 +1289,7 @@ let renderEducation = function (educationList) {
                                     class="form-control form-control-sm"
                                     id="majorCode${educationCount}"
                                     placeholder="สาขา"
+                                    disabled
                                   />
                                   <div
                                     class="invalid-feedback validation-error-message"
@@ -1297,6 +1303,7 @@ let renderEducation = function (educationList) {
                                     name="graduationYear"
                                     id="graduationYear${educationCount}"
                                     placeholder="ปีที่จบการศึกษา"
+                                    disabled
                                   />
                                   <div
                                     class="invalid-feedback validation-error-message"
@@ -1312,6 +1319,7 @@ let renderEducation = function (educationList) {
                                     name="university"
                                     id="university${educationCount}"
                                     placeholder="มหาวิทยาลัย"
+                                    disabled
                                   />
                                   <div
                                     class="invalid-feedback validation-error-message"
@@ -1365,6 +1373,7 @@ let renderExperience = function (experienceList) {
                                     name="experienceTypeCode${experienceCount}"
                                     id="experienceTypeCode${experienceCount}"
                                     data-size="4"
+                                    disabled
                                   >
                                     <option selected disabled>หมวดหมู่</option>
                                   </select>
@@ -1380,6 +1389,7 @@ let renderExperience = function (experienceList) {
                                     name="positionCode${experienceCount}"
                                     id="positionCode${experienceCount}"
                                     placeholder="ตำแหน่ง"
+                                    disabled
                                   />
                                   <div
                                     class="invalid-feedback validation-error-message"
@@ -1393,6 +1403,7 @@ let renderExperience = function (experienceList) {
                                     name="beginYear"
                                     id="beginYear${experienceCount}"
                                     placeholder="ปีที่เริ่ม"
+                                    disabled
                                   />
                                   <div
                                     class="invalid-feedback validation-error-message"
@@ -1406,6 +1417,7 @@ let renderExperience = function (experienceList) {
                                     name="endYear"
                                     id="endYear${experienceCount}"
                                     placeholder="ปีที่สิ้นสุด"
+                                    disabled
                                   />
                                   <div
                                     class="invalid-feedback validation-error-message"
@@ -1421,6 +1433,7 @@ let renderExperience = function (experienceList) {
                                     name="experienceDetail"
                                     id="experienceDetail${experienceCount}"
                                     placeholder="รายละเอียด"
+                                    disabled
                                 ></textarea>
                                 </div>
                                 
@@ -1474,6 +1487,7 @@ let renderTrainingCourse = function (trainingCourseList) {
                                     class="form-control form-control-sm"
                                     id="trainingCourseDesc${courseCount}"
                                     placeholder="ชื่อคอร์สอบรม"
+                                    disabled
                                   />
                                 </div>
                                 <div class="col-sm-4">
@@ -1483,6 +1497,7 @@ let renderTrainingCourse = function (trainingCourseList) {
                                     name="trainingYear"
                                     id="trainingYear${courseCount}"
                                     placeholder="ปีที่อบรม"
+                                    disabled
                                   />
                                 </div>
                               </div>

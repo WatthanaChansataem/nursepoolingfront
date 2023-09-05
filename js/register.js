@@ -254,6 +254,14 @@ let renderPage = function () {
   $("#addCourse").trigger("click");
 };
 
+$("#titleCode").on("change", function () {
+  if ($(this).val() == 4) {
+    $("#titleOther").show();
+  } else {
+    $("#titleOther").hide();
+  }
+});
+
 $("input[name=iDCardCopy]").on("change", function () {
   $(".iDCardCopyLabel").html($(this)[0].files[0].name);
   let changeElement = $("input[name=iDCardCopy]");
@@ -916,8 +924,11 @@ $("#submitRegister").on("click", function () {
       $("input[name=professionalLicenseCopy]").attr("documentId")
     );
 
+    let titleOther = $("#titleOther").val();
+
     let objadddata = {
       titleCode: titleCode,
+      titleOther: titleOther,
       firstName: firstName,
       lastName: lastName,
       identityCardId: identityCardId,
@@ -992,6 +1003,19 @@ $("#submitRegister").on("click", function () {
       isValidate = 1;
     } else {
       $(`.div-input-titleCode .custom-select`).removeClass(isInvalidClass);
+    }
+
+    if (
+      objadddata["titleCode"] == 4 &&
+      (objadddata["titleOther"] == "" || objadddata["titleOther"] == null)
+    ) {
+      $(`.div-input-titleOther .form-control`).addClass(isInvalidClass);
+      $(`.div-input-titleOther .${validationErrorMessageClass}`).html(
+        `กรุณาระบุ`
+      );
+      isValidate = 1;
+    } else {
+      $(`.div-input-titleOther .form-control`).removeClass(isInvalidClass);
     }
 
     if (objadddata["firstName"] == "" || objadddata["firstName"] == null) {

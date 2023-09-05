@@ -353,6 +353,11 @@ let renderPage = function () {
   });
 
   $("#titleCode").val(userData.titleCode);
+  if (userData.titleCode == 4) {
+    $("#titleOther").show();
+    $("#titleOther").val(userData.titleOther);
+  }
+
   $("#firstName").val(userData.firstName);
   $("#lastName").val(userData.lastName);
   $("#identityCardId").val(userData.identityCardId);
@@ -368,6 +373,14 @@ let renderPage = function () {
   renderExperience(userData.experienceList);
   renderTrainingCourse(userData.trainingCourseList);
 };
+
+$("#titleCode").on("change", function () {
+  if ($(this).val() == 4) {
+    $("#titleOther").show();
+  } else {
+    $("#titleOther").hide();
+  }
+});
 
 $("input[name=iDCardCopy]").on("change", function () {
   $(".iDCardCopyLabel").html($(this)[0].files[0].name);
@@ -1044,6 +1057,7 @@ $("#submitRegister").on("click", function () {
   let positionCode = parseInt($("#positionCode").val());
   let employeeNo = $(`#employeeNo`).val();
   let vendorNo = $(`#vendorNo`).val();
+  let titleOther = $("#titleOther").val();
 
   let deleteEducations = $.grep(userData.educationList, function (o) {
     return !$.map(educationSubmit, function (n) {
@@ -1066,6 +1080,7 @@ $("#submitRegister").on("click", function () {
   let objadddata = {
     userId: userData.userId,
     titleCode: titleCode,
+    titleOther: titleOther,
     firstName: firstName,
     lastName: lastName,
     identityCardId: identityCardId,
@@ -1097,6 +1112,20 @@ $("#submitRegister").on("click", function () {
     isValidate = 1;
   } else {
     $(`.div-input-titleCode .custom-select`).removeClass(isInvalidClass);
+  }
+
+  if (
+    objadddata["titleCode"] == 4 &&
+    (objadddata["titleOther"] == "" || objadddata["titleOther"] == null)
+  ) {
+    $(`.div-input-titleOther .form-control`).addClass(isInvalidClass);
+    $(`.div-input-titleOther .${validationErrorMessageClass}`).html(
+      `กรุณาระบุ`
+    );
+    scrollToElement($(`.div-input-titleOther .form-control`));
+    isValidate = 1;
+  } else {
+    $(`.div-input-titleOther .form-control`).removeClass(isInvalidClass);
   }
 
   if (objadddata["firstName"] == "" || objadddata["firstName"] == null) {
