@@ -1006,6 +1006,20 @@ $("#submitRegister").on("click", function () {
     }
 
     if (
+      objadddata["profileDocumentId"] == "" ||
+      objadddata["profileDocumentId"] == null ||
+      isNaN(objadddata["profileDocumentId"])
+    ) {
+      $(`.div-input-profileDocumentId .small`).addClass(isInvalidClass);
+      $(`.div-input-profileDocumentId .${validationErrorMessageClass}`).html(
+        `กรุณาระบุรูปโปรไฟล์`
+      );
+      isValidate = 1;
+    } else {
+      $(`.div-input-profileDocumentId .small`).removeClass(isInvalidClass);
+    }
+
+    if (
       objadddata["titleCode"] == 4 &&
       (objadddata["titleOther"] == "" || objadddata["titleOther"] == null)
     ) {
@@ -1085,7 +1099,11 @@ $("#submitRegister").on("click", function () {
       $(`.div-input-email .form-control`).removeClass(isInvalidClass);
     }
 
-    if (objadddata["phone"] == "" || objadddata["phone"] == null) {
+    if (
+      objadddata["phone"] == "" ||
+      objadddata["phone"] == null
+      // || objadddata["phone"].length != 10
+    ) {
       $(`.div-input-phone .form-control`).addClass(isInvalidClass);
       $(`.div-input-phone .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
       isValidate = 1;
