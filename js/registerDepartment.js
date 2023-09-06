@@ -95,7 +95,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadTitle = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/title/list",
+      url: "http://10.104.10.243:8082/api/title/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -118,7 +118,7 @@ let SetupData = (function () {
 
   let loadEducationalQualification = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/educationalQualification/list",
+      url: "http://10.104.10.243:8082/api/educationalQualification/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -144,7 +144,7 @@ let SetupData = (function () {
 
   let loadExperienceType = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/experienceType/list",
+      url: "http://10.104.10.243:8082/api/experienceType/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -167,7 +167,7 @@ let SetupData = (function () {
 
   let loadPosition = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/position/list",
+      url: "http://10.104.10.243:8082/api/position/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -190,7 +190,7 @@ let SetupData = (function () {
 
   let loadHospital = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/hospital/list",
+      url: "http://10.104.10.243:8082/api/hospital/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -216,7 +216,7 @@ let SetupData = (function () {
 
   let loadLocation = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/location/list",
+      url: "http://10.104.10.243:8082/api/location/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -242,7 +242,7 @@ let SetupData = (function () {
 
   let loadDepartment = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/department/list",
+      url: "http://10.104.10.243:8082/api/department/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -577,7 +577,7 @@ $("#submitRegister").on("click", function () {
     return;
   }
   $.ajax({
-    url: "https://localhost:7063/api/user/createdepartment",
+    url: "http://10.104.10.243:8082/api/user/createdepartment",
     type: "POST",
     data: JSON.stringify(objadddata),
     contentType: "application/json; charset=utf-8",
@@ -598,7 +598,7 @@ $("#submitRegister").on("click", function () {
 
 let upLoadFileWithContent = function (uploadFileData, defer) {
   $.ajax({
-    url: "https://localhost:7063/api/document/createWithContent",
+    url: "http://10.104.10.243:8082/api/document/createWithContent",
     method: "POST",
     data: uploadFileData,
     dataType: "json",
