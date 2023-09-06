@@ -366,6 +366,18 @@ let renderPage = function () {
   $("#employeeNo").val(userData.employeeNo);
   $("#vendorNo").val(userData.vendorNo);
 
+  $("#professionalLicenseExpireDate").val(
+    isDateTime(userData.professionalLicenseExpireDate)
+      ? moment(userData.professionalLicenseExpireDate).format("DD/MM/YYYY")
+      : userData.professionalLicenseExpireDate
+  );
+
+  $("#dateOfBirth").val(
+    isDateTime(userData.dateOfBirth)
+      ? moment(userData.dateOfBirth).format("DD/MM/YYYY")
+      : userData.dateOfBirth
+  );
+
   renderEducation(userData.educationList);
   renderExperience(userData.experienceList);
   renderTrainingCourse(userData.trainingCourseList);
@@ -1569,4 +1581,16 @@ let scrollToElement = function (element) {
   let offset = element.offset().top;
   let scrollOffset = offset - windowHeight / 2;
   $("html, body").animate({ scrollTop: scrollOffset }, 1000);
+};
+
+let isDateTime = function (dutyDate) {
+  // Try to parse the date string
+  const timestamp = Date.parse(dutyDate);
+
+  // Check if the parsing was successful and not NaN
+  if (!isNaN(timestamp)) {
+    return true;
+  }
+
+  return false;
 };

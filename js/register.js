@@ -231,6 +231,19 @@ let renderPage = function () {
   //   <option selected disabled>
   //     Choose one
   //   </option>;
+  $("#professionalLicenseExpireDate").datepicker({
+    format: "dd/mm/yyyy",
+    autoclose: true,
+    todayHighlight: true,
+    todayBtn: true,
+  });
+
+  $("#dateOfBirth").datepicker({
+    format: "dd/mm/yyyy",
+    autoclose: true,
+    todayHighlight: true,
+    todayBtn: true,
+  });
   $.each(positionMaster, function (i, item) {
     $("select[name=positionCode]").append(
       $("<option>", {
@@ -253,12 +266,17 @@ let renderPage = function () {
   $("#addExperience").trigger("click");
   $("#addCourse").trigger("click");
 };
-
+$("#dateOfBirth").on("change", function () {
+  $("#age").html(ageCalculator($("#dateOfBirth").val()));
+});
+$("#professionalLicenseExpireDate").on("change", function () {
+  console.log("ca");
+});
 $("#titleCode").on("change", function () {
   if ($(this).val() == 4) {
-    $("#titleOther").show();
+    $(".div-input-titleOther").show();
   } else {
-    $("#titleOther").hide();
+    $(".div-input-titleOther").hide();
   }
 });
 
@@ -558,8 +576,12 @@ $("#addCourse").on("click", function () {
                             </div>
                           </div>
                           <div class="form-group row">
-                          <div class="col-sm-8">
-                            <input class="" id="formFileSm${courseCount}" name="formFileSm${courseCount}" onchange="changeItemCourse(${courseCount})" type="file" style="line-height: 1em;" />
+                          <div class="col-sm-8 div-input-formFileSm${courseCount}">
+                            <input class="documentInput" id="formFileSm${courseCount}" name="formFileSm${courseCount}" onchange="changeItemCourse(${courseCount})" type="file" style="line-height: 1em;" />
+                            <div
+                                class="invalid-feedback validation-error-message"
+                              ></div>
+                              <span class="form-text text-muted"></span>
                           </div>
                           <div class="col-sm-2">
                             <a
@@ -885,6 +907,24 @@ $("#submitRegister").on("click", function () {
       );
     }
 
+    if (
+      obj["documentId"] == "" ||
+      obj["documentId"] == null ||
+      isNaN(obj["documentId"])
+    ) {
+      $(`.div-input-formFileSm${courseCount} .documentInput`).addClass(
+        isInvalidClass
+      );
+      $(
+        `.div-input-formFileSm${courseCount} .${validationErrorMessageClass}`
+      ).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(`.div-input-formFileSm${courseCount} .documentInput`).removeClass(
+        isInvalidClass
+      );
+    }
+
     courseSubmit.push(obj);
   }
   console.log(courseSubmit);
@@ -923,6 +963,11 @@ $("#submitRegister").on("click", function () {
     let professionalLicenseCopyDocumentId = parseInt(
       $("input[name=professionalLicenseCopy]").attr("documentId")
     );
+    let professionalLicenseExpireDate = $(
+      `#professionalLicenseExpireDate`
+    ).val();
+
+    let dateOfBirth = $(`#dateOfBirth`).val();
 
     let titleOther = $("#titleOther").val();
 
@@ -948,6 +993,8 @@ $("#submitRegister").on("click", function () {
       profileDocumentId: profileDocumentId,
       iDCardCopyDocumentId: iDCardCopyDocumentId,
       professionalLicenseCopyDocumentId: professionalLicenseCopyDocumentId,
+      professionalLicenseExpireDate: professionalLicenseExpireDate,
+      dateOfBirth: dateOfBirth,
     };
     console.log(objadddata);
 
@@ -1101,11 +1148,13 @@ $("#submitRegister").on("click", function () {
 
     if (
       objadddata["phone"] == "" ||
-      objadddata["phone"] == null
-      // || objadddata["phone"].length != 10
+      objadddata["phone"] == null ||
+      objadddata["phone"].length != 10
     ) {
       $(`.div-input-phone .form-control`).addClass(isInvalidClass);
-      $(`.div-input-phone .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
+      $(`.div-input-phone .${validationErrorMessageClass}`).html(
+        `กรุณาระบุเบอร์โทรศัพท์ไม่เกิน 10 หลัก`
+      );
       isValidate = 1;
     } else if (isNaN(Number(objadddata["phone"]))) {
       $(`.div-input-phone .form-control`).addClass(isInvalidClass);
@@ -1171,6 +1220,33 @@ $("#submitRegister").on("click", function () {
       $(`.div-input-professionalLicenseCopy .form-control`).removeClass(
         isInvalidClass
       );
+    }
+
+    if (
+      objadddata["professionalLicenseExpireDate"] == "" ||
+      objadddata["professionalLicenseExpireDate"] == null
+    ) {
+      $(`.div-input-professionalLicenseExpireDate .form-control`).addClass(
+        isInvalidClass
+      );
+      $(
+        `.div-input-professionalLicenseExpireDate .${validationErrorMessageClass}`
+      ).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(`.div-input-professionalLicenseExpireDate .form-control`).removeClass(
+        isInvalidClass
+      );
+    }
+
+    if (objadddata["dateOfBirth"] == "" || objadddata["dateOfBirth"] == null) {
+      $(`.div-input-dateOfBirth .form-control`).addClass(isInvalidClass);
+      $(`.div-input-dateOfBirth .${validationErrorMessageClass}`).html(
+        `กรุณาระบุ`
+      );
+      isValidate = 1;
+    } else {
+      $(`.div-input-dateOfBirth .form-control`).removeClass(isInvalidClass);
     }
 
     if (isValidate == 1) {
@@ -1302,4 +1378,57 @@ function showPassword() {
   } else {
     element.type = "password";
   }
+}
+
+function ageCalculator(dob) {
+  var dobParts = dob.split("/");
+
+  var parts = dob.split("/");
+  var date = new Date(parts[2], parts[1] - 1, parts[0]); // months are zero-based
+
+  var currentDate = new Date();
+
+  if (date > currentDate) {
+    $(`.div-input-dateOfBirth .form-control`).addClass(isInvalidClass);
+    $(`.div-input-dateOfBirth .${validationErrorMessageClass}`).html(
+      `วันเกิดต้องไม่มากกว่าวันที่ปัจจุบัน`
+    );
+    $("#dateOfBirth").datepicker("setDate", new Date());
+    return;
+  } else {
+    $(`.div-input-dateOfBirth .form-control`).removeClass(isInvalidClass);
+  }
+
+  if (dobParts.length !== 3) {
+    toastr.error("รูปแบบวันที่ไม่ถูกต้อง");
+    return;
+  }
+
+  var dob = new Date(
+    parseInt(dobParts[2]), // Year
+    parseInt(dobParts[1]) - 1, // Month (zero-based)
+    parseInt(dobParts[0]) // Day
+  );
+  var currentDate = new Date();
+
+  var years = currentDate.getFullYear() - dob.getFullYear();
+  var months = currentDate.getMonth() - dob.getMonth();
+  var days = currentDate.getDate() - dob.getDate();
+
+  if (months < 0 || (months === 0 && days < 0)) {
+    years--;
+    months += 12;
+  }
+
+  if (days < 0) {
+    var daysInLastMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      0
+    ).getDate();
+    months--;
+    days += daysInLastMonth;
+  }
+
+  return "อายุ: " + years + " ปี " + months + " เดือน " + days + " วัน";
 }

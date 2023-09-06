@@ -321,6 +321,40 @@ let renderPage = function () {
       docProfessionalLicenseCopy.documentId
     );
   }
+  $("#professionalLicenseExpireDate").datepicker({
+    format: "dd/mm/yyyy",
+    autoclose: true,
+    todayHighlight: true,
+    todayBtn: true,
+  });
+  $("#professionalLicenseExpireDate").val(
+    userData.professionalLicenseExpireDate
+  );
+
+  if (isDateTime(userData.professionalLicenseExpireDate)) {
+    let dateParts = moment(userData.professionalLicenseExpireDate)
+      .format("DD/MM/YYYY")
+      .split("/");
+
+    let jsDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+    $("#professionalLicenseExpireDate").datepicker("setDate", jsDate);
+  }
+
+  $("#dateOfBirth").datepicker({
+    format: "dd/mm/yyyy",
+    autoclose: true,
+    todayHighlight: true,
+    todayBtn: true,
+  });
+
+  if (isDateTime(userData.dateOfBirth)) {
+    let dateParts = moment(userData.dateOfBirth)
+      .format("DD/MM/YYYY")
+      .split("/");
+
+    let jsDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+    $("#dateOfBirth").datepicker("setDate", jsDate);
+  }
 
   // console.log(docIDCardCopy);
   // console.log(docProfessionalLicenseCopy);
@@ -374,11 +408,17 @@ let renderPage = function () {
   renderTrainingCourse(userData.trainingCourseList);
 };
 
+$("#dateOfBirth").on("change", function () {
+  $("#age").html(ageCalculator($("#dateOfBirth").val()));
+});
+$("#professionalLicenseExpireDate").on("change", function () {
+  console.log("ca");
+});
 $("#titleCode").on("change", function () {
   if ($(this).val() == 4) {
-    $("#titleOther").show();
+    $(".div-input-titleOther").show();
   } else {
-    $("#titleOther").hide();
+    $(".div-input-titleOther").hide();
   }
 });
 
@@ -1058,6 +1098,9 @@ $("#submitRegister").on("click", function () {
   let employeeNo = $(`#employeeNo`).val();
   let vendorNo = $(`#vendorNo`).val();
   let titleOther = $("#titleOther").val();
+  let professionalLicenseExpireDate = $(`#professionalLicenseExpireDate`).val();
+
+  let dateOfBirth = $(`#dateOfBirth`).val();
 
   let deleteEducations = $.grep(userData.educationList, function (o) {
     return !$.map(educationSubmit, function (n) {
@@ -1099,6 +1142,8 @@ $("#submitRegister").on("click", function () {
     deleteTrainingCourses: deleteTrainingCourses,
     deleteEducations: deleteEducations,
     deleteExperiences: deleteExperiences,
+    professionalLicenseExpireDate: professionalLicenseExpireDate,
+    dateOfBirth: dateOfBirth,
   };
   // console.log(objadddata);
   if (
@@ -1242,6 +1287,42 @@ $("#submitRegister").on("click", function () {
     isValidate = 1;
   } else {
     $(`.div-input-positionCode .custom-select`).removeClass(isInvalidClass);
+  }
+
+  if (
+    objadddata["professionalLicenseExpireDate"] == "" ||
+    objadddata["professionalLicenseExpireDate"] == null
+  ) {
+    $(`.div-input-professionalLicenseExpireDate .form-control`).addClass(
+      isInvalidClass
+    );
+    $(
+      `.div-input-professionalLicenseExpireDate .${validationErrorMessageClass}`
+    ).html(`กรุณาระบุ`);
+    scrollToElement(
+      $(`.div-input-professionalLicenseExpireDate .form-control`)
+    );
+    isValidate = 1;
+  } else {
+    $(`.div-input-professionalLicenseExpireDate .form-control`).removeClass(
+      isInvalidClass
+    );
+  }
+
+  if (objadddata["dateOfBirth"] == "" || objadddata["dateOfBirth"] == null) {
+    $(`.div-input-dateOfBirth .form-control`).addClass(isInvalidClass);
+    $(`.div-input-dateOfBirth .${validationErrorMessageClass}`).html(
+      `กรุณาระบุ`
+    );
+    scrollToElement($(`.div-input-dateOfBirth .form-control`));
+
+    isValidate = 1;
+  } else {
+    $(`.div-input-dateOfBirth .form-control`).removeClass(isInvalidClass);
+  }
+
+  if (isValidate == 1) {
+    return;
   }
 
   $.ajax({
@@ -1620,3 +1701,67 @@ let scrollToElement = function (element) {
   let scrollOffset = offset - windowHeight / 2;
   $("html, body").animate({ scrollTop: scrollOffset }, 1000);
 };
+let isDateTime = function (dutyDate) {
+  // Try to parse the date string
+  const timestamp = Date.parse(dutyDate);
+
+  // Check if the parsing was successful and not NaN
+  if (!isNaN(timestamp)) {
+    return true;
+  }
+
+  return false;
+};
+
+function ageCalculator(dob) {
+  var dobParts = dob.split("/");
+
+  var parts = dob.split("/");
+  var date = new Date(parts[2], parts[1] - 1, parts[0]); // months are zero-based
+
+  var currentDate = new Date();
+
+  if (date > currentDate) {
+    $(`.div-input-dateOfBirth .form-control`).addClass(isInvalidClass);
+    $(`.div-input-dateOfBirth .${validationErrorMessageClass}`).html(
+      `วันเกิดต้องไม่มากกว่าวันที่ปัจจุบัน`
+    );
+    $("#dateOfBirth").datepicker("setDate", new Date());
+    return;
+  } else {
+    $(`.div-input-dateOfBirth .form-control`).removeClass(isInvalidClass);
+  }
+
+  if (dobParts.length !== 3) {
+    toastr.error("รูปแบบวันที่ไม่ถูกต้อง");
+    return;
+  }
+
+  var dob = new Date(
+    parseInt(dobParts[2]), // Year
+    parseInt(dobParts[1]) - 1, // Month (zero-based)
+    parseInt(dobParts[0]) // Day
+  );
+  var currentDate = new Date();
+
+  var years = currentDate.getFullYear() - dob.getFullYear();
+  var months = currentDate.getMonth() - dob.getMonth();
+  var days = currentDate.getDate() - dob.getDate();
+
+  if (months < 0 || (months === 0 && days < 0)) {
+    years--;
+    months += 12;
+  }
+
+  if (days < 0) {
+    var daysInLastMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      0
+    ).getDate();
+    months--;
+    days += daysInLastMonth;
+  }
+
+  return "อายุ: " + years + " ปี " + months + " เดือน " + days + " วัน";
+}

@@ -675,7 +675,7 @@ let CreateDatatable = (function () {
 
         console.log(objData);
 
-        Spinner.activateSpinner($(this));
+        Spinner.activateSpinner($("#editScheduleBtnModal"));
         $.ajax({
           url: "http://10.104.10.243:8082/api/User/userManagement",
           type: "POST",
@@ -687,16 +687,17 @@ let CreateDatatable = (function () {
           dataType: "json",
           success: function (res) {
             if (res.status.code == 200) {
-              Spinner.deactivateSpinner($(this));
+              Spinner.deactivateSpinner($("#editScheduleBtnModal"));
               toastr.success("แก้ไขรายการสำเร็จ");
               $("#editScheduleModal").modal("hide");
               LoadDutySchedule();
             } else {
               toastr.error(res.status.message);
+              Spinner.deactivateSpinner($("#editScheduleBtnModal"));
             }
           },
           error: function (res) {
-            Spinner.deactivateSpinner($(this));
+            Spinner.deactivateSpinner($("#editScheduleBtnModal"));
             toastr.error("ไม่สามารถแก้ไขรายการได้");
           },
         });

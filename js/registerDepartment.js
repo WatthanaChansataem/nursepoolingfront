@@ -192,9 +192,6 @@ let SetupData = (function () {
     $.ajax({
       url: "http://10.104.10.243:8082/api/hospital/list",
       type: "GET",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
       success: function (res) {
         if (res.status.code == 200) {
           hospitalMaster = res.data;
@@ -218,9 +215,6 @@ let SetupData = (function () {
     $.ajax({
       url: "http://10.104.10.243:8082/api/location/list",
       type: "GET",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
       success: function (res) {
         if (res.status.code == 200) {
           locationMaster = res.data;
@@ -244,9 +238,6 @@ let SetupData = (function () {
     $.ajax({
       url: "http://10.104.10.243:8082/api/department/list",
       type: "GET",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
       success: function (res) {
         if (res.status.code == 200) {
           departmentMaster = res.data;
@@ -256,12 +247,12 @@ let SetupData = (function () {
           defered.resolve(true);
         } else {
           defered.resolve(false);
-          toastr.error("ไม่สามารถดึงข้อมูล Locaion ได้", "Error");
+          toastr.error("ไม่สามารถดึงข้อมูลแผนกได้", "Error");
         }
       },
       error: function (res) {
         defered.resolve(false);
-        toastr.error("ไม่สามารถดึงข้อมูล Locaion ได้", "Error");
+        toastr.error("ไม่สามารถดึงข้อมูลแผนกได้", "Error");
       },
     });
   };
