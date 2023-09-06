@@ -69,13 +69,13 @@ $("#resetPasswordButton").on("click", function () {
   isValidate = 0;
 
   let pattern =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+!.=])[a-zA-Z0-9@#$%^&+!.=]{7,}$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+!.=])[a-zA-Z0-9@#$%^&+!.=]{8,}$/;
   let isValid = pattern.test(objData["password"]);
 
   if (!isValid) {
     $(`.div-input-password .form-control`).addClass(isInvalidClass);
     $(`.div-input-password .${validationErrorMessageClass}`).html(
-      `ต้องมีอักษรตัวพิมพ์เล็กอย่างน้อยหนึ่งตัว มีอักษรตัวพิมพ์ใหญ่อย่างน้อยหนึ่งตัว มีตัวเลขอย่างน้อยหนึ่งตัว มีอักขระพิเศษ @#$%^&+!.= อย่างน้อยหนึ่งตัว และมีความยาวอย่างน้อย 7 ตัวอักษร`
+      `ต้องมีอักษรตัวพิมพ์เล็กอย่างน้อยหนึ่งตัว มีอักษรตัวพิมพ์ใหญ่อย่างน้อยหนึ่งตัว มีตัวเลขอย่างน้อยหนึ่งตัว มีอักขระพิเศษ @#$%^&+!.= อย่างน้อยหนึ่งตัว และมีความยาวอย่างน้อย 8 ตัวอักษร`
     );
     isValidate = 1;
   } else {
@@ -97,7 +97,7 @@ $("#resetPasswordButton").on("click", function () {
   }
 
   $.ajax({
-    url: "http://10.104.10.243:8082/api/User/updateResetPassword",
+    url: "https://localhost:7063/api/User/updateResetPassword",
     type: "POST",
     headers: {
       Authorization: "Bearer " + token,
@@ -113,7 +113,7 @@ $("#resetPasswordButton").on("click", function () {
       }
     },
     error: function (res) {
-      toastr.error("ไม่สามารถแก้ไขรายการได้");
+      toastr.error("ไม่สามารถ ResetPassword ได้");
     },
   });
 });

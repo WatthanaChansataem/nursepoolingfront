@@ -95,7 +95,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadTitle = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/title/list",
+      url: "https://localhost:7063/api/title/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -118,7 +118,7 @@ let SetupData = (function () {
 
   let loadEducationalQualification = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/educationalQualification/list",
+      url: "https://localhost:7063/api/educationalQualification/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -144,7 +144,7 @@ let SetupData = (function () {
 
   let loadExperienceType = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/experienceType/list",
+      url: "https://localhost:7063/api/experienceType/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -167,7 +167,7 @@ let SetupData = (function () {
 
   let loadPosition = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/position/list",
+      url: "https://localhost:7063/api/position/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -190,7 +190,7 @@ let SetupData = (function () {
 
   let loadHospital = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/hospital/list",
+      url: "https://localhost:7063/api/hospital/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -213,7 +213,7 @@ let SetupData = (function () {
 
   let loadLocation = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/location/list",
+      url: "https://localhost:7063/api/location/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -236,7 +236,7 @@ let SetupData = (function () {
 
   let loadDepartment = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/department/list",
+      url: "https://localhost:7063/api/department/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -452,13 +452,13 @@ $("#submitRegister").on("click", function () {
   }
 
   let pattern =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+!.=])[a-zA-Z0-9@#$%^&+!.=]{7,}$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+!.=])[a-zA-Z0-9@#$%^&+!.=]{8,}$/;
   let isValid = pattern.test(objadddata["password"]);
 
   if (!isValid) {
     $(`.div-input-password .form-control`).addClass(isInvalidClass);
     $(`.div-input-password .${validationErrorMessageClass}`).html(
-      `ต้องมีอักษรตัวพิมพ์เล็กอย่างน้อยหนึ่งตัว มีอักษรตัวพิมพ์ใหญ่อย่างน้อยหนึ่งตัว มีตัวเลขอย่างน้อยหนึ่งตัว มีอักขระพิเศษ @#$%^&+!.= อย่างน้อยหนึ่งตัว และมีความยาวอย่างน้อย 7 ตัวอักษร`
+      `ต้องมีอักษรตัวพิมพ์เล็กอย่างน้อยหนึ่งตัว มีอักษรตัวพิมพ์ใหญ่อย่างน้อยหนึ่งตัว มีตัวเลขอย่างน้อยหนึ่งตัว มีอักขระพิเศษ @#$%^&+!.= อย่างน้อยหนึ่งตัว และมีความยาวอย่างน้อย 8 ตัวอักษร`
     );
     // scrollToElement($(`.div-input-password .form-control`));
     isValidate = 1;
@@ -504,9 +504,15 @@ $("#submitRegister").on("click", function () {
     $(`.div-input-email .form-control`).removeClass(isInvalidClass);
   }
 
-  if (objadddata["phone"] == "" || objadddata["phone"] == null) {
+  if (
+    objadddata["phone"] == "" ||
+    objadddata["phone"] == null ||
+    objadddata["phone"].length != 10
+  ) {
     $(`.div-input-phone .form-control`).addClass(isInvalidClass);
-    $(`.div-input-phone .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
+    $(`.div-input-phone .${validationErrorMessageClass}`).html(
+      `กรุณาระบุเบอร์โทรศัพท์ไม่เกิน 10 หลัก`
+    );
     // scrollToElement($(`.div-input-phone .form-control`));
     isValidate = 1;
   } else if (isNaN(Number(objadddata["phone"]))) {
@@ -568,7 +574,7 @@ $("#submitRegister").on("click", function () {
     return;
   }
   $.ajax({
-    url: "http://10.104.10.243:8082/api/user/createdepartment",
+    url: "https://localhost:7063/api/user/createdepartment",
     type: "POST",
     data: JSON.stringify(objadddata),
     contentType: "application/json; charset=utf-8",
@@ -589,7 +595,7 @@ $("#submitRegister").on("click", function () {
 
 let upLoadFileWithContent = function (uploadFileData, defer) {
   $.ajax({
-    url: "http://10.104.10.243:8082/api/document/createWithContent",
+    url: "https://localhost:7063/api/document/createWithContent",
     method: "POST",
     data: uploadFileData,
     dataType: "json",

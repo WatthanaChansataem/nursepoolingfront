@@ -96,7 +96,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadTitle = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/title/list",
+      url: "https://localhost:7063/api/title/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -122,7 +122,7 @@ let SetupData = (function () {
 
   let loadEducationalQualification = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/educationalQualification/list",
+      url: "https://localhost:7063/api/educationalQualification/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -151,7 +151,7 @@ let SetupData = (function () {
 
   let loadExperienceType = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/experienceType/list",
+      url: "https://localhost:7063/api/experienceType/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -177,7 +177,7 @@ let SetupData = (function () {
 
   let loadPosition = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/position/list",
+      url: "https://localhost:7063/api/position/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -205,7 +205,7 @@ let SetupData = (function () {
     let urlParams = new URLSearchParams(window.location.search);
     userIdPreview = parseInt(urlParams.get("userId"));
     $.ajax({
-      url: "http://10.104.10.243:8082/api/user/previewProfile",
+      url: "https://localhost:7063/api/user/previewProfile",
       type: "POST",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -377,6 +377,11 @@ let renderPage = function () {
       ? moment(userData.dateOfBirth).format("DD/MM/YYYY")
       : userData.dateOfBirth
   );
+  if (isDateTime(userData.dateOfBirth)) {
+    $("#age").html(
+      ageCalculator(moment(userData.dateOfBirth).format("DD/MM/YYYY"))
+    );
+  }
 
   renderEducation(userData.educationList);
   renderExperience(userData.experienceList);
@@ -1213,7 +1218,7 @@ $("#submitRegister").on("click", function () {
   }
 
   $.ajax({
-    url: "http://10.104.10.243:8082/api/user/update",
+    url: "https://localhost:7063/api/user/update",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -1236,7 +1241,7 @@ $("#submitRegister").on("click", function () {
 
 let upLoadFile = function (uploadFileData, defer) {
   $.ajax({
-    url: "http://10.104.10.243:8082/api/document/create",
+    url: "https://localhost:7063/api/document/create",
     method: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -1518,7 +1523,7 @@ let renderTrainingCourse = function (trainingCourseList) {
                               </div>
   
                               <a
-                                  href="http://10.104.10.243:8082/api/document/get/${data.documentId}"
+                                  href="https://localhost:7063/api/document/get/${data.documentId}"
                                   target="_blank"
                                   id="refFileUpload"
                                   ><i
@@ -1549,7 +1554,7 @@ let renderTrainingCourse = function (trainingCourseList) {
 
 let upLoadFileWithContent = function (uploadFileData, defer) {
   $.ajax({
-    url: "http://10.104.10.243:8082/api/document/createWithContent",
+    url: "https://localhost:7063/api/document/createWithContent",
     method: "POST",
     data: uploadFileData,
     dataType: "json",
@@ -1594,3 +1599,56 @@ let isDateTime = function (dutyDate) {
 
   return false;
 };
+
+function ageCalculator(dob) {
+  var dobParts = dob.split("/");
+
+  var parts = dob.split("/");
+  var date = new Date(parts[2], parts[1] - 1, parts[0]); // months are zero-based
+
+  var currentDate = new Date();
+
+  if (date > currentDate) {
+    $(`.div-input-dateOfBirth .form-control`).addClass(isInvalidClass);
+    $(`.div-input-dateOfBirth .${validationErrorMessageClass}`).html(
+      `วันเกิดต้องไม่มากกว่าวันที่ปัจจุบัน`
+    );
+    $("#dateOfBirth").datepicker("setDate", new Date());
+    return;
+  } else {
+    $(`.div-input-dateOfBirth .form-control`).removeClass(isInvalidClass);
+  }
+
+  if (dobParts.length !== 3) {
+    toastr.error("รูปแบบวันที่ไม่ถูกต้อง");
+    return;
+  }
+
+  var dob = new Date(
+    parseInt(dobParts[2]), // Year
+    parseInt(dobParts[1]) - 1, // Month (zero-based)
+    parseInt(dobParts[0]) // Day
+  );
+  var currentDate = new Date();
+
+  var years = currentDate.getFullYear() - dob.getFullYear();
+  var months = currentDate.getMonth() - dob.getMonth();
+  var days = currentDate.getDate() - dob.getDate();
+
+  if (months < 0 || (months === 0 && days < 0)) {
+    years--;
+    months += 12;
+  }
+
+  if (days < 0) {
+    var daysInLastMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      0
+    ).getDate();
+    months--;
+    days += daysInLastMonth;
+  }
+
+  return "อายุ: " + years + " ปี " + months + " เดือน " + days + " วัน";
+}
