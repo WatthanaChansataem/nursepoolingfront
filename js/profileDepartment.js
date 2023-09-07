@@ -104,7 +104,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadTitle = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/title/list",
+      url: "https://localhost:7063/api/title/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -130,7 +130,7 @@ let SetupData = (function () {
 
   let loadEducationalQualification = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/educationalQualification/list",
+      url: "https://localhost:7063/api/educationalQualification/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -159,7 +159,7 @@ let SetupData = (function () {
 
   let loadExperienceType = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/experienceType/list",
+      url: "https://localhost:7063/api/experienceType/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -185,7 +185,7 @@ let SetupData = (function () {
 
   let loadPosition = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/position/list",
+      url: "https://localhost:7063/api/position/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -211,7 +211,7 @@ let SetupData = (function () {
 
   let loadUserData = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/user/details",
+      url: "https://localhost:7063/api/user/details",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -246,7 +246,7 @@ let SetupData = (function () {
   };
   let loadHospital = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/hospital/list",
+      url: "https://localhost:7063/api/hospital/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -272,7 +272,7 @@ let SetupData = (function () {
 
   let loadLocation = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/location/list",
+      url: "https://localhost:7063/api/location/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -298,7 +298,7 @@ let SetupData = (function () {
 
   let loadDepartment = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/department/list",
+      url: "https://localhost:7063/api/department/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -398,23 +398,23 @@ let renderPage = function () {
     );
   });
 
-  $.each(locationMaster, function (i, item) {
-    $("select[name=locationCode]").append(
-      $("<option>", {
-        value: item.locationCode,
-        text: item.locationDesc,
-      })
-    );
-  });
+  // $.each(locationMaster, function (i, item) {
+  //   $("select[name=locationCode]").append(
+  //     $("<option>", {
+  //       value: item.locationCode,
+  //       text: item.locationDesc,
+  //     })
+  //   );
+  // });
 
-  $.each(departmentMaster, function (i, item) {
-    $("select[name=departmentCode]").append(
-      $("<option>", {
-        value: item.departmentCode,
-        text: item.departmentDesc,
-      })
-    );
-  });
+  // $.each(departmentMaster, function (i, item) {
+  //   $("select[name=departmentCode]").append(
+  //     $("<option>", {
+  //       value: item.departmentCode,
+  //       text: item.departmentDesc,
+  //     })
+  //   );
+  // });
 
   $(".alert").hide();
 
@@ -435,10 +435,50 @@ let renderPage = function () {
   $("#navDepartmentCode").html(
     departmentMap.get(userData.departmentCode).departmentDesc
   );
-  $("#hospitalCode").val(userData.hospitalCode);
-  $("#locationCode").val(userData.locationCode);
-  $("#departmentCode").val(userData.departmentCode);
+  $("#hospitalCode").val(userData.hospitalCode).change();
+  $("#locationCode").val(userData.locationCode).change();
+  $("#departmentCode").val(userData.departmentCode).change();
 };
+
+$("#hospitalCode").on("change", function () {
+  $("#locationCode")
+    .empty()
+    .append("<option selected disabled hidden>กรุณาเลือก</option>");
+
+  $("#departmentCode")
+    .empty()
+    .append("<option selected disabled hidden>กรุณาเลือก</option>");
+
+  $.each(locationMaster, function (i, item) {
+    $("select[name=locationCode]").append(
+      $("<option>", {
+        value: item.locationCode,
+        text: item.locationDesc,
+      })
+    );
+  });
+});
+$("#locationCode").on("change", function () {
+  $("#departmentCode")
+    .empty()
+    .append("<option selected disabled hidden>กรุณาเลือก</option>");
+
+  $.each(
+    departmentMaster.filter(
+      (e) =>
+        e.hospitalCode == $("#hospitalCode").val() &&
+        e.locationCode == $("#locationCode").val()
+    ),
+    function (i, item) {
+      $("select[name=departmentCode]").append(
+        $("<option>", {
+          value: item.departmentCode,
+          text: item.departmentDesc,
+        })
+      );
+    }
+  );
+});
 
 $("input[name=changeProfileImage]").on("change", function () {
   let changeElement = $("input[name=changeProfileImage]");
@@ -635,13 +675,14 @@ $("#submitRegister").on("click", function () {
   } else {
     $(`.div-input-departmentCode .custom-select`).removeClass(isInvalidClass);
   }
+  console.log(objadddata);
 
   if (isValidate == 1) {
     return;
   }
 
   $.ajax({
-    url: "http://10.104.10.243:8082/api/user/updatedepartment",
+    url: "https://localhost:7063/api/user/updatedepartment",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -676,7 +717,7 @@ function readURL(input) {
 
 let upLoadFileWithContent = function (uploadFileData, defer) {
   $.ajax({
-    url: "http://10.104.10.243:8082/api/document/createWithContent",
+    url: "https://localhost:7063/api/document/createWithContent",
     method: "POST",
     data: uploadFileData,
     dataType: "json",
