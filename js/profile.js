@@ -97,7 +97,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadTitle = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/title/list",
+      url: "http://10.104.10.243:8082/api/title/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -123,7 +123,7 @@ let SetupData = (function () {
 
   let loadEducationalQualification = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/educationalQualification/list",
+      url: "http://10.104.10.243:8082/api/educationalQualification/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -152,7 +152,7 @@ let SetupData = (function () {
 
   let loadExperienceType = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/experienceType/list",
+      url: "http://10.104.10.243:8082/api/experienceType/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -178,7 +178,7 @@ let SetupData = (function () {
 
   let loadPosition = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/position/list",
+      url: "http://10.104.10.243:8082/api/position/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -204,7 +204,7 @@ let SetupData = (function () {
 
   let loadUserData = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/user/details",
+      url: "http://10.104.10.243:8082/api/user/details",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -1326,7 +1326,7 @@ $("#submitRegister").on("click", function () {
   }
 
   $.ajax({
-    url: "https://localhost:7063/api/user/update",
+    url: "http://10.104.10.243:8082/api/user/update",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -1349,7 +1349,7 @@ $("#submitRegister").on("click", function () {
 
 let upLoadFile = function (uploadFileData, defer) {
   $.ajax({
-    url: "https://localhost:7063/api/document/create",
+    url: "http://10.104.10.243:8082/api/document/create",
     method: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -1632,7 +1632,7 @@ let renderTrainingCourse = function (trainingCourseList) {
                             </div>
 
                             <a
-                                href="https://localhost:7063/api/document/get/${data.documentId}"
+                                href="http://10.104.10.243:8082/api/document/get/${data.documentId}"
                                 target="_blank"
                                 id="refFileUpload"
                                 ><i
@@ -1668,7 +1668,7 @@ let renderTrainingCourse = function (trainingCourseList) {
 
 let upLoadFileWithContent = function (uploadFileData, defer) {
   $.ajax({
-    url: "https://localhost:7063/api/document/createWithContent",
+    url: "http://10.104.10.243:8082/api/document/createWithContent",
     method: "POST",
     data: uploadFileData,
     dataType: "json",
