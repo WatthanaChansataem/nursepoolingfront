@@ -379,6 +379,7 @@ let renderPage = function () {
       })
     );
   });
+  $("select[name=hospitalCode]").val(userData.hospitalCode);
 
   $.each(locationMaster, function (i, item) {
     $("select[name=locationCode]").append(
@@ -388,6 +389,7 @@ let renderPage = function () {
       })
     );
   });
+  $("select[name=locationCode]").val(userData.locationCode);
 
   $.each(departmentMaster, function (i, item) {
     $("select[name=departmentCode]").append(
@@ -397,6 +399,7 @@ let renderPage = function () {
       })
     );
   });
+  $("select[name=departmentCode]").val(userData.departmentCode);
 
   $.each(hospitalMaster, function (i, item) {
     $("select[name=hospitalCodeModal]").append(
@@ -406,6 +409,7 @@ let renderPage = function () {
       })
     );
   });
+  $("select[name=hospitalCodeModal]").val(userData.hospitalCode).change();
 
   $.each(locationMaster, function (i, item) {
     $("select[name=locationCodeModal]").append(
@@ -415,6 +419,7 @@ let renderPage = function () {
       })
     );
   });
+  $("select[name=locationCodeModal]").val(userData.locationCode).change();
 
   $.each(departmentMaster, function (i, item) {
     $("select[name=departmentCodeModal]").append(
@@ -424,6 +429,7 @@ let renderPage = function () {
       })
     );
   });
+  $("select[name=departmentCodeModal]").val(userData.departmentCode).change();
 
   $.each(hospitalMaster, function (i, item) {
     $("select[name=hospitalCodeEditModal]").append(

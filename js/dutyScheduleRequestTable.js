@@ -379,6 +379,7 @@ let renderPage = function () {
       })
     );
   });
+  $("select[name=hospitalCode]").val(userData.hospitalCode).change();
 
   $.each(locationMaster, function (i, item) {
     $("select[name=locationCode]").append(
@@ -388,6 +389,7 @@ let renderPage = function () {
       })
     );
   });
+  $("select[name=locationCode]").val(userData.locationCode).change();
 
   $.each(departmentMaster, function (i, item) {
     $("select[name=departmentCode]").append(
@@ -397,6 +399,7 @@ let renderPage = function () {
       })
     );
   });
+  $("select[name=departmentCode]").val(userData.departmentCode).change();
 
   $.each(hospitalMaster, function (i, item) {
     $("select[name=hospitalCodeModal]").append(

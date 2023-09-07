@@ -242,7 +242,10 @@
             <!-- Page Heading -->
             <h1 class="h3 mb-2 text-gray-800">ฟอร์มขออัตรากำลัง</h1>
             <div class="form-group row">
-              <div class="col-sm-3 div-input-hospitalCode">
+              <div
+                class="col-sm-3 div-input-hospitalCode"
+                style="display: none"
+              >
                 <label for="hospitalCode" class="col-form-label-sm"
                   >โรงพยาบาล</label
                 >
@@ -255,7 +258,10 @@
                   <option selected value="-1">ทั้งหมด</option>
                 </select>
               </div>
-              <div class="col-sm-3 div-input-locationCode">
+              <div
+                class="col-sm-3 div-input-locationCode"
+                style="display: none"
+              >
                 <label for="locationCode" class="col-form-label-sm"
                   >Location</label
                 >
@@ -268,7 +274,10 @@
                   <option selected value="-1">ทั้งหมด</option>
                 </select>
               </div>
-              <div class="col-sm-3 div-input-departmentCode">
+              <div
+                class="col-sm-3 div-input-departmentCode"
+                style="display: none"
+              >
                 <label for="departmentCode" class="col-form-label-sm"
                   >แผนก</label
                 >
@@ -295,10 +304,10 @@
                   <option selected value="-1">ทั้งหมด</option>
                 </select>
               </div>
-            </div>
-
-            <div class="form-group row">
               <div class="col-sm-3">
+                <label for="beginDate" class="col-form-label-sm"
+                  >เดือนที่ทำรายการ</label
+                >
                 <input
                   type="text"
                   class="form-control"
@@ -307,9 +316,21 @@
                   placeholder="ปีที่เริ่ม"
                 />
               </div>
+            </div>
+
+            <div class="form-group row">
+              <!-- <div class="col-sm-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="beginDate"
+                  id="beginDate"
+                  placeholder="ปีที่เริ่ม"
+                />
+              </div> -->
 
               <div
-                class="col-sm-9"
+                class="col-sm-12"
                 style="display: flex; justify-content: flex-end"
               >
                 <div
@@ -493,7 +514,10 @@
             </div>
 
             <div class="form-group row">
-              <div class="col-sm-6 div-input-hospitalCodeModal">
+              <div
+                class="col-sm-6 div-input-hospitalCodeModal"
+                style="display: none"
+              >
                 <label for="hospitalCodeModal" class="col-form-label-sm"
                   >โรงพยาบาล</label
                 >
@@ -508,7 +532,10 @@
                 <div class="invalid-feedback validation-error-message"></div>
                 <span class="form-text text-muted"></span>
               </div>
-              <div class="col-sm-6 div-input-locationCodeModal">
+              <div
+                class="col-sm-6 div-input-locationCodeModal"
+                style="display: none"
+              >
                 <label for="locationCodeModal" class="col-form-label-sm"
                   >Location</label
                 >
@@ -527,7 +554,10 @@
             </div>
 
             <div class="form-group row">
-              <div class="col-sm-6 div-input-departmentCodeModal">
+              <div
+                class="col-sm-6 div-input-departmentCodeModal"
+                style="display: none"
+              >
                 <label for="departmentCodeModal" class="col-form-label-sm"
                   >แผนก</label
                 >
@@ -843,7 +873,10 @@
             </div>
 
             <div class="form-group row">
-              <div class="col-sm-6 div-input-hospitalCodeEditModal">
+              <div
+                class="col-sm-6 div-input-hospitalCodeEditModal"
+                style="display: none"
+              >
                 <label for="hospitalCodeEditModal" class="col-form-label-sm"
                   >โรงพยาบาล</label
                 >
@@ -858,7 +891,10 @@
                 <div class="invalid-feedback validation-error-message"></div>
                 <span class="form-text text-muted"></span>
               </div>
-              <div class="col-sm-6 div-input-locationCodeEditModal">
+              <div
+                class="col-sm-6 div-input-locationCodeEditModal"
+                style="display: none"
+              >
                 <label for="locationCodeEditModal" class="col-form-label-sm"
                   >Location</label
                 >
@@ -877,7 +913,10 @@
             </div>
 
             <div class="form-group row">
-              <div class="col-sm-6 div-input-departmentCodeEditModal">
+              <div
+                class="col-sm-6 div-input-departmentCodeEditModal"
+                style="display: none"
+              >
                 <label for="departmentCodeEditModal" class="col-form-label-sm"
                   >แผนก</label
                 >
