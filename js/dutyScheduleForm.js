@@ -718,7 +718,8 @@ let CreateDatatable = (function () {
           targets: 10,
           title: "แก้ไข",
           render: function (data, type, full, meta) {
-            return full.status == dutyScheduleStatusConstant.Normal
+            return full.status == dutyScheduleStatusConstant.Normal ||
+              full.status == dutyScheduleStatusConstant.Cancel
               ? `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`
               : "-";
           },

@@ -1034,7 +1034,11 @@ let CreateDatatable = (function () {
           targets: 15,
           title: "จำนวนที่ขอ",
           render: function (data, type, full, meta) {
-            return data;
+            return `<label style="color: ${
+              full.allRequestNumber == full.allApproveNumber
+                ? "green"
+                : "yellow"
+            }">${data}</label>`;
           },
         },
         {
