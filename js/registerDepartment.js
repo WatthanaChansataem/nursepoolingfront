@@ -442,9 +442,15 @@ $("#submitRegister").on("click", function () {
   };
   console.log(objadddata);
 
-  if (objadddata["userName"] == "" || objadddata["userName"] == null) {
+  if (
+    objadddata["userName"] == "" ||
+    objadddata["userName"] == null ||
+    objadddata["userName"].length <= 8
+  ) {
     $(`.div-input-userName .form-control`).addClass(isInvalidClass);
-    $(`.div-input-userName .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
+    $(`.div-input-userName .${validationErrorMessageClass}`).html(
+      `กรุณาระบุ UserName ให้มีความยาว 8 ตัวอักษรขึ้นไป`
+    );
     // scrollToElement($(`.div-input-userName .form-control`));
     isValidate = 1;
   } else {
