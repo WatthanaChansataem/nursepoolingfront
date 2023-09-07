@@ -1729,8 +1729,11 @@ let updateDutySchedule = function (eTable, eRow) {
     if (
       dutyScheduleStatusConstant.Approve == newDutySchedule.status &&
       (newDutySchedule.hospitalCode == null ||
+        isNaN(newDutySchedule.hospitalCode) ||
         newDutySchedule.locationCode == null ||
+        isNaN(newDutySchedule.locationCode) ||
         newDutySchedule.departmentCode == null ||
+        isNaN(newDutySchedule.departmentCode) ||
         newDutySchedule.shiftStart == "" ||
         newDutySchedule.shiftEnd == "" ||
         newDutySchedule.status == "")

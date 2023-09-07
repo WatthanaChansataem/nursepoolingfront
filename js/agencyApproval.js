@@ -1563,6 +1563,53 @@ let CreateDatatableDetail = (function () {
         }
       });
 
+      containerTable.on("change", ".hospitalCode", function () {
+        currentRow = $(this).closest("tr");
+        currentRow
+          .find("select[name=locationCode]")
+          .empty()
+          .append("<option selected disabled hidden>กรุณาเลือก</option>");
+
+        currentRow
+          .find("select[name=departmentCode]")
+          .empty()
+          .append("<option selected disabled hidden>กรุณาเลือก</option>");
+
+        $.each(locationMaster, function (i, item) {
+          currentRow.find("select[name=locationCode]").append(
+            $("<option>", {
+              value: item.locationCode,
+              text: item.locationDesc,
+            })
+          );
+        });
+      });
+
+      containerTable.on("change", ".locationCode", function () {
+        currentRow = $(this).closest("tr");
+
+        currentRow
+          .find("select[name=departmentCode]")
+          .empty()
+          .append("<option selected disabled hidden>กรุณาเลือก</option>");
+
+        $.each(
+          departmentMaster.filter(
+            (e) =>
+              e.hospitalCode == $("#hospitalCode").val() &&
+              e.locationCode == $("#locationCode").val()
+          ),
+          function (i, item) {
+            currentRow.find("select[name=departmentCode]").append(
+              $("<option>", {
+                value: item.departmentCode,
+                text: item.departmentDesc,
+              })
+            );
+          }
+        );
+      });
+
       table.on("click", ".cancel-button", function () {
         currentRow = $(this).closest("tr");
         currentRow.find("input,select").prop("disabled", true);
@@ -1685,6 +1732,11 @@ let renderRowEdit = function (table) {
     var row = $(this.node());
     let isChanged = table.table().row(row).data();
 
+    row
+      .find("select[name=hospitalCode]")
+      .empty()
+      .append("<option selected disabled hidden>กรุณาเลือก</option>");
+
     $.each(hospitalMaster, function (i, item) {
       row.find("select[name=hospitalCode]").append(
         $("<option>", {
@@ -1694,35 +1746,24 @@ let renderRowEdit = function (table) {
       );
     });
     if (isChanged.approveHospitalCode != null) {
-      row.find("select[name=hospitalCode]").val(isChanged.approveHospitalCode);
+      row
+        .find("select[name=hospitalCode]")
+        .val(isChanged.approveHospitalCode)
+        .change();
     }
-
-    $.each(locationMaster, function (i, item) {
-      row.find("select[name=locationCode]").append(
-        $("<option>", {
-          value: item.locationCode,
-          text: item.locationDesc,
-        })
-      );
-    });
 
     if (isChanged.approveLocationCode != null) {
-      row.find("select[name=locationCode]").val(isChanged.approveLocationCode);
+      row
+        .find("select[name=locationCode]")
+        .val(isChanged.approveLocationCode)
+        .change();
     }
-
-    $.each(departmentMaster, function (i, item) {
-      row.find("select[name=departmentCode]").append(
-        $("<option>", {
-          value: item.departmentCode,
-          text: item.departmentDesc,
-        })
-      );
-    });
 
     if (isChanged.approveDepartmentCode != null) {
       row
         .find("select[name=departmentCode]")
-        .val(isChanged.approveDepartmentCode);
+        .val(isChanged.approveDepartmentCode)
+        .change();
     }
 
     $.each(dutyScheduleStatusMasters, function (i, item) {
@@ -1781,8 +1822,11 @@ let updateDutySchedule = function (eTable, eRow) {
     if (
       dutyScheduleStatusConstant.Approve == newDutySchedule.status &&
       (newDutySchedule.hospitalCode == null ||
+        isNaN(newDutySchedule.hospitalCode) ||
         newDutySchedule.locationCode == null ||
+        isNaN(newDutySchedule.locationCode) ||
         newDutySchedule.departmentCode == null ||
+        isNaN(newDutySchedule.departmentCode) ||
         newDutySchedule.shiftStart == "" ||
         newDutySchedule.shiftEnd == "" ||
         newDutySchedule.status == "")
