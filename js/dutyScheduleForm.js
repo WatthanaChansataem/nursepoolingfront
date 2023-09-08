@@ -115,7 +115,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadHospital = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/hospital/list",
+      url: "https://localhost:7063/api/hospital/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -141,7 +141,7 @@ let SetupData = (function () {
 
   let loadLocation = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/location/list",
+      url: "https://localhost:7063/api/location/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -167,7 +167,7 @@ let SetupData = (function () {
 
   let loadDepartment = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/department/list",
+      url: "https://localhost:7063/api/department/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -193,7 +193,7 @@ let SetupData = (function () {
 
   let loadUserData = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8082/api/user/details",
+      url: "https://localhost:7063/api/user/details",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -334,6 +334,14 @@ $("#hospitalCodeModal").on("change", function () {
     .empty()
     .append("<option selected disabled hidden>กรุณาเลือก</option>");
 
+  $("#departmentCode2Modal")
+    .empty()
+    .append("<option selected disabled hidden>กรุณาเลือก</option>");
+
+  $("#departmentCode3Modal")
+    .empty()
+    .append("<option selected disabled hidden>กรุณาเลือก</option>");
+
   $.each(locationMaster, function (i, item) {
     $("select[name=locationCodeModal]").append(
       $("<option>", {
@@ -345,6 +353,14 @@ $("#hospitalCodeModal").on("change", function () {
 });
 $("#locationCodeModal").on("change", function () {
   $("#departmentCode1Modal")
+    .empty()
+    .append("<option selected disabled hidden>กรุณาเลือก</option>");
+
+  $("#departmentCode2Modal")
+    .empty()
+    .append("<option selected disabled hidden>กรุณาเลือก</option>");
+
+  $("#departmentCode3Modal")
     .empty()
     .append("<option selected disabled hidden>กรุณาเลือก</option>");
 
@@ -391,6 +407,14 @@ $("#hospitalCodeEditModal").on("change", function () {
     .empty()
     .append("<option selected disabled hidden>กรุณาเลือก</option>");
 
+  $("#departmentCode2EditModal")
+    .empty()
+    .append("<option selected disabled hidden>กรุณาเลือก</option>");
+
+  $("#departmentCode3EditModal")
+    .empty()
+    .append("<option selected disabled hidden>กรุณาเลือก</option>");
+
   $.each(locationMaster, function (i, item) {
     $("select[name=locationCodeEditModal]").append(
       $("<option>", {
@@ -402,6 +426,14 @@ $("#hospitalCodeEditModal").on("change", function () {
 });
 $("#locationCodeEditModal").on("change", function () {
   $("#departmentCode1EditModal")
+    .empty()
+    .append("<option selected disabled hidden>กรุณาเลือก</option>");
+
+  $("#departmentCode2EditModal")
+    .empty()
+    .append("<option selected disabled hidden>กรุณาเลือก</option>");
+
+  $("#departmentCode3EditModal")
     .empty()
     .append("<option selected disabled hidden>กรุณาเลือก</option>");
 
@@ -586,7 +618,7 @@ $("#addScheduleBtnModal").on("click", function () {
   };
 
   $.ajax({
-    url: "http://10.104.10.243:8082/api/dutySchedule/create",
+    url: "https://localhost:7063/api/dutySchedule/create",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -618,7 +650,7 @@ $("#submit").on("click", function () {
   //     dutyScheduleList: data,
   //   };
   //   $.ajax({
-  //     url: "http://10.104.10.243:8082/api/dutySchedule/create",
+  //     url: "https://localhost:7063/api/dutySchedule/create",
   //     type: "POST",
   //     headers: {
   //       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -958,7 +990,7 @@ let CreateDatatable = (function () {
         };
 
         $.ajax({
-          url: "http://10.104.10.243:8082/api/dutySchedule/update",
+          url: "https://localhost:7063/api/dutySchedule/update",
           type: "POST",
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -1011,7 +1043,7 @@ let LoadDutyScheduleForm = function () {
     dutyDate: $("#beginDate").val(),
   };
   $.ajax({
-    url: "http://10.104.10.243:8082/api/dutySchedule/searchDutyScheduleForDutyScheduleForm",
+    url: "https://localhost:7063/api/dutySchedule/searchDutyScheduleForDutyScheduleForm",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
