@@ -1750,6 +1750,13 @@ let renderRowEdit = function (table) {
         .find("select[name=hospitalCode]")
         .val(isChanged.approveHospitalCode)
         .change();
+    } else {
+      if (isChanged.dutyScheduleRequestList != null) {
+        row
+          .find("select[name=hospitalCode]")
+          .val(isChanged.dutyScheduleRequestList.hospitalCode)
+          .change();
+      }
     }
 
     if (isChanged.approveLocationCode != null) {
@@ -1757,6 +1764,13 @@ let renderRowEdit = function (table) {
         .find("select[name=locationCode]")
         .val(isChanged.approveLocationCode)
         .change();
+    } else {
+      if (isChanged.dutyScheduleRequestList != null) {
+        row
+          .find("select[name=locationCode]")
+          .val(isChanged.dutyScheduleRequestList.locationCode)
+          .change();
+      }
     }
 
     if (isChanged.approveDepartmentCode != null) {
@@ -1764,6 +1778,13 @@ let renderRowEdit = function (table) {
         .find("select[name=departmentCode]")
         .val(isChanged.approveDepartmentCode)
         .change();
+    } else {
+      if (isChanged.dutyScheduleRequestList != null) {
+        row
+          .find("select[name=departmentCode]")
+          .val(isChanged.dutyScheduleRequestList.departmentCode)
+          .change();
+      }
     }
 
     $.each(dutyScheduleStatusMasters, function (i, item) {

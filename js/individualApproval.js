@@ -1658,10 +1658,12 @@ let renderRowEdit = function (table) {
         .val(isChanged.approveHospitalCode)
         .change();
     } else {
-      row
-        .find("select[name=hospitalCode]")
-        .val(isChanged.dutyScheduleRequestList.hospitalCode)
-        .change();
+      if (isChanged.dutyScheduleRequestList != null) {
+        row
+          .find("select[name=hospitalCode]")
+          .val(isChanged.dutyScheduleRequestList.hospitalCode)
+          .change();
+      }
     }
 
     if (isChanged.approveLocationCode != null) {
@@ -1670,10 +1672,12 @@ let renderRowEdit = function (table) {
         .val(isChanged.approveLocationCode)
         .change();
     } else {
-      row
-        .find("select[name=locationCode]")
-        .val(isChanged.dutyScheduleRequestList.locationCode)
-        .change();
+      if (isChanged.dutyScheduleRequestList != null) {
+        row
+          .find("select[name=locationCode]")
+          .val(isChanged.dutyScheduleRequestList.locationCode)
+          .change();
+      }
     }
 
     if (isChanged.approveDepartmentCode != null) {
@@ -1682,10 +1686,12 @@ let renderRowEdit = function (table) {
         .val(isChanged.approveDepartmentCode)
         .change();
     } else {
-      row
-        .find("select[name=departmentCode]")
-        .val(isChanged.dutyScheduleRequestList.departmentCode)
-        .change();
+      if (isChanged.dutyScheduleRequestList != null) {
+        row
+          .find("select[name=departmentCode]")
+          .val(isChanged.dutyScheduleRequestList.departmentCode)
+          .change();
+      }
     }
 
     $.each(dutyScheduleStatusMasters, function (i, item) {
