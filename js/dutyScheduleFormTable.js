@@ -114,7 +114,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadHospital = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/hospital/list",
+      url: "http://10.104.10.243:8082/api/hospital/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -140,7 +140,7 @@ let SetupData = (function () {
 
   let loadLocation = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/location/list",
+      url: "http://10.104.10.243:8082/api/location/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -166,7 +166,7 @@ let SetupData = (function () {
 
   let loadDepartment = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/department/list",
+      url: "http://10.104.10.243:8082/api/department/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -192,7 +192,7 @@ let SetupData = (function () {
 
   let loadUserData = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/user/details",
+      url: "http://10.104.10.243:8082/api/user/details",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -498,7 +498,7 @@ $("#addScheduleBtnModal").on("click", function () {
 //   };
 
 //   $.ajax({
-//     url: "https://localhost:7063/api/dutySchedule/create",
+//     url: "http://10.104.10.243:8082/api/dutySchedule/create",
 //     type: "POST",
 //     data: JSON.stringify(objData),
 //     contentType: "application/json; charset=utf-8",
@@ -883,7 +883,7 @@ let CreateDatatable = (function () {
         };
 
         $.ajax({
-          url: "https://localhost:7063/api/dutySchedule/update",
+          url: "http://10.104.10.243:8082/api/dutySchedule/update",
           type: "POST",
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -938,7 +938,7 @@ let LoadDutySchedule = function () {
     status: $("#statusCode").val(),
   };
   $.ajax({
-    url: "https://localhost:7063/api/dutySchedule/searchDutyScheduleForDutyScheduleFormTable",
+    url: "http://10.104.10.243:8082/api/dutySchedule/searchDutyScheduleForDutyScheduleFormTable",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
