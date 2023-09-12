@@ -104,7 +104,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadTitle = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8088/api/title/list",
+      url: "http://10.104.10.243:8082/api/title/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -130,7 +130,7 @@ let SetupData = (function () {
 
   let loadEducationalQualification = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8088/api/educationalQualification/list",
+      url: "http://10.104.10.243:8082/api/educationalQualification/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -159,7 +159,7 @@ let SetupData = (function () {
 
   let loadExperienceType = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8088/api/experienceType/list",
+      url: "http://10.104.10.243:8082/api/experienceType/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -185,7 +185,7 @@ let SetupData = (function () {
 
   let loadPosition = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8088/api/position/list",
+      url: "http://10.104.10.243:8082/api/position/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -211,7 +211,7 @@ let SetupData = (function () {
 
   let loadUserData = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8088/api/user/details",
+      url: "http://10.104.10.243:8082/api/user/details",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -246,7 +246,7 @@ let SetupData = (function () {
   };
   let loadHospital = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8088/api/hospital/list",
+      url: "http://10.104.10.243:8082/api/hospital/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -272,7 +272,7 @@ let SetupData = (function () {
 
   let loadLocation = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8088/api/location/list",
+      url: "http://10.104.10.243:8082/api/location/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -298,7 +298,7 @@ let SetupData = (function () {
 
   let loadDepartment = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8088/api/department/list",
+      url: "http://10.104.10.243:8082/api/department/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -381,12 +381,12 @@ let SetupData = (function () {
 let renderPage = function () {
   $("#profileImg").attr(
     "src",
-    `http://10.104.10.243:8088/api/document/avatar/${userData.userId}`
+    `http://10.104.10.243:8082/api/document/avatar/${userData.userId}`
   );
 
   $("#navProfileImg").attr(
     "src",
-    `http://10.104.10.243:8088/api/document/avatar/${userData.userId}`
+    `http://10.104.10.243:8082/api/document/avatar/${userData.userId}`
   );
 
   $.each(hospitalMaster, function (i, item) {
@@ -682,7 +682,7 @@ $("#submitRegister").on("click", function () {
   }
 
   $.ajax({
-    url: "http://10.104.10.243:8088/api/user/updatedepartment",
+    url: "http://10.104.10.243:8082/api/user/updatedepartment",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -717,7 +717,7 @@ function readURL(input) {
 
 let upLoadFileWithContent = function (uploadFileData, defer) {
   $.ajax({
-    url: "http://10.104.10.243:8088/api/document/createWithContent",
+    url: "http://10.104.10.243:8082/api/document/createWithContent",
     method: "POST",
     data: uploadFileData,
     dataType: "json",
