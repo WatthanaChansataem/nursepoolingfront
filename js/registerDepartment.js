@@ -95,7 +95,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadTitle = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8088/api/title/list",
+      url: "https://localhost:7063/api/title/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -118,7 +118,7 @@ let SetupData = (function () {
 
   let loadEducationalQualification = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8088/api/educationalQualification/list",
+      url: "https://localhost:7063/api/educationalQualification/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -144,7 +144,7 @@ let SetupData = (function () {
 
   let loadExperienceType = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8088/api/experienceType/list",
+      url: "https://localhost:7063/api/experienceType/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -167,7 +167,7 @@ let SetupData = (function () {
 
   let loadPosition = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8088/api/position/list",
+      url: "https://localhost:7063/api/position/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -190,7 +190,7 @@ let SetupData = (function () {
 
   let loadHospital = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8088/api/hospital/list",
+      url: "https://localhost:7063/api/hospital/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -213,7 +213,7 @@ let SetupData = (function () {
 
   let loadLocation = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8088/api/location/list",
+      url: "https://localhost:7063/api/location/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -236,7 +236,7 @@ let SetupData = (function () {
 
   let loadDepartment = function (defered) {
     $.ajax({
-      url: "http://10.104.10.243:8088/api/department/list",
+      url: "https://localhost:7063/api/department/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -456,6 +456,7 @@ $("#submitRegister").on("click", function () {
   let agencyNo = $("#agencyNo").val();
   let email = $("#email").val();
   let phone = $("#phone").val();
+  let contractPerson = $("#contractPerson").val();
   let userName = $(`#userName`).val();
   let password = $(`#password`).val();
   let repeatPassword = $(`#repeatPassword`).val();
@@ -471,6 +472,7 @@ $("#submitRegister").on("click", function () {
     agencyNo: agencyNo,
     email: email,
     phone: phone,
+    contractPerson: contractPerson,
     userName: userName,
     password: password,
     repeatPassword: repeatPassword,
@@ -571,6 +573,19 @@ $("#submitRegister").on("click", function () {
   }
 
   if (
+    objadddata["contractPerson"] == "" ||
+    objadddata["contractPerson"] == null
+  ) {
+    $(`.div-input-contractPerson .form-control`).addClass(isInvalidClass);
+    $(`.div-input-contractPerson .${validationErrorMessageClass}`).html(
+      `กรุณาระบุ`
+    );
+    isValidate = 1;
+  } else {
+    $(`.div-input-contractPerson .form-control`).removeClass(isInvalidClass);
+  }
+
+  if (
     objadddata["hospitalCode"] == "" ||
     objadddata["hospitalCode"] == null ||
     isNaN(objadddata["hospitalCode"])
@@ -619,7 +634,7 @@ $("#submitRegister").on("click", function () {
     return;
   }
   $.ajax({
-    url: "http://10.104.10.243:8088/api/user/createdepartment",
+    url: "https://localhost:7063/api/user/createdepartment",
     type: "POST",
     data: JSON.stringify(objadddata),
     contentType: "application/json; charset=utf-8",
@@ -640,7 +655,7 @@ $("#submitRegister").on("click", function () {
 
 let upLoadFileWithContent = function (uploadFileData, defer) {
   $.ajax({
-    url: "http://10.104.10.243:8088/api/document/createWithContent",
+    url: "https://localhost:7063/api/document/createWithContent",
     method: "POST",
     data: uploadFileData,
     dataType: "json",

@@ -101,7 +101,7 @@
                         type="text"
                         class="form-control form-control-user"
                         id="firstName"
-                        placeholder="ชื่อ"
+                        placeholder="ชื่อหน่วยงาน"
                       />
                       <div
                         class="invalid-feedback validation-error-message"
@@ -159,6 +159,21 @@
                     </div>
                   </div>
                   <div class="form-group row">
+                    <div class="col-sm-6 mb-3 mb-sm-0 div-input-contractPerson">
+                      <input
+                        type="text"
+                        class="form-control form-control-user"
+                        id="contractPerson"
+                        placeholder="ชื่อผู้ติดต่อ"
+                      />
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
                     <div class="col-sm-6 div-input-hospitalCode">
                       <label for="hospitalCode" class="col-form-label-sm"
                         >โรงพยาบาล</label
@@ -171,6 +186,10 @@
                       >
                         <option selected disabled hidden>กรุณาเลือก</option>
                       </select>
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
                     </div>
                     <div class="col-sm-6 div-input-locationCode">
                       <label for="locationCode" class="col-form-label-sm"
@@ -184,6 +203,10 @@
                       >
                         <option selected disabled hidden>กรุณาเลือก</option>
                       </select>
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
                     </div>
                     <div class="col-sm-6 div-input-departmentCode">
                       <label for="departmentCode" class="col-form-label-sm"
@@ -197,6 +220,10 @@
                       >
                         <option selected disabled hidden>กรุณาเลือก</option>
                       </select>
+                      <div
+                        class="invalid-feedback validation-error-message"
+                      ></div>
+                      <span class="form-text text-muted"></span>
                     </div>
                   </div>
                 </form>
