@@ -62,7 +62,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadUserData = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/user/details",
+      url: "http://10.104.10.243:8088/api/user/details",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -75,7 +75,7 @@ let SetupData = (function () {
           );
           $("#navProfileImg").attr(
             "src",
-            `https://localhost:7063/api/document/avatar/${userData.userId}`
+            `http://10.104.10.243:8088/api/document/avatar/${userData.userId}`
           );
           defered.resolve(true);
         } else {
