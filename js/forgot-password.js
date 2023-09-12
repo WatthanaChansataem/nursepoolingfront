@@ -55,7 +55,7 @@ $("#resetPasswordButton").on("click", function () {
     email: email,
   };
   $.ajax({
-    url: "http://10.104.10.243:8082/api/user/resetPassword",
+    url: "https://localhost:7063/api/user/resetPassword",
     type: "POST",
     data: JSON.stringify(objData),
     contentType: "application/json; charset=utf-8",
