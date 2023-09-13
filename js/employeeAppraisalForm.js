@@ -658,6 +658,7 @@ let LoadDutyScheduleRequest = function () {
   let locationCode = parseInt($("#locationCode").val());
   let departmentCode = parseInt($("#departmentCode").val());
   let positionCode = parseInt($("#positionCode").val());
+  let isJustMonth = $(`#isJustMonth`).is(":checked") ? 1 : 0;
 
   let objData = {
     dutyDate: dutyDate,
@@ -665,6 +666,7 @@ let LoadDutyScheduleRequest = function () {
     locationCode: locationCode,
     departmentCode: departmentCode,
     positionCode: positionCode,
+    isJustMonth: isJustMonth,
   };
   $.ajax({
     url: "https://localhost:7063/api/dutySchedule/searchDutyScheduleForEmployeeAppraisalForm",
