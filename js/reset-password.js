@@ -97,7 +97,7 @@ $("#resetPasswordButton").on("click", function () {
   }
 
   $.ajax({
-    url: "http://10.104.10.243:8088/api/User/updateResetPassword",
+    url: "https://localhost:7063/api/User/updateResetPassword",
     type: "POST",
     headers: {
       Authorization: "Bearer " + token,
