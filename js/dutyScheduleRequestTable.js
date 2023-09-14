@@ -907,7 +907,7 @@ let CreateDatatable = (function () {
         { data: "allApproveNumber", className: "text-center" },
         { data: "totalDurationRequest", className: "text-center" },
         { data: "totalDurationApprove", className: "text-center" },
-        { data: "totalDurationOFF", className: "text-center" },
+        // { data: "totalDurationOFF", className: "text-center" },
         { data: "active", className: "text-center" },
         { data: "remark", className: "text-center" },
         { data: "", className: "text-center" },
@@ -1130,7 +1130,13 @@ let CreateDatatable = (function () {
           targets: 16,
           title: "จำนวนที่อนุมัติ",
           render: function (data, type, full, meta) {
-            return `<a  class="btn btn-success btn-circle btn-sm"> ${data}</i></a>`;
+            return `<a  class="btn btn-${
+              full.allApproveNumber >= full.allRequestNumber
+                ? "success"
+                : full.allApproveNumber > 0
+                ? "primary"
+                : "warning"
+            } btn-circle btn-sm"> ${data}</i></a>`;
           },
         },
         {
@@ -1147,16 +1153,16 @@ let CreateDatatable = (function () {
             return data;
           },
         },
-        {
-          targets: 19,
-          title: "ชั่วโมงที่OFF",
-          render: function (data, type, full, meta) {
-            return data;
-          },
-        },
+        // {
+        //   targets: 19,
+        //   title: "ชั่วโมงที่OFF",
+        //   render: function (data, type, full, meta) {
+        //     return data;
+        //   },
+        // },
 
         {
-          targets: 20,
+          targets: 19,
           title: "สถานะ",
           render: function (data, type, full, meta) {
             if (data == 0) {
@@ -1167,14 +1173,14 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 21,
+          targets: 20,
           title: "หมายเหตุ",
           render: function (data, type, full, meta) {
             return data;
           },
         },
         {
-          targets: 22,
+          targets: 21,
           title: "แก้ไข",
           render: function (data, type, full, meta) {
             return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`;
