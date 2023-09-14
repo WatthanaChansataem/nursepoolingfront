@@ -94,7 +94,7 @@ let dutyScheduleSStatusMap = {
   A: { desc: "Approve", state: "success" },
   C: { desc: "Cancel", state: "danger" },
   O: { desc: "Off", state: "warning" },
-  null: { desc: "New", state: "warning" },
+  null: { desc: "New", state: "primary" },
 };
 
 let dutyScheduleStatusConstant = {

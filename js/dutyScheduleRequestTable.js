@@ -968,56 +968,136 @@ let CreateDatatable = (function () {
           targets: 6,
           title: "07.00-15.00",
           render: function (data, type, full, meta) {
-            return data;
+            if (data == 0) {
+              return data;
+            } else {
+              return `<a  class="btn btn-${
+                full.approveNumber1 >= full.requestNumber1
+                  ? "success"
+                  : full.approveNumber1 > 0
+                  ? "primary"
+                  : "warning"
+              } btn-circle btn-sm"> ${data}</i></a>`;
+            }
           },
         },
         {
           targets: 7,
           title: "15.00-23.00",
           render: function (data, type, full, meta) {
-            return data;
+            if (data == 0) {
+              return data;
+            } else {
+              return `<a  class="btn btn-${
+                full.approveNumber2 >= full.requestNumber2
+                  ? "success"
+                  : full.approveNumber2 > 0
+                  ? "primary"
+                  : "warning"
+              } btn-circle btn-sm"> ${data}</i></a>`;
+            }
           },
         },
         {
           targets: 8,
           title: "23.00-07.00",
           render: function (data, type, full, meta) {
-            return data;
+            if (data == 0) {
+              return data;
+            } else {
+              return `<a  class="btn btn-${
+                full.approveNumber3 >= full.requestNumber3
+                  ? "success"
+                  : full.approveNumber3 > 0
+                  ? "primary"
+                  : "warning"
+              } btn-circle btn-sm"> ${data}</i></a>`;
+            }
           },
         },
         {
           targets: 9,
           title: "07.00-19.00",
           render: function (data, type, full, meta) {
-            return data;
+            if (data == 0) {
+              return data;
+            } else {
+              return `<a  class="btn btn-${
+                full.approveNumber4 >= full.requestNumber4
+                  ? "success"
+                  : full.approveNumber4 > 0
+                  ? "primary"
+                  : "warning"
+              } btn-circle btn-sm"> ${data}</i></a>`;
+            }
           },
         },
         {
           targets: 10,
           title: "19.00-07.00",
           render: function (data, type, full, meta) {
-            return data;
+            if (data == 0) {
+              return data;
+            } else {
+              return `<a  class="btn btn-${
+                full.approveNumber5 >= full.requestNumber5
+                  ? "success"
+                  : full.approveNumber5 > 0
+                  ? "primary"
+                  : "warning"
+              } btn-circle btn-sm"> ${data}</i></a>`;
+            }
           },
         },
         {
           targets: 11,
           title: "08.00-16.00",
           render: function (data, type, full, meta) {
-            return data;
+            if (data == 0) {
+              return data;
+            } else {
+              return `<a  class="btn btn-${
+                full.approveNumber6 >= full.requestNumber6
+                  ? "success"
+                  : full.approveNumber6 > 0
+                  ? "primary"
+                  : "warning"
+              } btn-circle btn-sm"> ${data}</i></a>`;
+            }
           },
         },
         {
           targets: 12,
           title: "08.00-20.00",
           render: function (data, type, full, meta) {
-            return data;
+            if (data == 0) {
+              return data;
+            } else {
+              return `<a  class="btn btn-${
+                full.approveNumber7 >= full.requestNumber7
+                  ? "success"
+                  : full.approveNumber7 > 0
+                  ? "primary"
+                  : "warning"
+              } btn-circle btn-sm"> ${data}</i></a>`;
+            }
           },
         },
         {
           targets: 13,
           title: "09.00-17.00",
           render: function (data, type, full, meta) {
-            return data;
+            if (data == 0) {
+              return data;
+            } else {
+              return `<a  class="btn btn-${
+                full.approveNumber8 >= full.requestNumber8
+                  ? "success"
+                  : full.approveNumber8 > 0
+                  ? "primary"
+                  : "warning"
+              } btn-circle btn-sm"> ${data}</i></a>`;
+            }
           },
         },
         {
@@ -1037,18 +1117,20 @@ let CreateDatatable = (function () {
           targets: 15,
           title: "จำนวนที่ขอ",
           render: function (data, type, full, meta) {
-            return `<label style="color: ${
-              full.allRequestNumber == full.allApproveNumber
-                ? "green"
-                : "yellow"
-            }">${data}</label>`;
+            return `<a  class="btn btn-${
+              full.allApproveNumber >= full.allRequestNumber
+                ? "success"
+                : full.allApproveNumber > 0
+                ? "primary"
+                : "warning"
+            } btn-circle btn-sm"> ${data}</i></a>`;
           },
         },
         {
           targets: 16,
           title: "จำนวนที่อนุมัติ",
           render: function (data, type, full, meta) {
-            return data;
+            return `<a  class="btn btn-success btn-circle btn-sm"> ${data}</i></a>`;
           },
         },
         {
