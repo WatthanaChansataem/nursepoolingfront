@@ -71,25 +71,25 @@ let userRoleConstant = {
 };
 
 let dutyScheduleStatusMasters = [
-  { statusCode: "N", statusDesc: "Normal" },
+  { statusCode: "N", statusDesc: "Wait" },
   { statusCode: "A", statusDesc: "Approve" },
   { statusCode: "C", statusDesc: "Cancel" },
   { statusCode: "O", statusDesc: "Off" },
 ];
 
 let dutyScheduleStatusMastersForUserUpdate = [
-  { statusCode: "N", statusDesc: "Normal" },
+  { statusCode: "N", statusDesc: "Wait" },
   { statusCode: "C", statusDesc: "Cancel" },
 ];
 
 let dutyScheduleStatusMastersForDashboard = [
-  { statusCode: "N", statusDesc: "Normal" },
+  { statusCode: "N", statusDesc: "Wait" },
   { statusCode: "A", statusDesc: "Approve" },
   { statusCode: "O", statusDesc: "Off" },
 ];
 
 let dutyScheduleSStatusMap = {
-  N: { desc: "Normal", state: "secondary" },
+  N: { desc: "Wait", state: "secondary" },
   A: { desc: "Approve", state: "success" },
   C: { desc: "Cancel", state: "danger" },
   O: { desc: "Off", state: "warning" },
@@ -97,7 +97,7 @@ let dutyScheduleSStatusMap = {
 };
 
 let dutyScheduleStatusConstant = {
-  Normal: "N",
+  Wait: "N",
   Approve: "A",
   Cancel: "C",
   Off: "O",

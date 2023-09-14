@@ -68,14 +68,14 @@ let userRoleConstant = {
 };
 
 let dutyScheduleStatusMasters = [
-  { statusCode: "N", statusDesc: "Normal" },
+  { statusCode: "N", statusDesc: "Wait" },
   { statusCode: "A", statusDesc: "Approve" },
   { statusCode: "C", statusDesc: "Cancel" },
   { statusCode: "O", statusDesc: "Off" },
 ];
 
 let dutyScheduleSStatusMap = {
-  N: { desc: "Normal", state: "secondary" },
+  N: { desc: "Wait", state: "secondary" },
   A: { desc: "Approve", state: "success" },
   C: { desc: "Cancel", state: "danger" },
   O: { desc: "Off", state: "warning" },
@@ -83,14 +83,14 @@ let dutyScheduleSStatusMap = {
 };
 
 let dutyScheduleSStatusConstant = {
-  Normal: "N",
+  Wait: "N",
   Approve: "A",
   Cancel: "C",
   Off: "O",
 };
 
 let dutyScheduleStatusMastersForUserUpdate = [
-  { statusCode: "N", statusDesc: "Normal" },
+  { statusCode: "N", statusDesc: "Wait" },
   //   { statusCode: "A", statusDesc: "Approve" },
   { statusCode: "C", statusDesc: "Cancel" },
   //   { statusCode: "O", statusDesc: "Off" },
@@ -685,7 +685,7 @@ let CreateDatatable = (function () {
           targets: 15,
           title: "แก้ไข",
           render: function (data, type, full, meta) {
-            return full.status == dutyScheduleSStatusConstant.Normal
+            return full.status == dutyScheduleSStatusConstant.Wait
               ? `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`
               : "-";
           },

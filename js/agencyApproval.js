@@ -76,29 +76,29 @@ let userRoleConstant = {
 };
 
 let dutyScheduleStatusMasters = [
-  { statusCode: "N", statusDesc: "Normal" },
+  { statusCode: "N", statusDesc: "Wait" },
   { statusCode: "A", statusDesc: "Approve" },
   { statusCode: "C", statusDesc: "Cancel" },
   { statusCode: "O", statusDesc: "Off" },
 ];
 
 let dutyScheduleStatusMastersForUserUpdate = [
-  { statusCode: "N", statusDesc: "Normal" },
+  { statusCode: "N", statusDesc: "Wait" },
   //   { statusCode: "A", statusDesc: "Approve" },
   { statusCode: "C", statusDesc: "Cancel" },
   //   { statusCode: "O", statusDesc: "Off" },
 ];
 
 let dutyScheduleSStatusMap = {
-  N: { desc: "Normal", state: "secondary" },
+  N: { desc: "Wait", state: "secondary" },
   A: { desc: "Approve", state: "success" },
   C: { desc: "Cancel", state: "danger" },
   O: { desc: "Off", state: "warning" },
-  null: { desc: "New", state: "info" },
+  null: { desc: "New", state: "warning" },
 };
 
 let dutyScheduleStatusConstant = {
-  Normal: "N",
+  Wait: "N",
   Approve: "A",
   Cancel: "C",
   Off: "O",
@@ -1525,7 +1525,7 @@ let CreateDatatableDetail = (function () {
           render: function (data, type, full, meta) {
             if (
               full.status == dutyScheduleStatusConstant.Off ||
-              full.status == dutyScheduleStatusConstant.Normal ||
+              full.status == dutyScheduleStatusConstant.Wait ||
               full.status == dutyScheduleStatusConstant.Approve
             ) {
               if (full.isUpdate == false) {
@@ -1789,7 +1789,7 @@ let renderRowEdit = function (table) {
     }
     row.find("#labelAlert").hide();
     if (
-      isChanged.status == dutyScheduleStatusConstant.Normal &&
+      isChanged.status == dutyScheduleStatusConstant.Wait &&
       (isChanged.approveShiftStart == null || isChanged.approveShiftStart == "")
     ) {
       if (isChanged.dutyScheduleRequestList != null) {
