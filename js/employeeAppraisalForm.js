@@ -426,6 +426,7 @@ let CreateDatatable = (function () {
         { data: "approveLocationCode", className: "text-center" },
         { data: "approveDepartmentCode", className: "text-center" },
         { data: "positionCode", className: "text-center" },
+        { data: "shiftStart", className: "text-center" },
         { data: "approveShiftStart", className: "text-center" },
         { data: "realShiftStart", className: "text-center" },
         { data: "score", className: "text-center" },
@@ -496,11 +497,18 @@ let CreateDatatable = (function () {
           targets: 7,
           title: "ช่วงเวลาที่ขอ",
           render: function (data, type, full, meta) {
-            return full.approveShiftStart + "-" + full.approveShiftEnd;
+            return full.shiftStart + "-" + full.shiftEnd;
           },
         },
         {
           targets: 8,
+          title: "ช่วงเวลาที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return full.approveShiftStart + "-" + full.approveShiftEnd;
+          },
+        },
+        {
+          targets: 9,
           title: "ช่วงเวลาที่เข้างานจริง",
           render: function (data, type, full, meta) {
             return full.realShiftStart == null
@@ -509,21 +517,21 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 9,
+          targets: 10,
           title: "ผลประเมิน",
           render: function (data, type, full, meta) {
             return scoreConstant[data].desc;
           },
         },
         {
-          targets: 10,
+          targets: 11,
           title: "หมายเหตุ",
           render: function (data, type, full, meta) {
             return data == null ? "-" : data;
           },
         },
         {
-          targets: 11,
+          targets: 12,
           title: "แก้ไข",
           render: function (data, type, full, meta) {
             return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`;

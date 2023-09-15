@@ -437,7 +437,21 @@ $("#submit").on("click", function () {
     dataType: "json",
     success: function (res) {
       if (res.status.code == 200) {
-        toastr.success("บันทึกสำเร็จ");
+        let isOverWrite = 0;
+        for (let data of res.data) {
+          if (data.isOverWrite == 1) {
+            isOverWrite = 1;
+          }
+        }
+        if (isOverWrite == 0) {
+          toastr.success("บันทึกสำเร็จ");
+          isOverWrite = 0;
+        } else {
+          toastr.warning(
+            "มีรายการที่อนุมัติเวร โดยที่หน่วยงานไม่ได้มีการขออัตรากำลัง กรุณาตรวจสอบการทำรายการอีกครั้ง"
+          );
+          isOverWrite = 0;
+        }
         modal.modal("hide");
         LoadDutyScheduleForIndividualApproval();
       } else {

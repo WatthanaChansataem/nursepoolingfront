@@ -304,18 +304,19 @@ let SetupData = (function () {
 })();
 
 let renderPage = function () {
-  $("#beginDate").datepicker({
-    format: "MM yyyy",
-    startView: "months",
-    viewMode: "months",
-    minViewMode: "months",
-    autoclose: true,
-  });
-  let currentDate = new Date();
-  $("#beginDate").datepicker(
-    "setDate",
-    new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
-  );
+  $("#beginDate")
+    .datepicker({
+      format: "dd/mm/yyyy",
+      autoclose: true,
+      todayHighlight: true,
+      todayBtn: true,
+    })
+    .datepicker("setDate", new Date());
+  // let currentDate = new Date();
+  // $("#beginDate").datepicker(
+  //   "setDate",
+  //   new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
+  // );
 
   $("#dutyDateModal")
     .datepicker({
@@ -1668,6 +1669,7 @@ let LoadDutyScheduleRequest = function () {
   let locationCode = parseInt($("#locationCode").val());
   let departmentCode = parseInt($("#departmentCode").val());
   let positionCode = parseInt($("#positionCode").val());
+  let isJustMonth = $(`#isJustMonth`).is(":checked") ? 1 : 0;
 
   let objData = {
     dutyDate: dutyDate,
@@ -1675,6 +1677,7 @@ let LoadDutyScheduleRequest = function () {
     locationCode: locationCode,
     departmentCode: departmentCode,
     positionCode: positionCode,
+    isJustMonth: isJustMonth,
   };
   $.ajax({
     url: "https://localhost:7063/api/dutyScheduleRequest/searchDutyScheduleRequest",
