@@ -1680,7 +1680,7 @@ let LoadDutyScheduleRequest = function () {
     isJustMonth: isJustMonth,
   };
   $.ajax({
-    url: link + "/api/dutyScheduleRequest/searchDutyScheduleRequest",
+    url: link + "/api/dutyScheduleRequest/searchDutyScheduleRequestTable",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
