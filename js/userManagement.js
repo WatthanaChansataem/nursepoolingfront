@@ -610,6 +610,12 @@ let CreateDatatable = (function () {
         $("#email").html(
           '<strong class="text-gray-900">Email:  </strong>' + data.email
         );
+        let contractPerson =
+          data.contractPerson == null ? "-" : data.contractPerson;
+        $("#contractPerson").html(
+          '<strong class="text-gray-900">ชื่อผู้ติดต่อ:  </strong>' +
+            contractPerson
+        );
         $("#phone").html(
           '<strong class="text-gray-900">โทรศัพท์:  </strong>' + data.phone
         );

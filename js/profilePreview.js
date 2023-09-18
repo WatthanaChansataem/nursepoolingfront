@@ -79,6 +79,7 @@ let DocumentTypeCode = {
   IDCardCopy: 2,
   ProfessionalLicenseCopy: 3,
   ProfileImg: 4,
+  CertificateDiplomaCopy: 5,
 };
 
 $(document).ready(function () {
@@ -296,6 +297,9 @@ let renderPage = function () {
   let docProfessionalLicenseCopy = userData.documentList.filter(
     (e) => e.documentTypeCode == DocumentTypeCode.ProfessionalLicenseCopy
   )[0];
+  let docCertificateDiplomaCopy = userData.documentList.filter(
+    (e) => e.documentTypeCode == DocumentTypeCode.CertificateDiplomaCopy
+  )[0];
 
   if (docIDCardCopy != null) {
     $("#refFileUploadIDCardCopy").attr(
@@ -317,6 +321,20 @@ let renderPage = function () {
     $("input[name=professionalLicenseCopy]").attr(
       "documentId",
       docProfessionalLicenseCopy.documentId
+    );
+  }
+
+  if (docCertificateDiplomaCopy != null) {
+    $("#refFileUploadcertificateDiplomaCopy").attr(
+      "href",
+      `https://localhost:7063/api/document/get/${docCertificateDiplomaCopy.documentId}`
+    );
+    $("#fileNamecertificateDiplomaCopy").html(
+      docCertificateDiplomaCopy.documentName
+    );
+    $("input[name=certificateDiplomaCopy]").attr(
+      "documentId",
+      docCertificateDiplomaCopy.documentId
     );
   }
 

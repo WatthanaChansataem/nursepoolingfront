@@ -78,6 +78,7 @@ let DocumentTypeCode = {
   IDCardCopy: 2,
   ProfessionalLicenseCopy: 3,
   ProfileImg: 4,
+  CertificateDiplomaCopy: 5,
 };
 
 $(document).ready(function () {
@@ -299,6 +300,10 @@ let renderPage = function () {
     (e) => e.documentTypeCode == DocumentTypeCode.ProfessionalLicenseCopy
   )[0];
 
+  let docCertificateDiplomaCopy = userData.documentList.filter(
+    (e) => e.documentTypeCode == DocumentTypeCode.CertificateDiplomaCopy
+  )[0];
+
   if (docIDCardCopy != null) {
     $("#refFileUploadIDCardCopy").attr(
       "href",
@@ -306,6 +311,20 @@ let renderPage = function () {
     );
     $("#fileNameIDCardCopy").html(docIDCardCopy.documentName);
     $("input[name=iDCardCopy]").attr("documentId", docIDCardCopy.documentId);
+  }
+
+  if (docCertificateDiplomaCopy != null) {
+    $("#refFileUploadcertificateDiplomaCopy").attr(
+      "href",
+      `https://localhost:7063/api/document/get/${docCertificateDiplomaCopy.documentId}`
+    );
+    $("#fileNamecertificateDiplomaCopy").html(
+      docCertificateDiplomaCopy.documentName
+    );
+    $("input[name=certificateDiplomaCopy]").attr(
+      "documentId",
+      docCertificateDiplomaCopy.documentId
+    );
   }
 
   if (docProfessionalLicenseCopy != null) {
@@ -429,6 +448,7 @@ $("input[name=iDCardCopy]").on("change", function () {
   uploadata.append("documentName", changeElement[0].files[0].name);
   uploadata.append("document", changeElement[0].files[0]);
   uploadata.append("documentTypeCode", DocumentTypeCode.IDCardCopy);
+  uploadata.append("insertUserId", userData.userId);
 
   let defer = $.Deferred();
   upLoadFile(uploadata, defer);
@@ -470,6 +490,26 @@ $("input[name=professionalLicenseCopy]").on("change", function () {
     "documentTypeCode",
     DocumentTypeCode.ProfessionalLicenseCopy
   );
+  uploadata.append("insertUserId", userData.userId);
+
+  let defer = $.Deferred();
+  upLoadFile(uploadata, defer);
+  $.when(defer).done(function (result) {
+    if (result) {
+      resData = result;
+      changeElement.attr("documentId", resData.documentId);
+    }
+  });
+});
+
+$("input[name=certificateDiplomaCopy]").on("change", function () {
+  $(".certificateDiplomaCopyLabel").html($(this)[0].files[0].name);
+  let changeElement = $("input[name=certificateDiplomaCopy]");
+  var uploadata = new FormData();
+  uploadata.append("documentName", changeElement[0].files[0].name);
+  uploadata.append("document", changeElement[0].files[0]);
+  uploadata.append("documentTypeCode", DocumentTypeCode.CertificateDiplomaCopy);
+  uploadata.append("insertUserId", userData.userId);
 
   let defer = $.Deferred();
   upLoadFile(uploadata, defer);
@@ -1086,6 +1126,10 @@ $("#submitRegister").on("click", function () {
     $("input[name=professionalLicenseCopy]").attr("documentId")
   );
 
+  let certificateDiplomaCopyDocumentId = parseInt(
+    $("input[name=certificateDiplomaCopy]").attr("documentId")
+  );
+
   let titleCode = parseInt($("#titleCode").val());
   let firstName = $("#firstName").val();
   let lastName = $("#lastName").val();
@@ -1144,6 +1188,7 @@ $("#submitRegister").on("click", function () {
     deleteExperiences: deleteExperiences,
     professionalLicenseExpireDate: professionalLicenseExpireDate,
     dateOfBirth: dateOfBirth,
+    certificateDiplomaCopyDocumentId: certificateDiplomaCopyDocumentId,
   };
   // console.log(objadddata);
   if (
@@ -1293,22 +1338,63 @@ $("#submitRegister").on("click", function () {
     $(`.div-input-positionCode .custom-select`).removeClass(isInvalidClass);
   }
 
-  if (
-    objadddata["professionalLicenseExpireDate"] == "" ||
-    objadddata["professionalLicenseExpireDate"] == null
-  ) {
-    $(`.div-input-professionalLicenseExpireDate .form-control`).addClass(
-      isInvalidClass
-    );
-    $(
-      `.div-input-professionalLicenseExpireDate .${validationErrorMessageClass}`
-    ).html(`กรุณาระบุ`);
-    scrollToElement(
-      $(`.div-input-professionalLicenseExpireDate .form-control`)
-    );
-    isValidate = 1;
+  if (objadddata["positionCode"] == 1) {
+    if (isNaN(objadddata["professionalLicenseCopyDocumentId"])) {
+      $(`.div-input-professionalLicenseCopy .form-control`).addClass(
+        isInvalidClass
+      );
+      $(
+        `.div-input-professionalLicenseCopy .${validationErrorMessageClass}`
+      ).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(`.div-input-professionalLicenseCopy .form-control`).removeClass(
+        isInvalidClass
+      );
+    }
+
+    if (
+      objadddata["professionalLicenseExpireDate"] == "" ||
+      objadddata["professionalLicenseExpireDate"] == null
+    ) {
+      $(`.div-input-professionalLicenseExpireDate .form-control`).addClass(
+        isInvalidClass
+      );
+      $(
+        `.div-input-professionalLicenseExpireDate .${validationErrorMessageClass}`
+      ).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(`.div-input-professionalLicenseExpireDate .form-control`).removeClass(
+        isInvalidClass
+      );
+    }
   } else {
     $(`.div-input-professionalLicenseExpireDate .form-control`).removeClass(
+      isInvalidClass
+    );
+
+    $(`.div-input-professionalLicenseCopy .form-control`).removeClass(
+      isInvalidClass
+    );
+  }
+
+  if (objadddata["positionCode"] != 1) {
+    if (isNaN(objadddata["certificateDiplomaCopyDocumentId"])) {
+      $(`.div-input-certificateDiplomaCopy .form-control`).addClass(
+        isInvalidClass
+      );
+      $(
+        `.div-input-certificateDiplomaCopy .${validationErrorMessageClass}`
+      ).html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(`.div-input-certificateDiplomaCopy .form-control`).removeClass(
+        isInvalidClass
+      );
+    }
+  } else {
+    $(`.div-input-certificateDiplomaCopy .form-control`).removeClass(
       isInvalidClass
     );
   }
