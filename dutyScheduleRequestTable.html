@@ -1206,6 +1206,81 @@
       </div>
     </div>
 
+    <div
+      class="modal fade"
+      id="approveModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              <strong class="text-gray-900">
+                รายชื่อเจ้าหน้าที่ที่ได้รับการอนุมัติ
+              </strong>
+            </h5>
+            <button
+              class="close"
+              type="button"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="col-sm-12">
+              <p id="dutyDateDisplayModal"></p>
+            </div>
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">รายการ</h6>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table
+                    class="table table-bordered nowrap"
+                    id="dataTableDetail"
+                    width="100%"
+                    cellspacing="0"
+                  >
+                    <thead>
+                      <tr>
+                        <th>No.</th>
+                        <th>ชื่อ</th>
+                        <th>โรงพยาบาลที่อนุมัติ</th>
+                        <th>Locationที่อนุมัติ</th>
+                        <th>แผนกที่อนุมัติ</th>
+                        <th>ช่วงเวลาที่อนุมัติ</th>
+                        <th>ช่วงเวลาที่เข้างานจริง</th>
+                        <th>ผลประเมิน</th>
+                        <th>หมายเหตุ</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <!-- <button class="btn btn-success" type="button" id="submit">
+              บันทึก
+            </button> -->
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-dismiss="modal"
+            >
+              ปิด
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

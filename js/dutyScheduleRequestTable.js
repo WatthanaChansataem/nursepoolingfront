@@ -65,6 +65,15 @@ let positionMap = new Map();
 let positionMaster;
 let userData;
 
+let scoreConstant = {
+  1: { desc: "แย่มาก", state: "secondary" },
+  2: { desc: "แย่", state: "secondary" },
+  3: { desc: "พอใช้", state: "secondary" },
+  4: { desc: "ดี", state: "secondary" },
+  5: { desc: "ดีมาก", state: "secondary" },
+  null: { desc: "ไม่มี", state: "primary" },
+};
+
 let userRoleConstant = {
   User: "U",
   Admin: "A",
@@ -108,6 +117,7 @@ let locationCodeConstant = {
 
 $(document).ready(function () {
   CreateDatatable.init();
+  CreateDatatableDetail.init();
 
   let setupDataDefered = $.Deferred();
   SetupData.init(setupDataDefered);
@@ -1137,7 +1147,7 @@ let CreateDatatable = (function () {
                 : full.allApproveNumber > 0
                 ? "primary"
                 : "warning"
-            } btn-circle btn-sm"> ${data}</i></a>`;
+            } btn-circle btn-sm display-button"> ${data}</i></a>`;
           },
         },
         {
@@ -1195,6 +1205,13 @@ let CreateDatatable = (function () {
     init: function () {
       initTable1();
       let containerTable = $(table.table().container());
+
+      containerTable.on("click", ".display-button", function () {
+        let rowIndex = table.row($(this).closest("tr")).index();
+        let data = table.row($(this).closest("tr")).data();
+        currentRow = $(this).closest("tr");
+        loadUserDataForDisplayModal(data);
+      });
 
       containerTable.on("click", ".edit-button", function () {
         // let contractNo = $(this).attr("contractNo");
@@ -1724,3 +1741,173 @@ let scrollToElement = function (element) {
   let scrollOffset = offset - windowHeight / 2;
   $("html, body").animate({ scrollTop: scrollOffset }, 1000);
 };
+
+let loadUserDataForDisplayModal = function (data) {
+  let objData = {
+    dutyScheduleRequestId: data.dutyScheduleRequestId,
+  };
+  $.ajax({
+    url:
+      link +
+      "/api/dutySchedule/searchDutyScheduleForEmployeeAppraisalFormApproveList",
+    type: "POST",
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+    data: JSON.stringify(objData),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (res) {
+      if (res.status.code == 200) {
+        let approvalDetaildata = res.data;
+        CreateDatatableDetail.data(approvalDetaildata);
+        $("#approveModal").modal("show");
+      } else {
+        toastr.error(res.status.message);
+      }
+    },
+    error: function (res) {
+      toastr.error("ไม่สามารถดึงข้อมูลได้");
+    },
+  });
+};
+$("#approveModal").on("shown.bs.modal", function () {
+  CreateDatatableDetail.adjust();
+});
+
+let CreateDatatableDetail = (function () {
+  let table;
+  let currentPage = 0;
+  let initTable1 = function () {
+    table = $("#dataTableDetail").DataTable({
+      responsive: false,
+      data: [],
+      scrollY: "50vh",
+      scrollX: true,
+      scrollCollapse: true,
+      columns: [
+        { data: "", className: "text-center" },
+        { data: "firstName", className: "text-center" },
+        { data: "approveHospitalCode", className: "text-center" },
+        { data: "approveLocationCode", className: "text-center" },
+        { data: "approveDepartmentCode", className: "text-center" },
+        { data: "approveShiftStart", className: "text-center" },
+        { data: "realShiftStart", className: "text-center" },
+        { data: "score", className: "text-center" },
+        { data: "remark", className: "text-center" },
+      ],
+      order: [[0, "asc"]],
+      columnDefs: [
+        {
+          targets: 0,
+          title: "No.",
+          render: function (data, type, full, meta) {
+            return parseInt(meta.row) + 1;
+          },
+        },
+        {
+          targets: 1,
+          title: "ชื่อ - นามสกุล",
+          render: function (data, type, full, meta) {
+            return full.firstName + " " + full.lastName;
+          },
+        },
+        {
+          targets: 2,
+          title: "โรงพยาบาลที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? ""
+              : hospitalMap.get(data).hospitalDesc;
+          },
+        },
+        {
+          targets: 3,
+          title: "Locationที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? ""
+              : locationMap.get(data).locationDesc;
+          },
+        },
+        {
+          targets: 4,
+          title: "แผนกที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? ""
+              : departmentMap.get(data).departmentDesc;
+          },
+        },
+        {
+          targets: 5,
+          title: "ช่วงเวลาที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return full.approveShiftStart + "-" + full.approveShiftEnd;
+          },
+        },
+        {
+          targets: 6,
+          title: "ช่วงเวลาที่เข้างานจริง",
+          render: function (data, type, full, meta) {
+            return full.realShiftStart == null
+              ? "-"
+              : full.realShiftStart + "-" + full.realShiftEnd;
+          },
+        },
+        {
+          targets: 7,
+          title: "ผลประเมิน",
+          render: function (data, type, full, meta) {
+            return scoreConstant[data].desc;
+          },
+        },
+        {
+          targets: 8,
+          title: "หมายเหตุ",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+      ],
+    });
+  };
+
+  return {
+    init: function () {
+      initTable1();
+      let containerTable = $(table.table().container());
+
+      // containerTable.on("click", ".edit-button", function () {
+      //   let rowIndex = table.row($(this).closest("tr")).index();
+      //   let data = table.row($(this).closest("tr")).data();
+      //   currentDutyScheduleId = data.dutyScheduleId;
+      //   currentRow = $(this).closest("tr");
+      //   globalScore = 0;
+      //   removeStar();
+      //   $("#editScheduleModal").modal();
+      // });
+    },
+    data: function (data) {
+      table.clear();
+      table.rows.add(data);
+      table.draw();
+    },
+    addData: function (data) {
+      table.rows.add(data);
+      table.draw();
+    },
+    getData: function (index) {
+      if (index) {
+        return table.row(index).data();
+      }
+      return table.rows().data().toArray();
+    },
+    datatable: function () {
+      return table;
+    },
+    adjust: function () {
+      table.columns.adjust();
+    },
+  };
+})();
