@@ -265,7 +265,7 @@ let renderPage = function () {
   //   $("select[name=titleCode]").val(2);
   $("#addEducation").trigger("click");
   $("#addExperience").trigger("click");
-  $("#addCourse").trigger("click");
+  // $("#addCourse").trigger("click");
 };
 $("#dateOfBirth").on("change", function () {
   $("#age").html(ageCalculator($("#dateOfBirth").val()));
@@ -1319,7 +1319,7 @@ $("#submitRegister").on("click", function () {
       success: function (res) {
         if (res.status.code == 200) {
           toastr.success("ลงทะเบียนสำเร็จ");
-          window.location.href = "login.html";
+          window.location.href = "login.html?from=registration";
         } else {
           toastr.error(res.status.message);
         }

@@ -45,6 +45,11 @@
 $(document).ready(function () {
   // localStorage.clear();
   console.log(localStorage.getItem("token"));
+  let urlParams = new URLSearchParams(window.location.search);
+  let from = urlParams.get("from");
+  if (from == "registration") {
+    toastr.success("ลงทะเบียนสำเร็จ");
+  }
 });
 
 $("#loginButton").on("click", function () {

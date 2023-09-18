@@ -642,7 +642,7 @@ $("#submitRegister").on("click", function () {
     success: function (res) {
       if (res.status.code == 200) {
         toastr.success("ลงทะเบียนสำเร็จ");
-        window.location.href = "login.html";
+        window.location.href = "login.html?from=registration";
       } else {
         toastr.error(res.status.message);
       }
