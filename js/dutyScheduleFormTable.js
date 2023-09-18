@@ -114,7 +114,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadHospital = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/hospital/list",
+      url: link + "/api/hospital/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -140,7 +140,7 @@ let SetupData = (function () {
 
   let loadLocation = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/location/list",
+      url: link + "/api/location/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -166,7 +166,7 @@ let SetupData = (function () {
 
   let loadDepartment = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/department/list",
+      url: link + "/api/department/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -192,7 +192,7 @@ let SetupData = (function () {
 
   let loadUserData = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/user/details",
+      url: link + "/api/user/details",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -205,7 +205,7 @@ let SetupData = (function () {
           );
           $("#navProfileImg").attr(
             "src",
-            `https://localhost:7063/api/document/avatar/${userData.userId}`
+            `${link}/api/document/avatar/${userData.userId}`
           );
           if (userData.role != userRoleConstant.User) {
             localStorage.clear();
@@ -498,7 +498,7 @@ $("#addScheduleBtnModal").on("click", function () {
 //   };
 
 //   $.ajax({
-//     url: "https://localhost:7063/api/dutySchedule/create",
+//     url: link + "/api/dutySchedule/create",
 //     type: "POST",
 //     data: JSON.stringify(objData),
 //     contentType: "application/json; charset=utf-8",
@@ -883,7 +883,7 @@ let CreateDatatable = (function () {
         };
 
         $.ajax({
-          url: "https://localhost:7063/api/dutySchedule/update",
+          url: link + "/api/dutySchedule/update",
           type: "POST",
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -938,7 +938,7 @@ let LoadDutySchedule = function () {
     status: $("#statusCode").val(),
   };
   $.ajax({
-    url: "https://localhost:7063/api/dutySchedule/searchDutyScheduleForDutyScheduleFormTable",
+    url: link + "/api/dutySchedule/searchDutyScheduleForDutyScheduleFormTable",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),

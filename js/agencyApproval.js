@@ -130,7 +130,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadHospital = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/hospital/list",
+      url: link + "/api/hospital/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -156,7 +156,7 @@ let SetupData = (function () {
 
   let loadLocation = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/location/list",
+      url: link + "/api/location/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -182,7 +182,7 @@ let SetupData = (function () {
 
   let loadDepartment = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/department/list",
+      url: link + "/api/department/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -208,7 +208,7 @@ let SetupData = (function () {
 
   let loadUserData = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/user/details",
+      url: link + "/api/user/details",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -219,7 +219,7 @@ let SetupData = (function () {
           $("#currentUserName").html(userData.firstName);
           $("#navProfileImg").attr(
             "src",
-            `https://localhost:7063/api/document/avatar/${userData.userId}`
+            `${link}/api/document/avatar/${userData.userId}`
           );
           if (userData.role != userRoleConstant.Admin) {
             localStorage.clear();
@@ -244,7 +244,7 @@ let SetupData = (function () {
 
   let loadPosition = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/position/list",
+      url: link + "/api/position/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -270,7 +270,7 @@ let SetupData = (function () {
 
   let loadEducationalQualification = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/educationalQualification/list",
+      url: link + "/api/educationalQualification/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -296,7 +296,7 @@ let SetupData = (function () {
 
   let loadExperienceType = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/experienceType/list",
+      url: link + "/api/experienceType/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -428,7 +428,7 @@ $("#submit").on("click", function () {
     approveDutyScheduleList: data,
   };
   $.ajax({
-    url: "https://localhost:7063/api/dutySchedule/approvedutyScheduleByDepartment",
+    url: link + "/api/dutySchedule/approvedutyScheduleByDepartment",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -1128,7 +1128,7 @@ let LoadDutyScheduleForIndividualApproval = function () {
     positionCode: positionCode,
   };
   $.ajax({
-    url: "https://localhost:7063/api/dutySchedule/searchDutyScheduleForAgencyApproval",
+    url: link + "/api/dutySchedule/searchDutyScheduleForAgencyApproval",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -1159,7 +1159,7 @@ let loadUserDateForApproveModal = function (day, data) {
     departmentCode: data.departmentCode,
   };
   $.ajax({
-    url: "https://localhost:7063/api/dutySchedule/searchDutyScheduleForAgencyApprovalDetail",
+    url: link + "/api/dutySchedule/searchDutyScheduleForAgencyApprovalDetail",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),

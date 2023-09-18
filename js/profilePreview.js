@@ -97,7 +97,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadTitle = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/title/list",
+      url: link + "/api/title/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -123,7 +123,7 @@ let SetupData = (function () {
 
   let loadEducationalQualification = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/educationalQualification/list",
+      url: link + "/api/educationalQualification/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -152,7 +152,7 @@ let SetupData = (function () {
 
   let loadExperienceType = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/experienceType/list",
+      url: link + "/api/experienceType/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -178,7 +178,7 @@ let SetupData = (function () {
 
   let loadPosition = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/position/list",
+      url: link + "/api/position/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -206,7 +206,7 @@ let SetupData = (function () {
     let urlParams = new URLSearchParams(window.location.search);
     userIdPreview = parseInt(urlParams.get("userId"));
     $.ajax({
-      url: "https://localhost:7063/api/user/previewProfile",
+      url: link + "/api/user/previewProfile",
       type: "POST",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -283,12 +283,12 @@ let SetupData = (function () {
 let renderPage = function () {
   $("#profileImg").attr(
     "src",
-    `https://localhost:7063/api/document/avatar/${userData.userId}`
+    `${link}/api/document/avatar/${userData.userId}`
   );
 
   $("#navProfileImg").attr(
     "src",
-    `https://localhost:7063/api/document/avatar/${userData.previewUserId}`
+    `${link}/api/document/avatar/${userData.previewUserId}`
   );
 
   let docIDCardCopy = userData.documentList.filter(
@@ -304,7 +304,7 @@ let renderPage = function () {
   if (docIDCardCopy != null) {
     $("#refFileUploadIDCardCopy").attr(
       "href",
-      `https://localhost:7063/api/document/get/${docIDCardCopy.documentId}`
+      `${link}/api/document/get/${docIDCardCopy.documentId}`
     );
     $("#fileNameIDCardCopy").html(docIDCardCopy.documentName);
     $("input[name=iDCardCopy]").attr("documentId", docIDCardCopy.documentId);
@@ -313,7 +313,7 @@ let renderPage = function () {
   if (docProfessionalLicenseCopy != null) {
     $("#refFileUploadProfessionalLicenseCopy").attr(
       "href",
-      `https://localhost:7063/api/document/get/${docProfessionalLicenseCopy.documentId}`
+      `${link}/api/document/get/${docProfessionalLicenseCopy.documentId}`
     );
     $("#fileNameProfessionalLicenseCopy").html(
       docProfessionalLicenseCopy.documentName
@@ -327,7 +327,7 @@ let renderPage = function () {
   if (docCertificateDiplomaCopy != null) {
     $("#refFileUploadcertificateDiplomaCopy").attr(
       "href",
-      `https://localhost:7063/api/document/get/${docCertificateDiplomaCopy.documentId}`
+      `${link}/api/document/get/${docCertificateDiplomaCopy.documentId}`
     );
     $("#fileNamecertificateDiplomaCopy").html(
       docCertificateDiplomaCopy.documentName
@@ -1236,7 +1236,7 @@ $("#submitRegister").on("click", function () {
   }
 
   $.ajax({
-    url: "https://localhost:7063/api/user/update",
+    url: link + "/api/user/update",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -1259,7 +1259,7 @@ $("#submitRegister").on("click", function () {
 
 let upLoadFile = function (uploadFileData, defer) {
   $.ajax({
-    url: "https://localhost:7063/api/document/create",
+    url: link + "/api/document/create",
     method: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -1541,7 +1541,7 @@ let renderTrainingCourse = function (trainingCourseList) {
                               </div>
   
                               <a
-                                  href="https://localhost:7063/api/document/get/${data.documentId}"
+                                  href=link + "/api/document/get/${data.documentId}"
                                   target="_blank"
                                   id="refFileUpload"
                                   ><i
@@ -1572,7 +1572,7 @@ let renderTrainingCourse = function (trainingCourseList) {
 
 let upLoadFileWithContent = function (uploadFileData, defer) {
   $.ajax({
-    url: "https://localhost:7063/api/document/createWithContent",
+    url: link + "/api/document/createWithContent",
     method: "POST",
     data: uploadFileData,
     dataType: "json",

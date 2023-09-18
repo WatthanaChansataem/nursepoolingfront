@@ -124,7 +124,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadHospital = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/hospital/list",
+      url: link + "/api/hospital/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -150,7 +150,7 @@ let SetupData = (function () {
 
   let loadLocation = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/location/list",
+      url: link + "/api/location/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -176,7 +176,7 @@ let SetupData = (function () {
 
   let loadDepartment = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/department/list",
+      url: link + "/api/department/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -202,7 +202,7 @@ let SetupData = (function () {
 
   let loadUserData = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/user/details",
+      url: link + "/api/user/details",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -213,7 +213,7 @@ let SetupData = (function () {
           $("#currentUserName").html(userData.firstName);
           $("#navProfileImg").attr(
             "src",
-            `https://localhost:7063/api/document/avatar/${userData.userId}`
+            `${link}/api/document/avatar/${userData.userId}`
           );
           if (userData.role != userRoleConstant.Department) {
             localStorage.clear();
@@ -238,7 +238,7 @@ let SetupData = (function () {
 
   let loadPosition = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/position/list",
+      url: link + "/api/position/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -768,7 +768,7 @@ $("#addScheduleBtnModal").on("click", function () {
   //   };
 
   $.ajax({
-    url: "https://localhost:7063/api/dutyScheduleRequest/create",
+    url: link + "/api/dutyScheduleRequest/create",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -800,7 +800,7 @@ $("#addScheduleBtnModal").on("click", function () {
 //     };
 
 //     $.ajax({
-//       url: "https://localhost:7063/api/dutySchedule/create",
+//       url: link + "/api/dutySchedule/create",
 //       type: "POST",
 //       headers: {
 //         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -1616,7 +1616,7 @@ let CreateDatatable = (function () {
         // console.log(objadddata);
 
         $.ajax({
-          url: "https://localhost:7063/api/dutyScheduleRequest/update",
+          url: link + "/api/dutyScheduleRequest/update",
           type: "POST",
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -1680,7 +1680,7 @@ let LoadDutyScheduleRequest = function () {
     isJustMonth: isJustMonth,
   };
   $.ajax({
-    url: "https://localhost:7063/api/dutyScheduleRequest/searchDutyScheduleRequest",
+    url: link + "/api/dutyScheduleRequest/searchDutyScheduleRequest",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),

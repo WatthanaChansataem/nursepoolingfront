@@ -152,7 +152,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadHospital = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/hospital/list",
+      url: link + "/api/hospital/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -178,7 +178,7 @@ let SetupData = (function () {
 
   let loadLocation = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/location/list",
+      url: link + "/api/location/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -204,7 +204,7 @@ let SetupData = (function () {
 
   let loadDepartment = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/department/list",
+      url: link + "/api/department/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -230,7 +230,7 @@ let SetupData = (function () {
 
   let loadUserData = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/user/details",
+      url: link + "/api/user/details",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -241,7 +241,7 @@ let SetupData = (function () {
           $("#currentUserName").html(userData.firstName);
           $("#navProfileImg").attr(
             "src",
-            `https://localhost:7063/api/document/avatar/${userData.userId}`
+            `${link}/api/document/avatar/${userData.userId}`
           );
           if (userData.role != userRoleConstant.Admin) {
             localStorage.clear();
@@ -266,7 +266,7 @@ let SetupData = (function () {
 
   let loadPosition = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/position/list",
+      url: link + "/api/position/list",
       type: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -559,7 +559,7 @@ let CreateDatatable = (function () {
         currentRow = $(this).closest("tr");
         $("#profileImg").attr(
           "src",
-          `https://localhost:7063/api/document/avatar/${data.userId}`
+          `${link}/api/document/avatar/${data.userId}`
         );
 
         $("#firstName").html(
@@ -683,7 +683,7 @@ let CreateDatatable = (function () {
 
         Spinner.activateSpinner($("#editScheduleBtnModal"));
         $.ajax({
-          url: "https://localhost:7063/api/User/userManagement",
+          url: link + "/api/User/userManagement",
           type: "POST",
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -741,7 +741,7 @@ let LoadDutySchedule = function () {
     positionCode: parseInt($("#positionCode").val()),
   };
   $.ajax({
-    url: "https://localhost:7063/api/User/searchForUserManagement",
+    url: link + "/api/User/searchForUserManagement",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -804,7 +804,7 @@ $("input[name=changeProfileImage]").on("change", function () {
 
 let upLoadFileWithContent = function (uploadFileData, defer) {
   $.ajax({
-    url: "https://localhost:7063/api/document/createWithContent",
+    url: link + "/api/document/createWithContent",
     method: "POST",
     data: uploadFileData,
     dataType: "json",
@@ -896,7 +896,7 @@ $("#addUserBtnModal").on("click", function () {
   }
 
   $.ajax({
-    url: "https://localhost:7063/api/User/createAdmin",
+    url: link + "/api/User/createAdmin",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),

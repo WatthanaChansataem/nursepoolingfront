@@ -62,7 +62,7 @@ $("#loginButton").on("click", function () {
     rememberMe: rememberMe,
   };
   $.ajax({
-    url: "https://localhost:7063/api/user/login",
+    url: link + "/api/user/login",
     type: "POST",
     data: JSON.stringify(objData),
     contentType: "application/json; charset=utf-8",

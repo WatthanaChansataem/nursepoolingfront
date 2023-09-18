@@ -92,7 +92,7 @@ $(document).ready(function () {
 let SetupData = (function () {
   let loadTitle = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/title/list",
+      url: link + "/api/title/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -115,7 +115,7 @@ let SetupData = (function () {
 
   let loadEducationalQualification = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/educationalQualification/list",
+      url: link + "/api/educationalQualification/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -141,7 +141,7 @@ let SetupData = (function () {
 
   let loadExperienceType = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/experienceType/list",
+      url: link + "/api/experienceType/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -164,7 +164,7 @@ let SetupData = (function () {
 
   let loadPosition = function (defered) {
     $.ajax({
-      url: "https://localhost:7063/api/position/list",
+      url: link + "/api/position/list",
       type: "GET",
       success: function (res) {
         if (res.status.code == 200) {
@@ -1311,7 +1311,7 @@ $("#submitRegister").on("click", function () {
       return;
     }
     $.ajax({
-      url: "https://localhost:7063/api/user/create",
+      url: link + "/api/user/create",
       type: "POST",
       data: JSON.stringify(objadddata),
       contentType: "application/json; charset=utf-8",
@@ -1351,7 +1351,7 @@ $("#submitRegister").on("click", function () {
 
 let LoadDutyFile = function () {
   $.ajax({
-    url: "https://localhost:7063/api/document/list",
+    url: link + "/api/document/list",
     type: "GET",
     success: function (res) {
       if (res.status.code == 200) {
@@ -1371,7 +1371,7 @@ let LoadDutyFile = function () {
 
 let upLoadFile = function (uploadFileData, defer) {
   $.ajax({
-    url: "https://localhost:7063/api/document/create",
+    url: link + "/api/document/create",
     method: "POST",
     data: uploadFileData,
     dataType: "json",
@@ -1395,7 +1395,7 @@ let upLoadFile = function (uploadFileData, defer) {
 
 let upLoadFileWithContent = function (uploadFileData, defer) {
   $.ajax({
-    url: "https://localhost:7063/api/document/createWithContent",
+    url: link + "/api/document/createWithContent",
     method: "POST",
     data: uploadFileData,
     dataType: "json",
