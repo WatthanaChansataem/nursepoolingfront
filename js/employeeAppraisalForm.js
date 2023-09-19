@@ -520,7 +520,9 @@ let CreateDatatable = (function () {
           targets: 10,
           title: "ผลประเมิน",
           render: function (data, type, full, meta) {
-            return scoreConstant[data].desc;
+            return '<span class="fa fa-star checked" style="color:orange"></span>'.repeat(
+              data
+            );
           },
         },
         {

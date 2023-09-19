@@ -552,6 +552,7 @@ let CreateDatatable = (function () {
         { data: "approveDepartmentCode", className: "text-center" },
         { data: "approveShiftEnd", className: "text-center" },
         { data: "realShiftEnd", className: "text-center" },
+        { data: "totalRealDuration", className: "text-center" },
         { data: "", className: "text-center" },
       ],
       order: [[0, "asc"]],
@@ -683,6 +684,13 @@ let CreateDatatable = (function () {
         },
         {
           targets: 15,
+          title: "จำนวนชั่วโมงที่เข้างาน",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+        {
+          targets: 16,
           title: "แก้ไข",
           render: function (data, type, full, meta) {
             return full.status == dutyScheduleSStatusConstant.Wait

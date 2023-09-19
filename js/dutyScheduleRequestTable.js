@@ -1859,7 +1859,9 @@ let CreateDatatableDetail = (function () {
           targets: 7,
           title: "ผลประเมิน",
           render: function (data, type, full, meta) {
-            return scoreConstant[data].desc;
+            return '<span class="fa fa-star checked" style="color:orange"></span>'.repeat(
+              data
+            );
           },
         },
         {
