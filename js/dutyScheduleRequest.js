@@ -326,6 +326,15 @@ let renderPage = function () {
     })
     .datepicker("setDate", new Date());
 
+  $("#dutyDateToModal")
+    .datepicker({
+      format: "dd/mm/yyyy",
+      autoclose: true,
+      todayHighlight: true,
+      todayBtn: true,
+    })
+    .datepicker("setDate", new Date());
+
   $.each(positionMaster, function (i, item) {
     $("select[name=positionCode]").append(
       $("<option>", {
@@ -502,6 +511,8 @@ $("#addScheduleBtnModal").on("click", function () {
   let requestNumberOther = parseInt($("#requestNumberOtherModal").val());
   let remark = $("#remarkModal").val();
   let active = $("#activeStatus").is(":checked") ? 1 : 0;
+  let isJustMonth = $(`#isJustMonth`).is(":checked") ? 1 : 0;
+  let dutyDateTo = $("#dutyDateToModal").val();
 
   let objadddata = {
     dutyDate: dutyDate,
@@ -522,6 +533,8 @@ $("#addScheduleBtnModal").on("click", function () {
     requestNumberOther: requestNumberOther,
     remark: remark,
     active: active,
+    isJustMonth: isJustMonth,
+    dutyDateTo: dutyDateTo,
   };
   console.log(objadddata);
   isValidate = 0;
@@ -536,6 +549,19 @@ $("#addScheduleBtnModal").on("click", function () {
     isValidate = 1;
   } else {
     $(`.div-input-dutyDateModal .form-control`).removeClass(isInvalidClass);
+  }
+  if (objadddata["isJustMonth"] == 1) {
+    if (objadddata["dutyDateTo"] == "" || objadddata["dutyDateTo"] == null) {
+      modal
+        .find(`.div-input-dutyDateToModal .form-control`)
+        .addClass(isInvalidClass);
+      modal
+        .find(`.div-input-dutyDateToModal .${validationErrorMessageClass}`)
+        .html(`กรุณาระบุ`);
+      isValidate = 1;
+    } else {
+      $(`.div-input-dutyDateToModal .form-control`).removeClass(isInvalidClass);
+    }
   }
 
   if (
@@ -861,6 +887,39 @@ $("#locationCodeModal").on("change", function () {
   } else {
     $(".opd_div").show();
     $(".ipd_div").show();
+  }
+});
+
+$("#isJustMonth").on("change", function () {
+  if ($(`#isJustMonth`).is(":checked")) {
+    $(".div-all-dutyDateToModal").show();
+  } else {
+    $(".div-all-dutyDateToModal").hide();
+  }
+});
+
+$("#dutyDateToModal").on("change", function () {
+  var partsTo = $("#dutyDateToModal").val().split("/");
+  var dateTo = new Date(partsTo[2], partsTo[1] - 1, partsTo[0]); // months are zero-based
+
+  var partsFrom = $("#dutyDateModal").val().split("/");
+  var dateFrom = new Date(partsFrom[2], partsFrom[1] - 1, partsFrom[0]); // months are zero-based
+
+  if (dateFrom > dateTo) {
+    $("#dutyDateToModal").datepicker("setDate", dateFrom);
+    toastr.warning("ไม่สามารถเลือกวันที่ถึง น้อยกว่าวันที่ขออัตรากำลัง");
+  }
+});
+
+$("#dutyDateModal").on("change", function () {
+  var partsTo = $("#dutyDateToModal").val().split("/");
+  var dateTo = new Date(partsTo[2], partsTo[1] - 1, partsTo[0]); // months are zero-based
+
+  var partsFrom = $("#dutyDateModal").val().split("/");
+  var dateFrom = new Date(partsFrom[2], partsFrom[1] - 1, partsFrom[0]); // months are zero-based
+
+  if (dateFrom > dateTo) {
+    $("#dutyDateToModal").datepicker("setDate", dateFrom);
   }
 });
 
