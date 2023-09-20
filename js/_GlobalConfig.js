@@ -1,4 +1,4 @@
-let link = "https://localhost:7063";
+let link = "http://10.104.10.243:8088";
 //http://10.104.10.243:8088 internal
 //http://10.104.10.243:8082 uat
 //https://localhost:7063 local
