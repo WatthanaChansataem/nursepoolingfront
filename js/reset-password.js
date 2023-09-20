@@ -107,7 +107,7 @@ $("#resetPasswordButton").on("click", function () {
     dataType: "json",
     success: function (res) {
       if (res.status.code == 200) {
-        window.location.href = "login.html";
+        window.location.href = "login.html?from=reset-password";
       } else {
         toastr.error(res.status.message);
       }

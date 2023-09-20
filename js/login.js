@@ -50,6 +50,11 @@ $(document).ready(function () {
   if (from == "registration") {
     toastr.success("ลงทะเบียนสำเร็จ");
   }
+
+  if (from == "reset-password") {
+    toastr.success("Reset รหัสผ่านสำเร็จ กรุณา Login อีกครั้ง");
+  }
+  console.log(from);
 });
 
 $("#loginButton").on("click", function () {
