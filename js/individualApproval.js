@@ -1716,13 +1716,33 @@ let renderRowEdit = function (table) {
       (isChanged.approveShiftStart == null || isChanged.approveShiftStart == "")
     ) {
       if (isChanged.dutyScheduleRequestList != null) {
-        row.find("input[name=shiftStartEdit]").val(isChanged.mapShiftStart);
-        row.find("input[name=shiftEndEdit]").val(isChanged.mapShiftEnd);
+        row.find("input[name=shiftStartEdit]").val(isChanged.shiftStart);
+        row.find("input[name=shiftEndEdit]").val(isChanged.shiftEnd);
         if (
           isChanged.shiftStart != isChanged.mapShiftStart ||
           isChanged.shiftEnd != isChanged.mapShiftEnd
         ) {
           row.find("#labelAlert").show();
+        }
+
+        if (isChanged.shiftStart != isChanged.mapShiftStart) {
+          row.find("input[name=shiftStartEdit]").css({
+            color: "red",
+          });
+        } else {
+          row.find("input[name=shiftStartEdit]").css({
+            color: "green",
+          });
+        }
+
+        if (isChanged.shiftEnd != isChanged.mapShiftEnd) {
+          row.find("input[name=shiftEndEdit]").css({
+            color: "red",
+          });
+        } else {
+          row.find("input[name=shiftEndEdit]").css({
+            color: "green",
+          });
         }
       }
     }

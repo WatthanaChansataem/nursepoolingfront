@@ -539,6 +539,11 @@ let CreateDatatable = (function () {
       columns: [
         { data: "", className: "text-center" },
         { data: "dutyDate", className: "text-center" },
+        { data: "status", className: "text-center" },
+        { data: "approveHospitalCode", className: "text-center" },
+        { data: "approveLocationCode", className: "text-center" },
+        { data: "approveDepartmentCode", className: "text-center" },
+        { data: "approveShiftEnd", className: "text-center" },
         { data: "shiftStart", className: "text-center" },
         { data: "hospitalCode", className: "text-center" },
         { data: "locationCode", className: "text-center" },
@@ -546,11 +551,6 @@ let CreateDatatable = (function () {
         { data: "departmentCode2", className: "text-center" },
         { data: "departmentCode3", className: "text-center" },
         { data: "remark", className: "text-center" },
-        { data: "status", className: "text-center" },
-        { data: "approveHospitalCode", className: "text-center" },
-        { data: "approveLocationCode", className: "text-center" },
-        { data: "approveDepartmentCode", className: "text-center" },
-        { data: "approveShiftEnd", className: "text-center" },
         { data: "realShiftEnd", className: "text-center" },
         { data: "totalRealDuration", className: "text-center" },
         { data: "", className: "text-center" },
@@ -573,72 +573,13 @@ let CreateDatatable = (function () {
         },
         {
           targets: 2,
-          title: "ช่วงเวลา",
-          render: function (data, type, full, meta) {
-            return full.shiftStart + "-" + full.shiftEnd;
-          },
-        },
-        {
-          targets: 3,
-          title: "โรงพยาบาล",
-          render: function (data, type, full, meta) {
-            return data == null || isNaN(data)
-              ? ""
-              : hospitalMap.get(data).hospitalDesc;
-          },
-        },
-        {
-          targets: 4,
-          title: "Location",
-          render: function (data, type, full, meta) {
-            return data == null || isNaN(data)
-              ? ""
-              : locationMap.get(data).locationDesc;
-          },
-        },
-        {
-          targets: 5,
-          title: "แผนกลำดับที่ 1",
-          render: function (data, type, full, meta) {
-            return data == null || isNaN(data)
-              ? ""
-              : departmentMap.get(data).departmentDesc;
-          },
-        },
-        {
-          targets: 6,
-          title: "แผนกลำดับที่ 2",
-          render: function (data, type, full, meta) {
-            return data == null || isNaN(data)
-              ? ""
-              : departmentMap.get(data).departmentDesc;
-          },
-        },
-        {
-          targets: 7,
-          title: "แผนกลำดับที่ 3",
-          render: function (data, type, full, meta) {
-            return data == null || isNaN(data)
-              ? ""
-              : departmentMap.get(data).departmentDesc;
-          },
-        },
-        {
-          targets: 8,
-          title: "หมายเหตุ",
-          render: function (data, type, full, meta) {
-            return data;
-          },
-        },
-        {
-          targets: 9,
           title: "สถานะ",
           render: function (data, type, full, meta) {
             return `<a class="btn btn-${dutyScheduleSStatusMap[data].state}" style="width: 90px;">${dutyScheduleSStatusMap[data].desc}</a>`;
           },
         },
         {
-          targets: 10,
+          targets: 3,
           title: "โรงพยาบาลที่อนุมัติ",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -647,7 +588,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 11,
+          targets: 4,
           title: "Locationที่อนุมัติ",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -656,7 +597,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 12,
+          targets: 5,
           title: "แผนกที่อนุมัติ",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -665,12 +606,71 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 13,
+          targets: 6,
           title: "ช่วงเวลาที่อนุมัติ",
           render: function (data, type, full, meta) {
             return full.approveShiftStart == null
               ? "-"
               : full.approveShiftStart + "-" + full.approveShiftEnd;
+          },
+        },
+        {
+          targets: 7,
+          title: "ช่วงเวลา",
+          render: function (data, type, full, meta) {
+            return full.shiftStart + "-" + full.shiftEnd;
+          },
+        },
+        {
+          targets: 8,
+          title: "โรงพยาบาล",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? ""
+              : hospitalMap.get(data).hospitalDesc;
+          },
+        },
+        {
+          targets: 9,
+          title: "Location",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? ""
+              : locationMap.get(data).locationDesc;
+          },
+        },
+        {
+          targets: 10,
+          title: "แผนกลำดับที่ 1",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? ""
+              : departmentMap.get(data).departmentDesc;
+          },
+        },
+        {
+          targets: 11,
+          title: "แผนกลำดับที่ 2",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? ""
+              : departmentMap.get(data).departmentDesc;
+          },
+        },
+        {
+          targets: 12,
+          title: "แผนกลำดับที่ 3",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? ""
+              : departmentMap.get(data).departmentDesc;
+          },
+        },
+        {
+          targets: 13,
+          title: "หมายเหตุ",
+          render: function (data, type, full, meta) {
+            return data;
           },
         },
         {
