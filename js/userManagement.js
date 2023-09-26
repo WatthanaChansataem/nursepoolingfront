@@ -791,15 +791,19 @@ $("input[name=changeProfileImage]").on("change", function () {
   uploadata.append("document", changeElement[0].files[0]);
   uploadata.append("documentTypeCode", DocumentTypeCode.ProfileImg);
   uploadata.append("insertUserId", userData.userId);
-  let defer = $.Deferred();
-  upLoadFileWithContent(uploadata, defer);
-  $.when(defer).done(function (result) {
-    if (result) {
-      resData = result;
-      changeElement.attr("documentId", resData.documentId);
-      location.reload();
-    }
-  });
+  if (changeElement[0].files[0].size > maximumSize) {
+    toastr.error("ไฟล์มีขนาดใหญ่เกินไป");
+  } else {
+    let defer = $.Deferred();
+    upLoadFileWithContent(uploadata, defer);
+    $.when(defer).done(function (result) {
+      if (result) {
+        resData = result;
+        changeElement.attr("documentId", resData.documentId);
+        location.reload();
+      }
+    });
+  }
 });
 
 let upLoadFileWithContent = function (uploadFileData, defer) {

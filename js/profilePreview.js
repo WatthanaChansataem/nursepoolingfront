@@ -407,21 +407,24 @@ let renderPage = function () {
 };
 
 $("input[name=iDCardCopy]").on("change", function () {
-  $(".iDCardCopyLabel").html($(this)[0].files[0].name);
   let changeElement = $("input[name=iDCardCopy]");
   var uploadata = new FormData();
   uploadata.append("documentName", changeElement[0].files[0].name);
   uploadata.append("document", changeElement[0].files[0]);
   uploadata.append("documentTypeCode", DocumentTypeCode.IDCardCopy);
-
-  let defer = $.Deferred();
-  upLoadFile(uploadata, defer);
-  $.when(defer).done(function (result) {
-    if (result) {
-      resData = result;
-      changeElement.attr("documentId", resData.documentId);
-    }
-  });
+  if (changeElement[0].files[0].size > maximumSize) {
+    toastr.error("ไฟล์มีขนาดใหญ่เกินไป");
+  } else {
+    $(".iDCardCopyLabel").html($(this)[0].files[0].name);
+    let defer = $.Deferred();
+    upLoadFile(uploadata, defer);
+    $.when(defer).done(function (result) {
+      if (result) {
+        resData = result;
+        changeElement.attr("documentId", resData.documentId);
+      }
+    });
+  }
 });
 
 $("input[name=changeProfileImage]").on("change", function () {
@@ -431,21 +434,21 @@ $("input[name=changeProfileImage]").on("change", function () {
   uploadata.append("document", changeElement[0].files[0]);
   uploadata.append("documentTypeCode", DocumentTypeCode.ProfileImg);
   uploadata.append("insertUserId", userData.userId);
-
-  let defer = $.Deferred();
-  upLoadFileWithContent(uploadata, defer);
-  $.when(defer).done(function (result) {
-    if (result) {
-      resData = result;
-      changeElement.attr("documentId", resData.documentId);
-    }
-  });
+  if (changeElement[0].files[0].size > maximumSize) {
+    toastr.error("ไฟล์มีขนาดใหญ่เกินไป");
+  } else {
+    let defer = $.Deferred();
+    upLoadFileWithContent(uploadata, defer);
+    $.when(defer).done(function (result) {
+      if (result) {
+        resData = result;
+        changeElement.attr("documentId", resData.documentId);
+      }
+    });
+  }
 });
 
 $("input[name=professionalLicenseCopy]").on("change", function () {
-  $(".professionalLicenseCopyLabel").html(
-    $("input[name=professionalLicenseCopy]")[0].files[0].name
-  );
   let changeElement = $("input[name=professionalLicenseCopy]");
   var uploadata = new FormData();
   uploadata.append("documentName", changeElement[0].files[0].name);
@@ -454,15 +457,21 @@ $("input[name=professionalLicenseCopy]").on("change", function () {
     "documentTypeCode",
     DocumentTypeCode.ProfessionalLicenseCopy
   );
-
-  let defer = $.Deferred();
-  upLoadFile(uploadata, defer);
-  $.when(defer).done(function (result) {
-    if (result) {
-      resData = result;
-      changeElement.attr("documentId", resData.documentId);
-    }
-  });
+  if (changeElement[0].files[0].size > maximumSize) {
+    toastr.error("ไฟล์มีขนาดใหญ่เกินไป");
+  } else {
+    $(".professionalLicenseCopyLabel").html(
+      $("input[name=professionalLicenseCopy]")[0].files[0].name
+    );
+    let defer = $.Deferred();
+    upLoadFile(uploadata, defer);
+    $.when(defer).done(function (result) {
+      if (result) {
+        resData = result;
+        changeElement.attr("documentId", resData.documentId);
+      }
+    });
+  }
 });
 
 $("#addEducation").on("click", function () {
@@ -765,15 +774,18 @@ function changeItemCourse(value) {
   uploadata.append("documentName", changeElement[0].files[0].name);
   uploadata.append("document", changeElement[0].files[0]);
   uploadata.append("documentTypeCode", DocumentTypeCode.TrainingCourse);
-
-  let defer = $.Deferred();
-  upLoadFile(uploadata, defer);
-  $.when(defer).done(function (result) {
-    if (result) {
-      resData = result;
-      changeElement.attr("documentId", resData.documentId);
-    }
-  });
+  if (changeElement[0].files[0].size > maximumSize) {
+    toastr.error("ไฟล์มีขนาดใหญ่เกินไป");
+  } else {
+    let defer = $.Deferred();
+    upLoadFile(uploadata, defer);
+    $.when(defer).done(function (result) {
+      if (result) {
+        resData = result;
+        changeElement.attr("documentId", resData.documentId);
+      }
+    });
+  }
 }
 
 $("#submitRegister").on("click", function () {

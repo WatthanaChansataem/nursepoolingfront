@@ -307,7 +307,7 @@ let renderPage = function () {
   if (docIDCardCopy != null) {
     $("#refFileUploadIDCardCopy").attr(
       "href",
-      `${link}/api/document/get/${docIDCardCopy.documentId}`
+      `${link}/api/document/getFile/${docIDCardCopy.documentId}`
     );
     $("#fileNameIDCardCopy").html(docIDCardCopy.documentName);
     $("input[name=iDCardCopy]").attr("documentId", docIDCardCopy.documentId);
@@ -316,7 +316,7 @@ let renderPage = function () {
   if (docCertificateDiplomaCopy != null) {
     $("#refFileUploadcertificateDiplomaCopy").attr(
       "href",
-      `${link}/api/document/get/${docCertificateDiplomaCopy.documentId}`
+      `${link}/api/document/getFile/${docCertificateDiplomaCopy.documentId}`
     );
     $("#fileNamecertificateDiplomaCopy").html(
       docCertificateDiplomaCopy.documentName
@@ -330,7 +330,7 @@ let renderPage = function () {
   if (docProfessionalLicenseCopy != null) {
     $("#refFileUploadProfessionalLicenseCopy").attr(
       "href",
-      `${link}/api/document/get/${docProfessionalLicenseCopy.documentId}`
+      `${link}/api/document/getFile/${docProfessionalLicenseCopy.documentId}`
     );
     $("#fileNameProfessionalLicenseCopy").html(
       docProfessionalLicenseCopy.documentName
@@ -442,7 +442,6 @@ $("#titleCode").on("change", function () {
 });
 
 $("input[name=iDCardCopy]").on("change", function () {
-  $(".iDCardCopyLabel").html($(this)[0].files[0].name);
   let changeElement = $("input[name=iDCardCopy]");
   var uploadata = new FormData();
   uploadata.append("documentName", changeElement[0].files[0].name);
@@ -450,14 +449,19 @@ $("input[name=iDCardCopy]").on("change", function () {
   uploadata.append("documentTypeCode", DocumentTypeCode.IDCardCopy);
   uploadata.append("insertUserId", userData.userId);
 
-  let defer = $.Deferred();
-  upLoadFile(uploadata, defer);
-  $.when(defer).done(function (result) {
-    if (result) {
-      resData = result;
-      changeElement.attr("documentId", resData.documentId);
-    }
-  });
+  if (changeElement[0].files[0].size > maximumSize) {
+    toastr.error("ไฟล์มีขนาดใหญ่เกินไป");
+  } else {
+    $(".iDCardCopyLabel").html($(this)[0].files[0].name);
+    let defer = $.Deferred();
+    upLoadFile(uploadata, defer);
+    $.when(defer).done(function (result) {
+      if (result) {
+        resData = result;
+        changeElement.attr("documentId", resData.documentId);
+      }
+    });
+  }
 });
 
 $("input[name=changeProfileImage]").on("change", function () {
@@ -468,20 +472,21 @@ $("input[name=changeProfileImage]").on("change", function () {
   uploadata.append("documentTypeCode", DocumentTypeCode.ProfileImg);
   uploadata.append("insertUserId", userData.userId);
 
-  let defer = $.Deferred();
-  upLoadFileWithContent(uploadata, defer);
-  $.when(defer).done(function (result) {
-    if (result) {
-      resData = result;
-      changeElement.attr("documentId", resData.documentId);
-    }
-  });
+  if (changeElement[0].files[0].size > maximumSize) {
+    toastr.error("ไฟล์มีขนาดใหญ่เกินไป");
+  } else {
+    let defer = $.Deferred();
+    upLoadFileWithContent(uploadata, defer);
+    $.when(defer).done(function (result) {
+      if (result) {
+        resData = result;
+        changeElement.attr("documentId", resData.documentId);
+      }
+    });
+  }
 });
 
 $("input[name=professionalLicenseCopy]").on("change", function () {
-  $(".professionalLicenseCopyLabel").html(
-    $("input[name=professionalLicenseCopy]")[0].files[0].name
-  );
   let changeElement = $("input[name=professionalLicenseCopy]");
   var uploadata = new FormData();
   uploadata.append("documentName", changeElement[0].files[0].name);
@@ -491,19 +496,24 @@ $("input[name=professionalLicenseCopy]").on("change", function () {
     DocumentTypeCode.ProfessionalLicenseCopy
   );
   uploadata.append("insertUserId", userData.userId);
-
-  let defer = $.Deferred();
-  upLoadFile(uploadata, defer);
-  $.when(defer).done(function (result) {
-    if (result) {
-      resData = result;
-      changeElement.attr("documentId", resData.documentId);
-    }
-  });
+  if (changeElement[0].files[0].size > maximumSize) {
+    toastr.error("ไฟล์มีขนาดใหญ่เกินไป");
+  } else {
+    $(".professionalLicenseCopyLabel").html(
+      $("input[name=professionalLicenseCopy]")[0].files[0].name
+    );
+    let defer = $.Deferred();
+    upLoadFile(uploadata, defer);
+    $.when(defer).done(function (result) {
+      if (result) {
+        resData = result;
+        changeElement.attr("documentId", resData.documentId);
+      }
+    });
+  }
 });
 
 $("input[name=certificateDiplomaCopy]").on("change", function () {
-  $(".certificateDiplomaCopyLabel").html($(this)[0].files[0].name);
   let changeElement = $("input[name=certificateDiplomaCopy]");
   var uploadata = new FormData();
   uploadata.append("documentName", changeElement[0].files[0].name);
@@ -511,14 +521,19 @@ $("input[name=certificateDiplomaCopy]").on("change", function () {
   uploadata.append("documentTypeCode", DocumentTypeCode.CertificateDiplomaCopy);
   uploadata.append("insertUserId", userData.userId);
 
-  let defer = $.Deferred();
-  upLoadFile(uploadata, defer);
-  $.when(defer).done(function (result) {
-    if (result) {
-      resData = result;
-      changeElement.attr("documentId", resData.documentId);
-    }
-  });
+  if (changeElement[0].files[0].size > maximumSize) {
+    toastr.error("ไฟล์มีขนาดใหญ่เกินไป");
+  } else {
+    $(".certificateDiplomaCopyLabel").html($(this)[0].files[0].name);
+    let defer = $.Deferred();
+    upLoadFile(uploadata, defer);
+    $.when(defer).done(function (result) {
+      if (result) {
+        resData = result;
+        changeElement.attr("documentId", resData.documentId);
+      }
+    });
+  }
 });
 
 $("#addEducation").on("click", function () {
@@ -839,14 +854,18 @@ function changeItemCourse(value) {
   uploadata.append("document", changeElement[0].files[0]);
   uploadata.append("documentTypeCode", DocumentTypeCode.TrainingCourse);
 
-  let defer = $.Deferred();
-  upLoadFile(uploadata, defer);
-  $.when(defer).done(function (result) {
-    if (result) {
-      resData = result;
-      changeElement.attr("documentId", resData.documentId);
-    }
-  });
+  if (changeElement[0].files[0].size > maximumSize) {
+    toastr.error("ไฟล์มีขนาดใหญ่เกินไป");
+  } else {
+    let defer = $.Deferred();
+    upLoadFile(uploadata, defer);
+    $.when(defer).done(function (result) {
+      if (result) {
+        resData = result;
+        changeElement.attr("documentId", resData.documentId);
+      }
+    });
+  }
 }
 
 $("#submitRegister").on("click", function () {
@@ -1722,7 +1741,7 @@ let renderTrainingCourse = function (trainingCourseList) {
                             </div>
 
                             <a
-                                href=link + "/api/document/get/${data.documentId}"
+                                href="${link}/api/document/getfile/${data.documentId}"
                                 target="_blank"
                                 id="refFileUpload"
                                 ><i

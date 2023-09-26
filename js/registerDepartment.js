@@ -382,15 +382,18 @@ $("input[name=changeProfileImage]").on("change", function () {
   uploadata.append("documentName", changeElement[0].files[0].name);
   uploadata.append("document", changeElement[0].files[0]);
   uploadata.append("documentTypeCode", DocumentTypeCode.ProfileImg);
-
-  let defer = $.Deferred();
-  upLoadFileWithContent(uploadata, defer);
-  $.when(defer).done(function (result) {
-    if (result) {
-      resData = result;
-      changeElement.attr("documentId", resData.documentId);
-    }
-  });
+  if (changeElement[0].files[0].size > maximumSize) {
+    toastr.error("ไฟล์มีขนาดใหญ่เกินไป");
+  } else {
+    let defer = $.Deferred();
+    upLoadFileWithContent(uploadata, defer);
+    $.when(defer).done(function (result) {
+      if (result) {
+        resData = result;
+        changeElement.attr("documentId", resData.documentId);
+      }
+    });
+  }
 });
 
 $("#editProfile").on("click", function () {
