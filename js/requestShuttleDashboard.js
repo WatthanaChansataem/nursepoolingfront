@@ -527,6 +527,7 @@ let CreateDatatable = (function () {
               });
             }
           }
+          CreateDatatable.adjust();
         }
       });
     },
