@@ -495,6 +495,7 @@ $("#addScheduleBtnModal").on("click", function () {
   let departmentCode2 = parseInt($("#departmentCode2Modal").val());
   let departmentCode3 = parseInt($("#departmentCode3Modal").val());
   let remark = $("#remarkModal").val();
+  let requestShuttle = $(`#requestShuttle`).is(":checked") ? 1 : 0;
 
   let objadddata = {
     dutyDate: dutyDate,
@@ -508,6 +509,7 @@ $("#addScheduleBtnModal").on("click", function () {
     remark: remark,
     dutyScheduleId: 0,
     status: null,
+    requestShuttle: requestShuttle,
   };
   isValidate = 0;
 
@@ -690,7 +692,7 @@ let CreateDatatable = (function () {
     table = $("#dataTable").DataTable({
       responsive: false,
       data: [],
-      scrollY: "50vh",
+      // scrollY: "50vh",
       scrollX: true,
       scrollCollapse: true,
       columns: [
@@ -830,6 +832,12 @@ let CreateDatatable = (function () {
         $("#remarkEditModal").val(data.remark);
         $("#statusCodeModal").val(data.status);
 
+        $("#statusCodeModal").val(data.status);
+        $("#requestShuttleEdit").prop(
+          "checked",
+          data.requestShuttle == null || data.requestShuttle == 0 ? false : true
+        );
+
         $("#editScheduleModal").modal();
       });
 
@@ -844,6 +852,7 @@ let CreateDatatable = (function () {
         let departmentCode3 = parseInt($("#departmentCode3EditModal").val());
         let remark = $("#remarkEditModal").val();
         let status = $("#statusCodeModal").val();
+        let requestShuttle = $(`#requestShuttleEdit`).is(":checked") ? 1 : 0;
 
         let objadddata = {
           dutyDate: dutyDate,
@@ -857,6 +866,7 @@ let CreateDatatable = (function () {
           remark: remark,
           dutyScheduleId: currentDutyScheduleId,
           status: status,
+          requestShuttle: requestShuttle,
         };
         isValidate = 0;
 

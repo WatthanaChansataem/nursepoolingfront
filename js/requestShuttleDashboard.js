@@ -71,21 +71,25 @@ let userRoleConstant = {
 };
 
 let dutyScheduleStatusMasters = [
-  { statusCode: "N", statusDesc: "Normal" },
+  { statusCode: "N", statusDesc: "Wait" },
   { statusCode: "A", statusDesc: "Approve" },
   { statusCode: "C", statusDesc: "Cancel" },
   { statusCode: "O", statusDesc: "Off" },
 ];
 
 let dutyScheduleStatusMastersForUserUpdate = [
-  { statusCode: "N", statusDesc: "Normal" },
-  //   { statusCode: "A", statusDesc: "Approve" },
+  { statusCode: "N", statusDesc: "Wait" },
   { statusCode: "C", statusDesc: "Cancel" },
-  //   { statusCode: "O", statusDesc: "Off" },
+];
+
+let dutyScheduleStatusMastersForDashboard = [
+  { statusCode: "N", statusDesc: "Wait" },
+  { statusCode: "A", statusDesc: "Approve" },
+  { statusCode: "O", statusDesc: "Off" },
 ];
 
 let dutyScheduleSStatusMap = {
-  N: { desc: "Normal", state: "secondary" },
+  N: { desc: "Wait", state: "secondary" },
   A: { desc: "Approve", state: "success" },
   C: { desc: "Cancel", state: "danger" },
   O: { desc: "Off", state: "warning" },
@@ -93,19 +97,19 @@ let dutyScheduleSStatusMap = {
 };
 
 let dutyScheduleStatusConstant = {
-  Normal: "N",
+  Wait: "N",
   Approve: "A",
   Cancel: "C",
   Off: "O",
 };
 
 let scoreConstant = {
-  1: { desc: "แย่มาก", state: "secondary" },
-  2: { desc: "แย่", state: "secondary" },
-  3: { desc: "พอใช้", state: "secondary" },
-  4: { desc: "ดี", state: "secondary" },
-  5: { desc: "ดีมาก", state: "secondary" },
-  null: { desc: "ไม่มี", state: "primary" },
+  1: { desc: "แย่มาก", state: "danger" },
+  2: { desc: "แย่", state: "warning" },
+  3: { desc: "พอใช้", state: "primary" },
+  4: { desc: "ดี", state: "info" },
+  5: { desc: "ดีมาก", state: "success" },
+  null: { desc: "ไม่มี", state: "light" },
 };
 let locationCodeConstant = {
   OPD: 1,
@@ -234,7 +238,7 @@ let SetupData = (function () {
             "src",
             `${link}/api/document/avatar/${userData.userId}`
           );
-          if (userData.role != userRoleConstant.Department) {
+          if (userData.role != userRoleConstant.Admin) {
             localStorage.clear();
             window.location.href = "login.html";
           }
@@ -323,6 +327,14 @@ let SetupData = (function () {
 })();
 
 let renderPage = function () {
+  $.each(dutyScheduleStatusMastersForDashboard, function (i, item) {
+    $("select[name=statusCode]").append(
+      $("<option>", {
+        value: item.statusCode,
+        text: item.statusDesc,
+      })
+    );
+  });
   $("#beginDate")
     .datepicker({
       format: "dd/mm/yyyy",
@@ -349,7 +361,6 @@ let renderPage = function () {
       })
     );
   });
-  $("select[name=hospitalCode]").val(userData.hospitalCode).change();
 
   $.each(locationMaster, function (i, item) {
     $("select[name=locationCode]").append(
@@ -359,7 +370,6 @@ let renderPage = function () {
       })
     );
   });
-  $("select[name=locationCode]").val(userData.locationCode).change();
 
   $.each(departmentMaster, function (i, item) {
     $("select[name=departmentCode]").append(
@@ -369,40 +379,11 @@ let renderPage = function () {
       })
     );
   });
-  $("select[name=departmentCode]").val(userData.departmentCode).change();
-
-  $("#navHospitalCode").html(
-    hospitalMap.get(userData.hospitalCode).hospitalDesc
-  );
-
-  $("#navLocationCode").html(
-    locationMap.get(userData.locationCode).locationDesc
-  );
-
-  $("#navDepartmentCode").html(
-    departmentMap.get(userData.departmentCode).departmentDesc
-  );
-  LoadDutyScheduleRequest();
 };
+
 $("#generalSearch").on("click", function () {
   LoadDutyScheduleRequest();
 });
-
-// $("#hospitalCode").on("change", function () {
-//   LoadDutyScheduleRequest();
-// });
-// $("#locationCode").on("change", function () {
-//   LoadDutyScheduleRequest();
-// });
-// $("#departmentCode").on("change", function () {
-//   LoadDutyScheduleRequest();
-// });
-// $("#positionCode").on("change", function () {
-//   LoadDutyScheduleRequest();
-// });
-// $("#beginDate").on("change", function () {
-//   LoadDutyScheduleRequest();
-// });
 
 $("#sidebarToggle").on("click", function () {
   CreateDatatable.adjust();
@@ -415,7 +396,7 @@ let CreateDatatable = (function () {
     table = $("#dataTable").DataTable({
       responsive: false,
       data: [],
-      scrollY: "50vh",
+      // scrollY: "50vh",
       scrollX: true,
       scrollCollapse: true,
       columns: [
@@ -426,13 +407,13 @@ let CreateDatatable = (function () {
         { data: "approveLocationCode", className: "text-center" },
         { data: "approveDepartmentCode", className: "text-center" },
         { data: "positionCode", className: "text-center" },
-        { data: "shiftStart", className: "text-center" },
         { data: "approveShiftStart", className: "text-center" },
         { data: "realShiftStart", className: "text-center" },
+        { data: "totalRealDuration", className: "text-center" },
+        { data: "status", className: "text-center" },
         { data: "score", className: "text-center" },
-        // { data: "active", className: "text-center" },
         { data: "departmentRemark", className: "text-center" },
-        { data: "", className: "text-center" },
+        // { data: "", className: "text-center" },
       ],
       order: [[0, "asc"]],
       columnDefs: [
@@ -447,7 +428,9 @@ let CreateDatatable = (function () {
           targets: 1,
           title: "ชื่อ - นามสกุล",
           render: function (data, type, full, meta) {
-            return full.firstName + " " + full.lastName;
+            return `<a class="" href="profilePreview.html?userId=${
+              full.userId
+            }" target="_blank">${full.firstName + " " + full.lastName}</a>`;
           },
         },
         {
@@ -462,7 +445,7 @@ let CreateDatatable = (function () {
           title: "โรงพยาบาล",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
-              ? ""
+              ? "-"
               : hospitalMap.get(data).hospitalDesc;
           },
         },
@@ -471,7 +454,7 @@ let CreateDatatable = (function () {
           title: "Location",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
-              ? ""
+              ? "-"
               : locationMap.get(data).locationDesc;
           },
         },
@@ -480,7 +463,7 @@ let CreateDatatable = (function () {
           title: "แผนก",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
-              ? ""
+              ? "-"
               : departmentMap.get(data).departmentDesc;
           },
         },
@@ -489,26 +472,21 @@ let CreateDatatable = (function () {
           title: "ตำแหน่ง",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
-              ? ""
+              ? "-"
               : positionMap.get(data).positionDesc;
           },
         },
         {
           targets: 7,
-          title: "ช่วงเวลาที่ขอ",
+          title: "ช่วงเวลาที่อนุมัติ",
           render: function (data, type, full, meta) {
-            return full.shiftStart + "-" + full.shiftEnd;
+            return full.approveShiftStart == null
+              ? "-"
+              : full.approveShiftStart + "-" + full.approveShiftEnd;
           },
         },
         {
           targets: 8,
-          title: "ช่วงเวลาที่อนุมัติ",
-          render: function (data, type, full, meta) {
-            return full.approveShiftStart + "-" + full.approveShiftEnd;
-          },
-        },
-        {
-          targets: 9,
           title: "ช่วงเวลาที่เข้างานจริง",
           render: function (data, type, full, meta) {
             return full.realShiftStart == null
@@ -517,28 +495,40 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 10,
-          title: "ผลประเมิน",
-          render: function (data, type, full, meta) {
-            return '<span class="fa fa-star checked" style="color:orange"></span>'.repeat(
-              data
-            );
-          },
-        },
-        {
-          targets: 11,
-          title: "หมายเหตุ",
+          targets: 9,
+          title: "จำนวนชั่วโมงที่เข้างาน",
           render: function (data, type, full, meta) {
             return data == null ? "-" : data;
           },
         },
         {
-          targets: 12,
-          title: "แก้ไข",
+          targets: 10,
+          title: "สถานะ",
           render: function (data, type, full, meta) {
-            return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`;
+            return `<a class="btn btn-${dutyScheduleSStatusMap[data].state}" style="width: 90px;">${dutyScheduleSStatusMap[data].desc}</a>`;
           },
         },
+        {
+          targets: 11,
+          title: "ผลประเมิน",
+          render: function (data, type, full, meta) {
+            return `<a class="btn btn-${scoreConstant[data].state}" style="width: 90px;">${scoreConstant[data].desc}</a>`;
+          },
+        },
+        {
+          targets: 12,
+          title: "หมายเหตุจากหน่วยงาน",
+          render: function (data, type, full, meta) {
+            return data == null ? "-" : data;
+          },
+        },
+        // {
+        //   targets: 11,
+        //   title: "แก้ไข",
+        //   render: function (data, type, full, meta) {
+        //     return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`;
+        //   },
+        // },
       ],
     });
   };
@@ -562,18 +552,14 @@ let CreateDatatable = (function () {
         let realShiftStart = $("#realShiftStartModal").val();
         let realShiftEnd = $("#realShiftEndModal").val();
         let remark = $("#remarkEditModal").val();
-        let ratingScore = $("#ratingScore").val();
-        let evaluatorEmployeeCode = $("#evaluatorEmployeeCode").val();
-
         let objadddata = {
           departmentRemark: remark,
           realShiftStart: realShiftStart,
           realShiftEnd: realShiftEnd,
           score: globalScore,
           dutyScheduleId: currentDutyScheduleId,
-          ratingScore: ratingScore,
-          evaluatorEmployeeCode: evaluatorEmployeeCode,
         };
+        console.log(objadddata);
         isValidate = 0;
 
         if (
@@ -611,45 +597,6 @@ let CreateDatatable = (function () {
         } else {
           modalEdit
             .find(`.div-input-realShiftEndModal .form-control`)
-            .removeClass(isInvalidClass);
-        }
-
-        if (
-          objadddata["evaluatorEmployeeCode"] == null ||
-          objadddata["evaluatorEmployeeCode"] == ""
-        ) {
-          modalEdit
-            .find(`.div-input-evaluatorEmployeeCode .form-control`)
-            .addClass(isInvalidClass);
-          modalEdit
-            .find(
-              `.div-input-evaluatorEmployeeCode .${validationErrorMessageClass}`
-            )
-            .html(`กรุณาระบุ`);
-          isValidate = 1;
-        } else {
-          modalEdit
-            .find(`.div-input-evaluatorEmployeeCode .form-control`)
-            .removeClass(isInvalidClass);
-        }
-
-        if (
-          objadddata["ratingScore"] == null ||
-          objadddata["ratingScore"] == "" ||
-          objadddata["ratingScore"] == 0 ||
-          objadddata["ratingScore"] < 0 ||
-          objadddata["ratingScore"] > 5
-        ) {
-          modalEdit
-            .find(`.div-input-ratingScore .form-control`)
-            .addClass(isInvalidClass);
-          modalEdit
-            .find(`.div-input-ratingScore .${validationErrorMessageClass}`)
-            .html(`กรุณาระบุคะแนน 1 - 5 คะแนน`);
-          isValidate = 1;
-        } else {
-          modalEdit
-            .find(`.div-input-ratingScore .form-control`)
             .removeClass(isInvalidClass);
         }
 
@@ -712,6 +659,7 @@ let LoadDutyScheduleRequest = function () {
   let departmentCode = parseInt($("#departmentCode").val());
   let positionCode = parseInt($("#positionCode").val());
   let isJustMonth = $(`#isJustMonth`).is(":checked") ? 1 : 0;
+  let statusCode = $("#statusCode").val();
 
   let objData = {
     dutyDate: dutyDate,
@@ -720,9 +668,11 @@ let LoadDutyScheduleRequest = function () {
     departmentCode: departmentCode,
     positionCode: positionCode,
     isJustMonth: isJustMonth,
+    statusCode: statusCode,
   };
+  console.log(objData);
   $.ajax({
-    url: link + "/api/dutySchedule/searchDutyScheduleForEmployeeAppraisalForm",
+    url: link + "/api/dutySchedule/searchDutyScheduleDashboard",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -732,7 +682,54 @@ let LoadDutyScheduleRequest = function () {
     dataType: "json",
     success: function (res) {
       if (res.status.code == 200) {
-        CreateDatatable.data(res.data);
+        let dashboardData = res.data;
+        CreateDatatable.data(dashboardData.dutyScheduleList);
+
+        $("#requestNumberProgress").attr("style", "width: 100%");
+        $("#allRequestNumber").html(dashboardData.allRequestNumber);
+        $("#totalDuration").html(
+          "คิดเป็นจำนวนชั่วโมง : " + dashboardData.totalDuration + " ชัวโมง"
+        );
+
+        $("#approveNumberProgress").attr(
+          "style",
+          `width: ${FindPercenOf(
+            dashboardData.allApproveNumber,
+            dashboardData.allRequestNumber
+          )}%`
+        );
+        $("#allApproveNumber").html(dashboardData.allApproveNumber);
+        $("#totalApproveDuration").html(
+          "คิดเป็นจำนวนชั่วโมง : " +
+            dashboardData.totalApproveDuration +
+            " ชัวโมง"
+        );
+
+        $("#allRealNumberProgress").attr(
+          "style",
+          `width: ${FindPercenOf(
+            dashboardData.allRealNumber,
+            dashboardData.allRequestNumber
+          )}%`
+        );
+        $("#allRealNumber").html(dashboardData.allRealNumber);
+        $("#totalAllRealDuration").html(
+          "คิดเป็นจำนวนชั่วโมง : " +
+            dashboardData.totalAllRealDuration +
+            " ชัวโมง"
+        );
+
+        $("#allOffNumberProgress").attr(
+          "style",
+          `width: ${FindPercenOf(
+            dashboardData.allOffNumber,
+            dashboardData.allRequestNumber
+          )}%`
+        );
+        $("#allOffNumber").html(dashboardData.allOffNumber);
+        $("#totalOffDuration").html(
+          "คิดเป็นจำนวนชั่วโมง : " + dashboardData.totalOffDuration + " ชัวโมง"
+        );
       } else {
         toastr.error(res.status.message);
       }
@@ -776,4 +773,8 @@ let removeStar = function () {
   });
   //   });
   // });
+};
+
+let FindPercenOf = function (x, y) {
+  return (x * 100) / y;
 };

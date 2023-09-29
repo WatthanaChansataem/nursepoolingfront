@@ -304,7 +304,7 @@ let renderPage = function () {
   if (docIDCardCopy != null) {
     $("#refFileUploadIDCardCopy").attr(
       "href",
-      `${link}/api/document/get/${docIDCardCopy.documentId}`
+      `${link}/api/document/getFile/${docIDCardCopy.documentId}`
     );
     $("#fileNameIDCardCopy").html(docIDCardCopy.documentName);
     $("input[name=iDCardCopy]").attr("documentId", docIDCardCopy.documentId);
@@ -313,7 +313,7 @@ let renderPage = function () {
   if (docProfessionalLicenseCopy != null) {
     $("#refFileUploadProfessionalLicenseCopy").attr(
       "href",
-      `${link}/api/document/get/${docProfessionalLicenseCopy.documentId}`
+      `${link}/api/document/getFile/${docProfessionalLicenseCopy.documentId}`
     );
     $("#fileNameProfessionalLicenseCopy").html(
       docProfessionalLicenseCopy.documentName
@@ -327,7 +327,7 @@ let renderPage = function () {
   if (docCertificateDiplomaCopy != null) {
     $("#refFileUploadcertificateDiplomaCopy").attr(
       "href",
-      `${link}/api/document/get/${docCertificateDiplomaCopy.documentId}`
+      `${link}/api/document/getFile/${docCertificateDiplomaCopy.documentId}`
     );
     $("#fileNamecertificateDiplomaCopy").html(
       docCertificateDiplomaCopy.documentName
@@ -1553,7 +1553,7 @@ let renderTrainingCourse = function (trainingCourseList) {
                               </div>
   
                               <a
-                                  href=link + "/api/document/get/${data.documentId}"
+                                  href="${link}/api/document/getFile/${data.documentId}"
                                   target="_blank"
                                   id="refFileUpload"
                                   ><i
