@@ -408,6 +408,14 @@ $("#sidebarToggle").on("click", function () {
   CreateDatatable.adjust();
 });
 
+$("#submit").on("click", function () {
+  let selectedData = CreateDatatable.getData().filter(
+    (s) => s.checked === true
+  );
+
+  // console.log(selectedData);
+});
+
 let CreateDatatable = (function () {
   let table;
   let currentPage = 0;
@@ -419,6 +427,7 @@ let CreateDatatable = (function () {
       scrollX: true,
       scrollCollapse: true,
       columns: [
+        // { data: "dutyScheduleId", className: "uniqueClassName" },
         { data: "", className: "text-center" },
         { data: "firstName", className: "text-center" },
         { data: "dutyDate", className: "text-center" },
@@ -431,11 +440,57 @@ let CreateDatatable = (function () {
         { data: "realShiftStart", className: "text-center" },
         { data: "score", className: "text-center" },
         // { data: "active", className: "text-center" },
+        { data: "ratingScore", className: "text-center" },
+        { data: "evaluatorEmployeeCode", className: "text-center" },
         { data: "departmentRemark", className: "text-center" },
         { data: "", className: "text-center" },
       ],
+      // headerCallback: function (thead, data, start, end, display) {
+      //   const isCheckedAll =
+      //     data.every((s) => s.checked === true) && data.length > 0;
+      //   $(thead).find("th:eq(0)").html(`
+      //                         <label class="kt-checkbox kt-checkbox--single kt-checkbox--solid">
+      //                             <input type="checkbox" ${
+      //                               !isCheckedAll ? "" : "checked"
+      //                             } value="" class="kt-group-checkable">
+      //                             <span></span>
+      //                         </label>`);
+      // },
+      // drawCallback: function (settings) {
+      //   let api = this.api();
+      //   currentPage = api.page();
+      // },
+      // infoCallback: function (settings, start, end, max, total, pre) {
+      //   let api = this.api();
+      //   const selected = api
+      //     .rows()
+      //     .data()
+      //     .toArray()
+      //     .filter((s) => s.checked === true);
+      //   if (selected.length) {
+      //     return `${pre}    ${selected.length} rows selected`;
+      //   }
+      //   return `${pre}`;
+      // },
       order: [[0, "asc"]],
       columnDefs: [
+        // {
+        //   targets: 0,
+        //   // width: "30px",
+        //   className: "dt-right",
+        //   orderable: false,
+        //   render: function (data, type, full, meta) {
+        //     return `
+        //                   <label class="kt-checkbox kt-checkbox--single kt-checkbox--solid">
+        //                       <input type="checkbox" ${
+        //                         !full.checked ? "" : "checked"
+        //                       } value="${
+        //       full.dutyScheduleId
+        //     }" class="kt-checkable">
+        //                       <span></span>
+        //                   </label>`;
+        //   },
+        // },
         {
           targets: 0,
           title: "No.",
@@ -527,13 +582,27 @@ let CreateDatatable = (function () {
         },
         {
           targets: 11,
-          title: "หมายเหตุ",
+          title: "คะแนนการทำงานของเจ้าหน้าที่",
           render: function (data, type, full, meta) {
             return data == null ? "-" : data;
           },
         },
         {
           targets: 12,
+          title: "รหัสพนักงานผู้ประเมิน",
+          render: function (data, type, full, meta) {
+            return data == null ? "-" : data;
+          },
+        },
+        {
+          targets: 13,
+          title: "หมายเหตุ",
+          render: function (data, type, full, meta) {
+            return data == null ? "-" : data;
+          },
+        },
+        {
+          targets: 14,
           title: "แก้ไข",
           render: function (data, type, full, meta) {
             return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`;
@@ -548,9 +617,40 @@ let CreateDatatable = (function () {
       initTable1();
       let containerTable = $(table.table().container());
 
+      containerTable.on("click", ".kt-group-checkable", function () {
+        let isChecked = $(this).is(":checked");
+        if (isChecked) {
+          table
+            .rows()
+            .data()
+            .each(function (item, index) {
+              table.row(index).data({ ...item, checked: true });
+            });
+        } else {
+          table
+            .rows()
+            .data()
+            .each(function (item, index) {
+              table.row(index).data({ ...item, checked: false });
+            });
+        }
+        table.page(currentPage).draw(false);
+      });
+      containerTable.on("click", ".kt-checkable", function () {
+        let row = $(this).closest("tr");
+        let isChecked = table.row(row).data();
+        table.row(row).data({ ...isChecked, checked: !isChecked.checked });
+        table.page(currentPage).draw(false);
+      });
+
       containerTable.on("click", ".edit-button", function () {
         let rowIndex = table.row($(this).closest("tr")).index();
         let data = table.row($(this).closest("tr")).data();
+        $("#realShiftStartModal").val(data.realShiftStart);
+        $("#realShiftEndModal").val(data.realShiftEnd);
+        $("#ratingScore").val(data.ratingScore);
+        $("#evaluatorEmployeeCode").val(data.evaluatorEmployeeCode);
+        $("#remarkEditModal").val(data.departmentRemark);
         currentDutyScheduleId = data.dutyScheduleId;
         currentRow = $(this).closest("tr");
         globalScore = 0;
@@ -559,16 +659,16 @@ let CreateDatatable = (function () {
       });
 
       $("#editScheduleBtnModal").on("click", function () {
-        let realShiftStart = $("#realShiftStartModal").val();
-        let realShiftEnd = $("#realShiftEndModal").val();
+        // let realShiftStart = $("#realShiftStartModal").val();
+        // let realShiftEnd = $("#realShiftEndModal").val();
         let remark = $("#remarkEditModal").val();
         let ratingScore = $("#ratingScore").val();
         let evaluatorEmployeeCode = $("#evaluatorEmployeeCode").val();
 
         let objadddata = {
           departmentRemark: remark,
-          realShiftStart: realShiftStart,
-          realShiftEnd: realShiftEnd,
+          // realShiftStart: realShiftStart,
+          // realShiftEnd: realShiftEnd,
           score: globalScore,
           dutyScheduleId: currentDutyScheduleId,
           ratingScore: ratingScore,
@@ -576,43 +676,43 @@ let CreateDatatable = (function () {
         };
         isValidate = 0;
 
-        if (
-          objadddata["realShiftStart"] == null ||
-          objadddata["realShiftStart"] == ""
-        ) {
-          modalEdit
-            .find(`.div-input-realShiftStartModal .form-control`)
-            .addClass(isInvalidClass);
-          modalEdit
-            .find(
-              `.div-input-realShiftStartModal .${validationErrorMessageClass}`
-            )
-            .html(`กรุณาระบุ`);
-          isValidate = 1;
-        } else {
-          modalEdit
-            .find(`.div-input-realShiftStartModal .form-control`)
-            .removeClass(isInvalidClass);
-        }
+        // if (
+        //   objadddata["realShiftStart"] == null ||
+        //   objadddata["realShiftStart"] == ""
+        // ) {
+        //   modalEdit
+        //     .find(`.div-input-realShiftStartModal .form-control`)
+        //     .addClass(isInvalidClass);
+        //   modalEdit
+        //     .find(
+        //       `.div-input-realShiftStartModal .${validationErrorMessageClass}`
+        //     )
+        //     .html(`กรุณาระบุ`);
+        //   isValidate = 1;
+        // } else {
+        //   modalEdit
+        //     .find(`.div-input-realShiftStartModal .form-control`)
+        //     .removeClass(isInvalidClass);
+        // }
 
-        if (
-          objadddata["realShiftEnd"] == null ||
-          objadddata["realShiftEnd"] == ""
-        ) {
-          modalEdit
-            .find(`.div-input-realShiftEndModal .form-control`)
-            .addClass(isInvalidClass);
-          modalEdit
-            .find(
-              `.div-input-realShiftEndModal .${validationErrorMessageClass}`
-            )
-            .html(`กรุณาระบุ`);
-          isValidate = 1;
-        } else {
-          modalEdit
-            .find(`.div-input-realShiftEndModal .form-control`)
-            .removeClass(isInvalidClass);
-        }
+        // if (
+        //   objadddata["realShiftEnd"] == null ||
+        //   objadddata["realShiftEnd"] == ""
+        // ) {
+        //   modalEdit
+        //     .find(`.div-input-realShiftEndModal .form-control`)
+        //     .addClass(isInvalidClass);
+        //   modalEdit
+        //     .find(
+        //       `.div-input-realShiftEndModal .${validationErrorMessageClass}`
+        //     )
+        //     .html(`กรุณาระบุ`);
+        //   isValidate = 1;
+        // } else {
+        //   modalEdit
+        //     .find(`.div-input-realShiftEndModal .form-control`)
+        //     .removeClass(isInvalidClass);
+        // }
 
         if (
           objadddata["evaluatorEmployeeCode"] == null ||

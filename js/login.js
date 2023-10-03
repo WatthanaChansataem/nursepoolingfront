@@ -41,12 +41,11 @@
         e.preventDefault();
     });
 })(jQuery);
-
+let from;
+let urlParams;
 $(document).ready(function () {
-  // localStorage.clear();
-  console.log(localStorage.getItem("token"));
-  let urlParams = new URLSearchParams(window.location.search);
-  let from = urlParams.get("from");
+  urlParams = new URLSearchParams(window.location.search);
+  from = urlParams.get("from");
   if (from == "registration") {
     toastr.success("ลงทะเบียนสำเร็จ");
   }
@@ -66,6 +65,7 @@ $("#loginButton").on("click", function () {
     password: password,
     rememberMe: rememberMe,
   };
+  $("#loginSpinner").show();
   $.ajax({
     url: link + "/api/user/login",
     type: "POST",
@@ -74,13 +74,26 @@ $("#loginButton").on("click", function () {
     dataType: "json",
     success: function (res) {
       if (res.status.code == 200) {
+        $("#loginSpinner").hide();
         localStorage.setItem("token", res.data.token);
-        window.location.href = res.data.appRoleMenu;
+        if (from == "qrcode") {
+          window.location.href = `stampTimeAttendance.html?hospitalCode=${urlParams.get(
+            "hospitalCode"
+          )}&locationCode=${urlParams.get(
+            "locationCode"
+          )}&departmentCode=${urlParams.get(
+            "departmentCode"
+          )}&time=${urlParams.get("time")}`;
+        } else {
+          window.location.href = res.data.appRoleMenu;
+        }
       } else {
+        $("#loginSpinner").hide();
         toastr.error(res.status.message);
       }
     },
     error: function (res) {
+      $("#loginSpinner").hide();
       toastr.error("ไม่สามารถ Login ได้", "Error");
     },
   });
