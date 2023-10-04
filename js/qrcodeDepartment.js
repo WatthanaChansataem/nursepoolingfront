@@ -428,34 +428,34 @@ $("#logoutConfirm").on("click", function () {
 });
 
 function clockUpdate() {
-  var date = new Date();
-  function addZero(x) {
-    if (x < 10) {
-      return (x = "0" + x);
-    } else {
-      return x;
-    }
-  }
+  var currentTime = new Date();
+  // Operating System Clock Hours for 12h clock
+  var currentHoursAP = currentTime.getHours();
+  // Operating System Clock Hours for 24h clock
+  var currentHours = currentTime.getHours();
+  // Operating System Clock Minutes
+  var currentMinutes = currentTime.getMinutes();
+  // Operating System Clock Seconds
+  var currentSeconds = currentTime.getSeconds();
+  // Adding 0 if Minutes & Seconds is More or Less than 10
+  currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
+  currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
+  // Picking "AM" or "PM" 12h clock if time is more or less than 12
+  var timeOfDay = currentHours < 12 ? "AM" : "PM";
+  // transform clock to 12h version if needed
+  currentHoursAP = currentHours > 12 ? currentHours - 12 : currentHours;
+  // transform clock to 12h version after mid night
+  currentHoursAP = currentHoursAP == 0 ? 12 : currentHoursAP;
 
-  function twelveHour(x) {
-    if (x > 12) {
-      return (x = x - 12);
-    } else if (x == 0) {
-      return (x = 12);
-    } else {
-      return x;
-    }
-  }
+  // var currentTimeString =
+  //   "24h kello: " + currentHours + ":" + currentMinutes + ":" + currentSeconds;
 
-  var h = addZero(twelveHour(date.getHours()));
-  var m = addZero(date.getMinutes());
-  var s = addZero(date.getSeconds());
-  let time = h + ":" + m + ":" + s;
+  let time = currentHours + ":" + currentMinutes + ":" + currentSeconds;
   $(".digital-clock").text(time);
   let qrvalue = `${flink}/login.html?from=qrcode&hospitalCode=${
     userData.hospitalCode
   }&locationCode=${userData.locationCode}&departmentCode=${
     userData.departmentCode
-  }&time=${h + "" + m + "" + s}`;
+  }&time=${currentHours + "" + currentMinutes + "" + currentSeconds}`;
   qrcode.makeCode(qrvalue);
 }

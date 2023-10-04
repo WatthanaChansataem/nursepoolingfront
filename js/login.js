@@ -53,7 +53,16 @@ $(document).ready(function () {
   if (from == "reset-password") {
     toastr.success("Reset รหัสผ่านสำเร็จ กรุณา Login อีกครั้ง");
   }
-  console.log(from);
+
+  if (from == "qrcode" && localStorage.getItem("token") != null) {
+    window.location.href = `stampTimeAttendance.html?hospitalCode=${urlParams.get(
+      "hospitalCode"
+    )}&locationCode=${urlParams.get(
+      "locationCode"
+    )}&departmentCode=${urlParams.get("departmentCode")}&time=${urlParams.get(
+      "time"
+    )}`;
+  }
 });
 
 $("#loginButton").on("click", function () {
