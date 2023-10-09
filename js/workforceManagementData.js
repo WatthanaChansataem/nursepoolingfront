@@ -63,6 +63,11 @@ let positionMap = new Map();
 let positionMaster;
 let userData;
 let currentDutyScheduleId;
+let chartdata;
+var workforceChart;
+var workforceDurationChart;
+var approvechartApex;
+var requestchartApex;
 
 let userRoleConstant = {
   User: "U",
@@ -131,7 +136,7 @@ $(document).ready(function () {
   });
 
   CreateDatatable.init();
-
+  CreateDatatableRequest.init();
   let setupDataDefered = $.Deferred();
   SetupData.init(setupDataDefered);
 
@@ -141,6 +146,7 @@ $(document).ready(function () {
     }
 
     renderPage();
+    renderChart();
   });
 });
 
@@ -344,6 +350,15 @@ let renderPage = function () {
     })
     .datepicker("setDate", new Date());
 
+  $("#endDate")
+    .datepicker({
+      format: "dd/mm/yyyy",
+      autoclose: true,
+      todayHighlight: true,
+      todayBtn: true,
+    })
+    .datepicker("setDate", new Date());
+
   $.each(positionMaster, function (i, item) {
     $("select[name=positionCode]").append(
       $("<option>", {
@@ -371,14 +386,14 @@ let renderPage = function () {
     );
   });
 
-  // $.each(departmentMaster, function (i, item) {
-  //   $("select[name=departmentCode]").append(
-  //     $("<option>", {
-  //       value: item.departmentCode,
-  //       text: item.departmentDesc,
-  //     })
-  //   );
-  // });
+  //   $.each(departmentMaster, function (i, item) {
+  //     $("select[name=departmentCode]").append(
+  //       $("<option>", {
+  //         value: item.departmentCode,
+  //         text: item.departmentDesc,
+  //       })
+  //     );
+  //   });
 };
 
 $("#hospitalCode").on("change", function () {
@@ -588,86 +603,6 @@ let CreateDatatable = (function () {
         removeStar();
         $("#editScheduleModal").modal();
       });
-
-      $("#editScheduleBtnModal").on("click", function () {
-        let realShiftStart = $("#realShiftStartModal").val();
-        let realShiftEnd = $("#realShiftEndModal").val();
-        let remark = $("#remarkEditModal").val();
-        let objadddata = {
-          departmentRemark: remark,
-          realShiftStart: realShiftStart,
-          realShiftEnd: realShiftEnd,
-          score: globalScore,
-          dutyScheduleId: currentDutyScheduleId,
-        };
-        console.log(objadddata);
-        isValidate = 0;
-
-        if (
-          objadddata["realShiftStart"] == null ||
-          objadddata["realShiftStart"] == ""
-        ) {
-          modalEdit
-            .find(`.div-input-realShiftStartModal .form-control`)
-            .addClass(isInvalidClass);
-          modalEdit
-            .find(
-              `.div-input-realShiftStartModal .${validationErrorMessageClass}`
-            )
-            .html(`กรุณาระบุ`);
-          isValidate = 1;
-        } else {
-          modalEdit
-            .find(`.div-input-realShiftStartModal .form-control`)
-            .removeClass(isInvalidClass);
-        }
-
-        if (
-          objadddata["realShiftEnd"] == null ||
-          objadddata["realShiftEnd"] == ""
-        ) {
-          modalEdit
-            .find(`.div-input-realShiftEndModal .form-control`)
-            .addClass(isInvalidClass);
-          modalEdit
-            .find(
-              `.div-input-realShiftEndModal .${validationErrorMessageClass}`
-            )
-            .html(`กรุณาระบุ`);
-          isValidate = 1;
-        } else {
-          modalEdit
-            .find(`.div-input-realShiftEndModal .form-control`)
-            .removeClass(isInvalidClass);
-        }
-
-        if (isValidate == 1) {
-          return;
-        }
-
-        $.ajax({
-          url: link + "/api/dutySchedule/updateEmployeeAppraisal",
-          type: "POST",
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-          data: JSON.stringify(objadddata),
-          contentType: "application/json; charset=utf-8",
-          dataType: "json",
-          success: function (res) {
-            if (res.status.code == 200) {
-              toastr.success("อัพเดทรายการสำเร็จ");
-              $("#editScheduleModal").modal("hide");
-              LoadDutyScheduleRequest();
-            } else {
-              toastr.error(res.status.message);
-            }
-          },
-          error: function (res) {
-            toastr.error("ไม่สามารถอัพเดทรายการได้");
-          },
-        });
-      });
     },
     data: function (data) {
       table.clear();
@@ -695,25 +630,25 @@ let CreateDatatable = (function () {
 
 let LoadDutyScheduleRequest = function () {
   let dutyDate = $("#beginDate").val();
+  let dutyDateTo = $("#endDate").val();
   let hospitalCode = parseInt($("#hospitalCode").val());
   let locationCode = parseInt($("#locationCode").val());
   let departmentCode = parseInt($("#departmentCode").val());
   let positionCode = parseInt($("#positionCode").val());
-  let isJustMonth = $(`#isJustMonth`).is(":checked") ? 1 : 0;
   let statusCode = $("#statusCode").val();
 
   let objData = {
     dutyDate: dutyDate,
+    dutyDateTo: dutyDateTo,
     hospitalCode: hospitalCode,
     locationCode: locationCode,
     departmentCode: departmentCode,
     positionCode: positionCode,
-    isJustMonth: isJustMonth,
     statusCode: statusCode,
   };
   console.log(objData);
   $.ajax({
-    url: link + "/api/dutySchedule/searchDutyScheduleDashboard",
+    url: link + "/api/dutySchedule/searchWorkforceManagementData",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -727,50 +662,145 @@ let LoadDutyScheduleRequest = function () {
         CreateDatatable.data(dashboardData.dutyScheduleList);
 
         $("#requestNumberProgress").attr("style", "width: 100%");
-        $("#allRequestNumber").html(dashboardData.allRequestNumber);
-        $("#totalDuration").html(
+
+        //allRequest
+        $("#allRequestNumberCard").html(
+          dashboardData.allRequestNumber + " อัตรา"
+        );
+        $("#totalDurationCard").html(
           "คิดเป็นจำนวนชั่วโมง : " + dashboardData.totalDuration + " ชัวโมง"
         );
+        // $("#allRequestNumber").html(dashboardData.allRequestNumber);
+        // $("#totalDuration").html(
+        //   "คิดเป็นจำนวนชั่วโมง : " + dashboardData.totalDuration + " ชัวโมง"
+        // );
 
-        $("#approveNumberProgress").attr(
-          "style",
-          `width: ${FindPercenOf(
-            dashboardData.allApproveNumber,
-            dashboardData.allRequestNumber
-          )}%`
+        //approve
+        $("#allApproveNumberCard").html(
+          dashboardData.allApproveNumber + " อัตรา"
         );
-        $("#allApproveNumber").html(dashboardData.allApproveNumber);
-        $("#totalApproveDuration").html(
+        $("#totalApproveDurationCard").html(
           "คิดเป็นจำนวนชั่วโมง : " +
             dashboardData.totalApproveDuration +
             " ชัวโมง"
         );
+        // $("#approveNumberProgress").attr(
+        //   "style",
+        //   `width: ${FindPercenOf(
+        //     dashboardData.allApproveNumber,
+        //     dashboardData.allRequestNumber
+        //   )}%`
+        // );
+        // $("#allApproveNumber").html(dashboardData.allApproveNumber);
+        // $("#totalApproveDuration").html(
+        //   "คิดเป็นจำนวนชั่วโมง : " +
+        //     dashboardData.totalApproveDuration +
+        //     " ชัวโมง"
+        // );
 
-        $("#allRealNumberProgress").attr(
-          "style",
-          `width: ${FindPercenOf(
-            dashboardData.allRealNumber,
-            dashboardData.allRequestNumber
-          )}%`
-        );
-        $("#allRealNumber").html(dashboardData.allRealNumber);
-        $("#totalAllRealDuration").html(
+        //real
+        $("#allRealNumberCard").html(dashboardData.allRealNumber + " อัตรา");
+        $("#totalAllRealDurationCard").html(
           "คิดเป็นจำนวนชั่วโมง : " +
             dashboardData.totalAllRealDuration +
             " ชัวโมง"
         );
+        // $("#allRealNumberProgress").attr(
+        //   "style",
+        //   `width: ${FindPercenOf(
+        //     dashboardData.allRealNumber,
+        //     dashboardData.allRequestNumber
+        //   )}%`
+        // );
+        // $("#allRealNumber").html(dashboardData.allRealNumber);
+        // $("#totalAllRealDuration").html(
+        //   "คิดเป็นจำนวนชั่วโมง : " +
+        //     dashboardData.totalAllRealDuration +
+        //     " ชัวโมง"
+        // );
 
-        $("#allOffNumberProgress").attr(
-          "style",
-          `width: ${FindPercenOf(
-            dashboardData.allOffNumber,
-            dashboardData.allRequestNumber
-          )}%`
-        );
-        $("#allOffNumber").html(dashboardData.allOffNumber);
-        $("#totalOffDuration").html(
+        //off
+        $("#allOffNumberCard").html(dashboardData.allOffNumber + " อัตรา");
+        $("#totalOffDurationCard").html(
           "คิดเป็นจำนวนชั่วโมง : " + dashboardData.totalOffDuration + " ชัวโมง"
         );
+        // $("#allOffNumberProgress").attr(
+        //   "style",
+        //   `width: ${FindPercenOf(
+        //     dashboardData.allOffNumber,
+        //     dashboardData.allRequestNumber
+        //   )}%`
+        // );
+        // $("#allOffNumber").html(dashboardData.allOffNumber);
+        // $("#totalOffDuration").html(
+        //   "คิดเป็นจำนวนชั่วโมง : " + dashboardData.totalOffDuration + " ชัวโมง"
+        // );
+
+        chartdata = dashboardData;
+        let workforceChartLabel = [];
+        let workforceChartRequestNumber = [];
+        let workforceChartApproveNumber = [];
+        let workforceChartRealNumber = [];
+        let requestChartSeries = [];
+        let approveChartSeries = [];
+
+        let workforceChartRequestDuration = [];
+        let workforceChartApproveDuration = [];
+        let workforceChartRealDuration = [];
+
+        console.log(chartdata);
+        if (chartdata != null) {
+          for (let data of chartdata.workforceManagementItemList) {
+            workforceChartLabel.push(data.dutyDate);
+            workforceChartRequestNumber.push(data.requestNumber);
+            workforceChartApproveNumber.push(data.approveNumber);
+            workforceChartRealNumber.push(data.realNumber);
+
+            workforceChartRequestDuration.push(data.requestDuration);
+            workforceChartApproveDuration.push(data.approveDuration);
+            workforceChartRealDuration.push(data.realDuration);
+          }
+
+          for (let data of chartdata.workforceManagementApexChartSeriesList) {
+            requestChartSeries.push({
+              name: data.name,
+              data: data.requestList,
+            });
+            approveChartSeries.push({
+              name: data.name,
+              data: data.approveList,
+            });
+          }
+        }
+
+        workforceChart.data.labels = workforceChartLabel;
+        workforceChart.data.datasets[0].data = workforceChartRequestNumber;
+        workforceChart.data.datasets[1].data = workforceChartApproveNumber;
+        workforceChart.data.datasets[2].data = workforceChartRealNumber;
+        workforceChart.update();
+
+        workforceDurationChart.data.labels = workforceChartLabel;
+        workforceDurationChart.data.datasets[0].data =
+          workforceChartRequestDuration;
+        workforceDurationChart.data.datasets[1].data =
+          workforceChartApproveDuration;
+        workforceDurationChart.data.datasets[2].data =
+          workforceChartRealDuration;
+        workforceDurationChart.update();
+
+        requestchartApex.updateOptions({
+          xaxis: {
+            categories: workforceChartLabel,
+          },
+          series: requestChartSeries,
+        });
+
+        approvechartApex.updateOptions({
+          xaxis: {
+            categories: workforceChartLabel,
+          },
+          series: approveChartSeries,
+        });
       } else {
         toastr.error(res.status.message);
       }
@@ -819,3 +849,532 @@ let removeStar = function () {
 let FindPercenOf = function (x, y) {
   return (x * 100) / y;
 };
+
+let renderChart = function () {
+  // Set new default font family and font color to mimic Bootstrap's default styling
+  (Chart.defaults.global.defaultFontFamily = "Nunito"),
+    '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+  Chart.defaults.global.defaultFontColor = "#858796";
+
+  function number_format(number, decimals, dec_point, thousands_sep) {
+    // *     example: number_format(1234.56, 2, ',', ' ');
+    // *     return: '1 234,56'
+    number = (number + "").replace(",", "").replace(" ", "");
+    var n = !isFinite(+number) ? 0 : +number,
+      prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+      sep = typeof thousands_sep === "undefined" ? "," : thousands_sep,
+      dec = typeof dec_point === "undefined" ? "." : dec_point,
+      s = "",
+      toFixedFix = function (n, prec) {
+        var k = Math.pow(10, prec);
+        return "" + Math.round(n * k) / k;
+      };
+    // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+    s = (prec ? toFixedFix(n, prec) : "" + Math.round(n)).split(".");
+    if (s[0].length > 3) {
+      s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+    }
+    if ((s[1] || "").length < prec) {
+      s[1] = s[1] || "";
+      s[1] += new Array(prec - s[1].length + 1).join("0");
+    }
+    return s.join(dec);
+  }
+
+  // Area Chart Example
+  var ctx = document.getElementById("myAreaChart");
+
+  workforceChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: [],
+      datasets: [
+        {
+          label: "จำนวนที่ขอ",
+          backgroundColor: "rgba(78, 115, 223, 1)",
+          borderColor: "rgba(78, 115, 223, 1)",
+          hoverBackgroundColor: "rgba(78, 115, 223, 1)",
+          hoverBorderColor: "rgba(78, 115, 223, 1)",
+          data: [],
+          barPercentage: 0.75,
+          categoryPercentage: 0.5,
+        },
+        {
+          label: "จำนวนที่อนุมัติ",
+          backgroundColor: "#14A44D",
+          borderColor: "#14A44D",
+          hoverBackgroundColor: "#14A44D",
+          hoverBorderColor: "#14A44D",
+          data: [],
+          barPercentage: 0.75,
+          categoryPercentage: 0.5,
+        },
+        {
+          label: "จำนวนที่เข้างาน",
+          backgroundColor: "#54B4D3",
+          borderColor: "#54B4D3",
+          hoverBackgroundColor: "#54B4D3",
+          hoverBorderColor: "#54B4D3",
+          data: [],
+          barPercentage: 0.75,
+          categoryPercentage: 0.5,
+        },
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      layout: {
+        padding: {
+          left: 10,
+          right: 25,
+          top: 25,
+          bottom: 0,
+        },
+      },
+      scales: {
+        xAxes: [
+          {
+            time: {
+              unit: "date",
+            },
+            gridLines: {
+              display: false,
+              drawBorder: false,
+            },
+            ticks: {
+              maxTicksLimit: 7,
+            },
+          },
+        ],
+        yAxes: [
+          {
+            ticks: {
+              maxTicksLimit: 5,
+              padding: 10,
+              // Include a dollar sign in the ticks
+              callback: function (value, index, values) {
+                return "จำนวน " + number_format(value);
+              },
+            },
+            gridLines: {
+              color: "rgb(234, 236, 244)",
+              zeroLineColor: "rgb(234, 236, 244)",
+              drawBorder: false,
+              borderDash: [2],
+              zeroLineBorderDash: [2],
+            },
+          },
+        ],
+      },
+      legend: {
+        display: true,
+      },
+      tooltips: {
+        backgroundColor: "rgb(255,255,255)",
+        bodyFontColor: "#858796",
+        titleMarginBottom: 10,
+        titleFontColor: "#6e707e",
+        titleFontSize: 14,
+        borderColor: "#dddfeb",
+        borderWidth: 1,
+        xPadding: 15,
+        yPadding: 15,
+        displayColors: false,
+        intersect: false,
+        mode: "index",
+        caretPadding: 10,
+        callbacks: {
+          label: function (tooltipItem, chart) {
+            var datasetLabel =
+              chart.datasets[tooltipItem.datasetIndex].label || "";
+            return (
+              datasetLabel + " " + number_format(tooltipItem.yLabel) + " อัตรา"
+            );
+          },
+        },
+      },
+    },
+  });
+
+  // Area Chart Example2
+  var ctx = document.getElementById("myAreaChart4");
+
+  workforceDurationChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: [],
+      datasets: [
+        {
+          label: "จำนวนที่ขอ",
+          backgroundColor: "rgba(78, 115, 223, 1)",
+          borderColor: "rgba(78, 115, 223, 1)",
+          hoverBackgroundColor: "rgba(78, 115, 223, 1)",
+          hoverBorderColor: "rgba(78, 115, 223, 1)",
+          data: [],
+          barPercentage: 0.75,
+          categoryPercentage: 0.5,
+        },
+        {
+          label: "จำนวนที่อนุมัติ",
+          backgroundColor: "#14A44D",
+          borderColor: "#14A44D",
+          hoverBackgroundColor: "#14A44D",
+          hoverBorderColor: "#14A44D",
+          data: [],
+          barPercentage: 0.75,
+          categoryPercentage: 0.5,
+        },
+        {
+          label: "จำนวนที่เข้างาน",
+          backgroundColor: "#54B4D3",
+          borderColor: "#54B4D3",
+          hoverBackgroundColor: "#54B4D3",
+          hoverBorderColor: "#54B4D3",
+          data: [],
+          barPercentage: 0.75,
+          categoryPercentage: 0.5,
+        },
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      layout: {
+        padding: {
+          left: 10,
+          right: 25,
+          top: 25,
+          bottom: 0,
+        },
+      },
+      scales: {
+        xAxes: [
+          {
+            time: {
+              unit: "date",
+            },
+            gridLines: {
+              display: false,
+              drawBorder: false,
+            },
+            ticks: {
+              maxTicksLimit: 7,
+            },
+          },
+        ],
+        yAxes: [
+          {
+            ticks: {
+              maxTicksLimit: 5,
+              padding: 10,
+              // Include a dollar sign in the ticks
+              callback: function (value, index, values) {
+                return "จำนวน " + number_format(value);
+              },
+            },
+            gridLines: {
+              color: "rgb(234, 236, 244)",
+              zeroLineColor: "rgb(234, 236, 244)",
+              drawBorder: false,
+              borderDash: [2],
+              zeroLineBorderDash: [2],
+            },
+          },
+        ],
+      },
+      legend: {
+        display: true,
+      },
+      tooltips: {
+        backgroundColor: "rgb(255,255,255)",
+        bodyFontColor: "#858796",
+        titleMarginBottom: 10,
+        titleFontColor: "#6e707e",
+        titleFontSize: 14,
+        borderColor: "#dddfeb",
+        borderWidth: 1,
+        xPadding: 15,
+        yPadding: 15,
+        displayColors: false,
+        intersect: false,
+        mode: "index",
+        caretPadding: 10,
+        callbacks: {
+          label: function (tooltipItem, chart) {
+            var datasetLabel =
+              chart.datasets[tooltipItem.datasetIndex].label || "";
+            return (
+              datasetLabel +
+              " " +
+              number_format(tooltipItem.yLabel) +
+              " ชั่วโมง"
+            );
+          },
+        },
+      },
+    },
+  });
+
+  //apex
+  var options = {
+    chart: {
+      height: 350,
+      type: "bar",
+      stacked: true,
+    },
+    plotOptions: {
+      bar: {
+        horizontal: true,
+      },
+    },
+    stroke: {
+      width: 1,
+      colors: ["#fff"],
+    },
+    series: [],
+    xaxis: {
+      categories: [],
+      labels: {
+        formatter: function (val) {
+          return val + " อัตรา";
+        },
+      },
+    },
+    yaxis: {
+      title: {
+        text: undefined,
+      },
+    },
+    tooltip: {
+      y: {
+        formatter: function (val) {
+          return val + " อัตรา";
+        },
+      },
+    },
+    fill: {
+      opacity: 1,
+    },
+    legend: {
+      position: "top",
+      horizontalAlign: "left",
+      offsetX: 40,
+    },
+  };
+  requestchartApex = new ApexCharts(
+    document.querySelector("#myAreaChart2"),
+    options
+  );
+  requestchartApex.render();
+
+  //
+  var options = {
+    chart: {
+      height: 350,
+      type: "bar",
+      stacked: true,
+    },
+    plotOptions: {
+      bar: {
+        horizontal: true,
+      },
+    },
+    stroke: {
+      width: 1,
+      colors: ["#fff"],
+    },
+    series: [],
+    xaxis: {
+      categories: [],
+      labels: {
+        formatter: function (val) {
+          return val + " อัตรา";
+        },
+      },
+    },
+    yaxis: {
+      title: {
+        text: undefined,
+      },
+    },
+    tooltip: {
+      y: {
+        formatter: function (val) {
+          return val + " อัตรา";
+        },
+      },
+    },
+    fill: {
+      opacity: 1,
+    },
+    legend: {
+      position: "top",
+      horizontalAlign: "left",
+      offsetX: 40,
+    },
+  };
+  approvechartApex = new ApexCharts(
+    document.querySelector("#myAreaChart3"),
+    options
+  );
+  approvechartApex.render();
+};
+
+let CreateDatatableRequest = (function () {
+  let table;
+  let currentPage = 0;
+  let initTable1 = function () {
+    table = $("#dataTableRequest").DataTable({
+      responsive: false,
+      data: [],
+      // scrollY: "50vh",
+      scrollX: true,
+      scrollCollapse: true,
+      columns: [
+        { data: "", className: "text-center" },
+        { data: "firstName", className: "text-center" },
+        { data: "dutyDate", className: "text-center" },
+        { data: "approveHospitalCode", className: "text-center" },
+        { data: "approveLocationCode", className: "text-center" },
+        { data: "approveDepartmentCode", className: "text-center" },
+        { data: "positionCode", className: "text-center" },
+        { data: "approveShiftStart", className: "text-center" },
+        { data: "realShiftStart", className: "text-center" },
+        { data: "totalRealDuration", className: "text-center" },
+        { data: "status", className: "text-center" },
+      ],
+      order: [[0, "asc"]],
+      columnDefs: [
+        {
+          targets: 0,
+          title: "No.",
+          render: function (data, type, full, meta) {
+            return parseInt(meta.row) + 1;
+          },
+        },
+        {
+          targets: 1,
+          title: "โรงพยาบาล",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? "-"
+              : hospitalMap.get(data).hospitalDesc;
+          },
+        },
+        {
+          targets: 2,
+          title: "Location",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? "-"
+              : locationMap.get(data).locationDesc;
+          },
+        },
+        {
+          targets: 3,
+          title: "แผนก",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? "-"
+              : departmentMap.get(data).departmentDesc;
+          },
+        },
+        {
+          targets: 4,
+          title: "ตำแหน่ง",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? "-"
+              : positionMap.get(data).positionDesc;
+          },
+        },
+        {
+          targets: 5,
+          title: "วันเดือนปี",
+          render: function (data, type, full, meta) {
+            return isDateTime(data) ? moment(data).format("DD/MM/YYYY") : data;
+          },
+        },
+        {
+          targets: 6,
+          title: "ช่วงเวลาที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+        {
+          targets: 7,
+          title: "ช่วงเวลาที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+        {
+          targets: 8,
+          title: "ช่วงเวลาที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+        {
+          targets: 9,
+          title: "ช่วงเวลาที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+        {
+          targets: 10,
+          title: "ช่วงเวลาที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+        // {
+        //   targets: 6,
+        //   title: "ช่วงเวลาที่อนุมัติ",
+        //   render: function (data, type, full, meta) {
+        //     return data;
+        //   },
+        // },
+      ],
+    });
+  };
+
+  return {
+    init: function () {
+      initTable1();
+      let containerTable = $(table.table().container());
+
+      containerTable.on("click", ".edit-button", function () {
+        let rowIndex = table.row($(this).closest("tr")).index();
+        let data = table.row($(this).closest("tr")).data();
+        currentDutyScheduleId = data.dutyScheduleId;
+        currentRow = $(this).closest("tr");
+        globalScore = 0;
+        removeStar();
+        $("#editScheduleModal").modal();
+      });
+    },
+    data: function (data) {
+      table.clear();
+      table.rows.add(data);
+      table.draw();
+    },
+    addData: function (data) {
+      table.rows.add(data);
+      table.draw();
+    },
+    getData: function (index) {
+      if (index) {
+        return table.row(index).data();
+      }
+      return table.rows().data().toArray();
+    },
+    datatable: function () {
+      return table;
+    },
+    adjust: function () {
+      table.columns.adjust();
+    },
+  };
+})();
