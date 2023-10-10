@@ -443,6 +443,7 @@ $("#generalSearch").on("click", function () {
 
 $("#sidebarToggle").on("click", function () {
   CreateDatatable.adjust();
+  CreateDatatableRequest.adjust();
 });
 
 let CreateDatatable = (function () {
@@ -737,6 +738,10 @@ let LoadDutyScheduleRequest = function () {
         // );
 
         chartdata = dashboardData;
+        console.log(dashboardData.workforceManagementApexChartTableList);
+        CreateDatatableRequest.data(
+          dashboardData.workforceManagementApexChartTableList
+        );
         let workforceChartLabel = [];
         let workforceChartRequestNumber = [];
         let workforceChartApproveNumber = [];
@@ -748,7 +753,6 @@ let LoadDutyScheduleRequest = function () {
         let workforceChartApproveDuration = [];
         let workforceChartRealDuration = [];
 
-        console.log(chartdata);
         if (chartdata != null) {
           for (let data of chartdata.workforceManagementItemList) {
             workforceChartLabel.push(data.dutyDate);
@@ -1231,16 +1235,17 @@ let CreateDatatableRequest = (function () {
       scrollCollapse: true,
       columns: [
         { data: "", className: "text-center" },
-        { data: "firstName", className: "text-center" },
-        { data: "dutyDate", className: "text-center" },
-        { data: "approveHospitalCode", className: "text-center" },
-        { data: "approveLocationCode", className: "text-center" },
-        { data: "approveDepartmentCode", className: "text-center" },
+        { data: "hospitalCode", className: "text-center" },
+        { data: "locationCode", className: "text-center" },
+        { data: "departmentCode", className: "text-center" },
         { data: "positionCode", className: "text-center" },
-        { data: "approveShiftStart", className: "text-center" },
-        { data: "realShiftStart", className: "text-center" },
-        { data: "totalRealDuration", className: "text-center" },
-        { data: "status", className: "text-center" },
+        { data: "date", className: "text-center" },
+        { data: "requestNumber", className: "text-center" },
+        { data: "approveNumber", className: "text-center" },
+        { data: "realNumber", className: "text-center" },
+        { data: "requestDuration", className: "text-center" },
+        { data: "approveDuration", className: "text-center" },
+        { data: "realDuration", className: "text-center" },
       ],
       order: [[0, "asc"]],
       columnDefs: [
@@ -1291,51 +1296,51 @@ let CreateDatatableRequest = (function () {
           targets: 5,
           title: "วันเดือนปี",
           render: function (data, type, full, meta) {
-            return isDateTime(data) ? moment(data).format("DD/MM/YYYY") : data;
+            return data;
           },
         },
         {
           targets: 6,
-          title: "ช่วงเวลาที่อนุมัติ",
+          title: "จำนวนที่ขอ",
           render: function (data, type, full, meta) {
             return data;
           },
         },
         {
           targets: 7,
-          title: "ช่วงเวลาที่อนุมัติ",
+          title: "จำนวนที่อนุมัติ",
           render: function (data, type, full, meta) {
             return data;
           },
         },
         {
           targets: 8,
-          title: "ช่วงเวลาที่อนุมัติ",
+          title: "จำนวนที่เข้าจริง",
           render: function (data, type, full, meta) {
             return data;
           },
         },
         {
           targets: 9,
-          title: "ช่วงเวลาที่อนุมัติ",
+          title: "ชั่วโมงที่ขอ",
           render: function (data, type, full, meta) {
             return data;
           },
         },
         {
           targets: 10,
-          title: "ช่วงเวลาที่อนุมัติ",
+          title: "ชั่วโมงที่อนุมัติ",
           render: function (data, type, full, meta) {
             return data;
           },
         },
-        // {
-        //   targets: 6,
-        //   title: "ช่วงเวลาที่อนุมัติ",
-        //   render: function (data, type, full, meta) {
-        //     return data;
-        //   },
-        // },
+        {
+          targets: 11,
+          title: "ชั่วโมงที่เข้าจริง",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
       ],
     });
   };
