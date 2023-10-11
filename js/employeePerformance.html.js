@@ -423,9 +423,11 @@ let CreateDatatable = (function () {
         { data: "requestNumber", className: "text-center" },
         { data: "approveNumber", className: "text-center" },
         { data: "realNumber", className: "text-center" },
+        { data: "offNumber", className: "text-center" },
         { data: "totalDuration", className: "text-center" },
         { data: "totalApproveDuration", className: "text-center" },
         { data: "totalRealDuration", className: "text-center" },
+        { data: "totalOFFDuration", className: "text-center" },
         { data: "averageRatingScore", className: "text-center" },
         { data: "active", className: "text-center" },
         { data: "insertDateTime", className: "text-center" },
@@ -493,27 +495,41 @@ let CreateDatatable = (function () {
         },
         {
           targets: 7,
-          title: "จำนวนชั่วโมงที่ขอ",
+          title: "จำนวนเวรที่OFF",
           render: function (data, type, full, meta) {
             return data;
           },
         },
         {
           targets: 8,
-          title: "จำนวนชั่วโมงที่ได้รับบการอนุมัติ",
+          title: "จำนวนชั่วโมงที่ขอ",
           render: function (data, type, full, meta) {
             return data;
           },
         },
         {
           targets: 9,
-          title: "จำนวนชั่วโมงที่เข้างาน",
+          title: "จำนวนชั่วโมงที่ได้รับบการอนุมัติ",
           render: function (data, type, full, meta) {
             return data;
           },
         },
         {
           targets: 10,
+          title: "จำนวนชั่วโมงที่เข้างาน",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+        {
+          targets: 11,
+          title: "จำนวนชั่วโมงที่OFF",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+        {
+          targets: 12,
           title: "คะแนนเฉลี่ย",
           render: function (data, type, full, meta) {
             return data;
@@ -521,7 +537,7 @@ let CreateDatatable = (function () {
         },
 
         {
-          targets: 11,
+          targets: 13,
           title: "สถานะ",
           render: function (data, type, full, meta) {
             if (data == 0) {
@@ -532,14 +548,14 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 12,
+          targets: 14,
           title: "วันที่ลงทะเบียน",
           render: function (data, type, full, meta) {
             return isDateTime(data) ? moment(data).format("DD/MM/YYYY") : data;
           },
         },
         {
-          targets: 13,
+          targets: 15,
           title: "แก้ไข",
           render: function (data, type, full, meta) {
             return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`;
