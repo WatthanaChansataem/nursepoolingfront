@@ -217,7 +217,6 @@ let SetupData = (function () {
       success: function (res) {
         if (res.status.code == 200) {
           userData = res.data;
-          $("#version").html("Version " + userData.version);
           $("#currentUserName").html(userData.previewFirstName);
           if (userData.previewUserRole != userRoleConstant.Admin) {
             localStorage.clear();

@@ -68,11 +68,6 @@ let approveStatusMasters = [
   { statusCode: 1, statusDesc: "อนุมัติแล้ว" },
 ];
 
-let approveStatusConstant = {
-  Active: 1,
-  InActive: 0,
-};
-
 let userLevelMaster = [
   { userLevelCode: 1, userLevelDesc: "1" },
   { userLevelCode: 2, userLevelDesc: "2" },
@@ -243,34 +238,7 @@ let SetupData = (function () {
       success: function (res) {
         if (res.status.code == 200) {
           userData = res.data;
-          $("#version").html("Version " + userData.version);
           $("#currentUserName").html(userData.firstName);
-          if (
-            userData.approveUserList != null &&
-            userData.approveUserList.length > 0
-          ) {
-            $("#notifyCount").html(1);
-            $("#notifyDropdown")
-              .append(`<a class="dropdown-item d-flex align-items-center" href="userManagement.html?from=notification">
-              <div class="mr-3">
-                <div class="icon-circle bg-primary">
-                  <i class="fas fa-user text-white"></i>
-                </div>
-              </div>
-              <div>
-                <div class="small text-gray-500">${userData.notifyDateString}</div>
-                <span class="font-weight-bold"
-                  >มีผู้ใช้ที่ยังไม่ได้รับการอนุมัติจำนวน ${userData.approveUserList.length} รายการ</span
-                >
-              </div>
-            </a>`);
-          } else {
-            $("#notifyDropdown").append(`<a
-            class="dropdown-item text-center small text-gray-500"
-            href="#"
-            >ไม่พบรายการ</a
-          >`);
-          }
           $("#navProfileImg").attr(
             "src",
             `${link}/api/document/avatar/${userData.userId}`
@@ -365,6 +333,7 @@ let SetupData = (function () {
 
 let renderPage = function () {
   //   CreateDatatable.adjust();
+  LoadDutySchedule();
   $("#beginDate").datepicker({
     format: "dd/mm/yyyy",
     autoclose: true,
@@ -442,12 +411,6 @@ let renderPage = function () {
       })
     );
   });
-  urlParams = new URLSearchParams(window.location.search);
-  from = urlParams.get("from");
-  if (from == "notification") {
-    $("select[name=statusCode]").val(approveStatusConstant.InActive);
-  }
-  LoadDutySchedule();
 };
 
 $("#sidebarToggle").on("click", function () {

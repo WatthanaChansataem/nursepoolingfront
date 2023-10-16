@@ -81,9 +81,6 @@
   </style>
 
   <body id="page-top">
-    <div class="col-sm-12" style="position: fixed; bottom: 10px; z-index: 99">
-      <span class="text-white small" id="version"></span>
-    </div>
     <!-- Page Wrapper -->
     <div id="wrapper">
       <!-- Sidebar -->
@@ -130,26 +127,6 @@
           <a class="nav-link" href="dutyScheduleDashboard.html">
             <i class="fas fa-fw fa-table"></i>
             <span>Dashboard ตารางเวร</span></a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="workforceManagementData.html">
-            <i class="fas fa-fw fa-bar-chart"></i>
-            <span>ข้อมูลบริหารอัตรากำลัง</span></a
-          >
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="employeePerformance.html">
-            <i class="fas fa-fw fa-id-badge"></i>
-            <span>Performance รายบุคคล</span></a
-          >
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="agencyPerformance.html">
-            <i class="fas fa-fw fa-hospital"></i>
-            <span>Performance รายหน่วยงาน</span></a
           >
         </li>
 
@@ -233,31 +210,7 @@
                   </form>
                 </div>
               </li>
-              <!-- Nav Item - Alerts -->
-              <li class="nav-item dropdown no-arrow mx-1">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  id="alertsDropdown"
-                  role="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  <i class="fas fa-bell fa-fw"></i>
-                  <span
-                    class="badge badge-danger badge-counter"
-                    id="notifyCount"
-                  ></span>
-                </a>
-                <div
-                  class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                  aria-labelledby="alertsDropdown"
-                  id="notifyDropdown"
-                >
-                  <h6 class="dropdown-header">การแจ้งเตือน</h6>
-                </div>
-              </li>
+
               <div class="topbar-divider d-none d-sm-block"></div>
 
               <!-- Nav Item - User Information -->
@@ -403,7 +356,7 @@
                 </div>
                 <!-- </div> -->
               </div>
-              <!-- <div class="col-sm-3 div-input-statusCode">
+              <div class="col-sm-3 div-input-statusCode">
                 <label for="statusCode" class="col-form-label-sm">สถานะ</label>
                 <select
                   class="custom-select statusCode"
@@ -413,7 +366,7 @@
                 >
                   <option selected value="-1">ทั้งหมด</option>
                 </select>
-              </div> -->
+              </div>
             </div>
             <div
               class="col-sm-12"
@@ -448,12 +401,18 @@
                     <thead>
                       <tr>
                         <th>No.</th>
+                        <th>ชื่อ - นามสกุล</th>
+                        <th>วันเดือนปี</th>
                         <th>โรงพยาบาล</th>
                         <th>Location</th>
                         <th>แผนก</th>
-                        <th>วันที่</th>
-                        <!-- <th>ช่วงเวลาที่ต้องเข้างาน</th> -->
-                        <th>จำนวนที่มีการขอรถรับส่ง</th>
+                        <th>ตำแหน่ง</th>
+                        <th>ช่วงเวลาที่ขอ</th>
+                        <th>ช่วงเวลาที่เข้างานจริง</th>
+                        <th>จำนวนชั่วโมงที่เข้างาน</th>
+                        <th>สถานะ</th>
+                        <th>ผลประเมิน</th>
+                        <th>หมายเหตุ</th>
                         <!-- <th>แก้ไข</th> -->
                       </tr>
                     </thead>
@@ -472,6 +431,97 @@
                   </span>
                   <span class="text">Export Excel</span>
                 </a>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-12 mb-4">
+                <!-- Project Card Example -->
+                <div class="card shadow mb-4">
+                  <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Summary</h6>
+                  </div>
+                  <div class="card-body">
+                    <h4 class="small font-weight-bold">
+                      จำนวนที่ขอ: <span id="allRequestNumber">0</span> อัตรา
+
+                      <span class="float-right" id="totalDuration"
+                        >คิดเป็นจำนวนชั่วโมง : 0 ชัวโมง</span
+                      >
+                    </h4>
+                    <div class="progress mb-4">
+                      <div
+                        class="progress-bar bg-primary"
+                        role="progressbar"
+                        style="width: 0%"
+                        aria-valuenow="100"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        id="requestNumberProgress"
+                      ></div>
+                    </div>
+
+                    <h4 class="small font-weight-bold">
+                      จำนวนที่อนุมัติ:
+                      <span id="allApproveNumber">0</span> อัตรา
+
+                      <span class="float-right" id="totalApproveDuration"
+                        >คิดเป็นจำนวนชั่วโมง : 0 ชัวโมง</span
+                      >
+                    </h4>
+                    <div class="progress mb-4">
+                      <div
+                        class="progress-bar bg-success"
+                        role="progressbar"
+                        style="width: 0%"
+                        aria-valuenow="0"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        id="approveNumberProgress"
+                      ></div>
+                    </div>
+
+                    <h4 class="small font-weight-bold">
+                      จำนวนที่เข้างาน:
+                      <span id="allRealNumber">0</span> อัตรา
+
+                      <span class="float-right" id="totalAllRealDuration"
+                        >คิดเป็นจำนวนชั่วโมง : 0 ชัวโมง</span
+                      >
+                    </h4>
+                    <div class="progress mb-4">
+                      <div
+                        class="progress-bar bg-info"
+                        role="progressbar"
+                        style="width: 0%"
+                        aria-valuenow="0"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        id="allRealNumberProgress"
+                      ></div>
+                    </div>
+
+                    <h4 class="small font-weight-bold">
+                      จำนวนที่Off:
+                      <span id="allOffNumber">0</span> อัตรา
+
+                      <span class="float-right" id="totalOffDuration"
+                        >คิดเป็นจำนวนชั่วโมง : 0 ชัวโมง</span
+                      >
+                    </h4>
+                    <div class="progress mb-4">
+                      <div
+                        class="progress-bar bg-warning"
+                        role="progressbar"
+                        style="width: 0%"
+                        aria-valuenow="0"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        id="allOffNumberProgress"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -537,6 +587,109 @@
     </div>
 
     <!-- EditSchedule Modal-->
+    <div
+      class="modal fade"
+      id="editScheduleModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleEditModalLabel">
+              แก้ไขรายการขออัตรากำลัง
+            </h5>
+            <button
+              class="close"
+              type="button"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group row">
+              <div class="col-sm-12">
+                <label for="realShiftStartModal" class="col-form-label-sm"
+                  >ช่วงเวลาที่เข้างาน</label
+                >
+                <div class="form-group row">
+                  <label
+                    for="realShiftStartModal"
+                    class="col-sm-1 col-form-label-sm"
+                    >เวลา</label
+                  >
+                  <div class="col-sm-4 div-input-realShiftStartModal">
+                    <input
+                      type="time"
+                      class="form-control form-control-sm"
+                      name="realShiftStartModal"
+                      id="realShiftStartModal"
+                    />
+                    <div
+                      class="invalid-feedback validation-error-message"
+                    ></div>
+                    <span class="form-text text-muted"></span>
+                  </div>
+                  <label
+                    for="realShiftEndModal"
+                    class="col-sm-1 col-form-label-sm"
+                    >ถึง</label
+                  >
+                  <div class="col-sm-4 div-input-realShiftEndModal">
+                    <input
+                      type="time"
+                      class="form-control form-control-sm"
+                      name="realShiftEndModal"
+                      id="realShiftEndModal"
+                    />
+                    <div
+                      class="invalid-feedback validation-error-message"
+                    ></div>
+                    <span class="form-text text-muted"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="rating-box">
+              <header>การประเมิน</header>
+              <div class="stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-12">
+                <textarea
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="remarkEditModal"
+                  id="remarkEditModal"
+                  placeholder="หมายเหตุ"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-dismiss="modal"
+            >
+              ยกเลิก
+            </button>
+            <a class="btn btn-success" id="editScheduleBtnModal">บันทึก</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>

@@ -223,7 +223,6 @@ let SetupData = (function () {
           //   for (let data of res.data) {
           //     positionMap.set(data.positionCode, data);
           //   }
-          $("#version").html("Version " + userData.version);
           $("#currentUserName").html(userData.firstName);
           if (userData.role != userRoleConstant.Department) {
             localStorage.clear();

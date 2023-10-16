@@ -81,9 +81,6 @@
   </style>
 
   <body id="page-top">
-    <div class="col-sm-12" style="position: fixed; bottom: 10px; z-index: 99">
-      <span class="text-white small" id="version"></span>
-    </div>
     <!-- Page Wrapper -->
     <div id="wrapper">
       <!-- Sidebar -->
@@ -130,13 +127,6 @@
           <a class="nav-link" href="employeeAppraisalForm.html">
             <i class="fas fa-fw fa-address-book"></i>
             <span>บันทึกเวลาและการประเมิน</span></a
-          >
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="qrcodeDepartment.html">
-            <i class="fas fa-fw fa-qrcode"></i>
-            <span> QR Code Generator</span></a
           >
         </li>
 
@@ -425,7 +415,6 @@
                   >
                     <thead>
                       <tr>
-                        <!-- <th></th> -->
                         <th>No.</th>
                         <th>ชื่อ - นามสกุล</th>
                         <th>วันเดือนปี</th>
@@ -437,8 +426,6 @@
                         <th>ช่วงเวลาที่อนุมัติ</th>
                         <th>ช่วงเวลาที่เข้างานจริง</th>
                         <th>ผลประเมิน</th>
-                        <th>คะแนนการทำงานของเจ้าหน้าที่</th>
-                        <th>รหัสพนักงานผู้ประเมิน</th>
                         <!-- <th>สถานะ</th> -->
                         <th>หมายเหตุ</th>
                         <th>แก้ไข</th>
@@ -457,7 +444,7 @@
                   <span class="icon text-white-50">
                     <i class="fa fa-check"></i>
                   </span>
-                  <span class="text">อนุมัติ</span>
+                  <span class="text">บันทึก</span>
                 </a>
               </div>
             </div>
@@ -564,7 +551,6 @@
                       class="form-control form-control-sm"
                       name="realShiftStartModal"
                       id="realShiftStartModal"
-                      disabled
                     />
                     <div
                       class="invalid-feedback validation-error-message"
@@ -582,7 +568,6 @@
                       class="form-control form-control-sm"
                       name="realShiftEndModal"
                       id="realShiftEndModal"
-                      disabled
                     />
                     <div
                       class="invalid-feedback validation-error-message"
