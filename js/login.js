@@ -41,12 +41,11 @@
         e.preventDefault();
     });
 })(jQuery);
-
+let from;
+let urlParams;
 $(document).ready(function () {
-  // localStorage.clear();
-  console.log(localStorage.getItem("token"));
-  let urlParams = new URLSearchParams(window.location.search);
-  let from = urlParams.get("from");
+  urlParams = new URLSearchParams(window.location.search);
+  from = urlParams.get("from");
   if (from == "registration") {
     toastr.success("ลงทะเบียนสำเร็จ");
   }
@@ -54,7 +53,26 @@ $(document).ready(function () {
   if (from == "reset-password") {
     toastr.success("Reset รหัสผ่านสำเร็จ กรุณา Login อีกครั้ง");
   }
-  console.log(from);
+
+  if (from == "qrcode" && localStorage.getItem("token") != null) {
+    window.location.href = `stampTimeAttendance.html?hospitalCode=${urlParams.get(
+      "hospitalCode"
+    )}&locationCode=${urlParams.get(
+      "locationCode"
+    )}&departmentCode=${urlParams.get("departmentCode")}&time=${urlParams.get(
+      "time"
+    )}`;
+  }
+
+  let setupDataDefered = $.Deferred();
+  SetupData.init(setupDataDefered);
+  localStorage.setItem("test", "12356");
+
+  $.when(setupDataDefered).done(function (success) {
+    if (!success) {
+      return;
+    }
+  });
 });
 
 $("#loginButton").on("click", function () {
@@ -66,6 +84,7 @@ $("#loginButton").on("click", function () {
     password: password,
     rememberMe: rememberMe,
   };
+  $("#loginSpinner").show();
   $.ajax({
     url: link + "/api/user/login",
     type: "POST",
@@ -74,13 +93,26 @@ $("#loginButton").on("click", function () {
     dataType: "json",
     success: function (res) {
       if (res.status.code == 200) {
+        $("#loginSpinner").hide();
         localStorage.setItem("token", res.data.token);
-        window.location.href = res.data.appRoleMenu;
+        if (from == "qrcode") {
+          window.location.href = `stampTimeAttendance.html?hospitalCode=${urlParams.get(
+            "hospitalCode"
+          )}&locationCode=${urlParams.get(
+            "locationCode"
+          )}&departmentCode=${urlParams.get(
+            "departmentCode"
+          )}&time=${urlParams.get("time")}`;
+        } else {
+          window.location.href = res.data.appRoleMenu;
+        }
       } else {
+        $("#loginSpinner").hide();
         toastr.error(res.status.message);
       }
     },
     error: function (res) {
+      $("#loginSpinner").hide();
       toastr.error("ไม่สามารถ Login ได้", "Error");
     },
   });
@@ -94,3 +126,40 @@ function showPassword() {
     element.type = "password";
   }
 }
+
+let SetupData = (function () {
+  let loadUserData = function (defered) {
+    $.ajax({
+      url: link + "/api/user/version",
+      type: "GET",
+      success: function (res) {
+        if (res.status.code == 200) {
+          let userData = res.data;
+          $("#version").html("Version " + userData.version);
+          defered.resolve(true);
+        } else {
+          defered.resolve(false);
+          toastr.error("ไม่สามารถดึงข้อมูลเวอร์ชันได้", "Error");
+        }
+      },
+      error: function (res) {
+        defered.resolve(false);
+        toastr.error("ไม่สามารถดึงข้อมูลเวอร์ชันได้", "Error");
+      },
+    });
+  };
+  return {
+    init: function (defered) {
+      let loadUserDefer = $.Deferred();
+      loadUserData(loadUserDefer);
+
+      $.when(loadUserDefer).done(function (loadUserResult) {
+        if (loadUserResult) {
+          defered.resolve(true);
+        } else {
+          defered.resolve(false);
+        }
+      });
+    },
+  };
+})();

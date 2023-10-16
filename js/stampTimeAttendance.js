@@ -46,17 +46,20 @@
         e.preventDefault();
     });
 })(jQuery);
-
+let userData;
+let urlParams;
 $(document).ready(function () {
   let setupDataDefered = $.Deferred();
   SetupData.init(setupDataDefered);
+  urlParams = new URLSearchParams(window.location.search);
+  from = urlParams.get("from");
 
   $.when(setupDataDefered).done(function (success) {
     if (!success) {
       return;
     }
-    // renderPage();
-    // $("#pdfViewer").attr("src", `${link}/api/document/getFilePolicy`);
+    stampTimeAttendance();
+    $("#preloader").hide();
   });
 });
 
@@ -70,8 +73,7 @@ let SetupData = (function () {
       },
       success: function (res) {
         if (res.status.code == 200) {
-          let userData = res.data;
-          $("#version").html("Version " + userData.version);
+          userData = res.data;
           $("#currentUserName").html(
             userData.firstName + " " + userData.lastName
           );
@@ -113,3 +115,44 @@ $("#logoutConfirm").on("click", function () {
   localStorage.clear();
   window.location.href = "login.html";
 });
+
+let stampTimeAttendance = function () {
+  let objData = {
+    userId: userData.userId,
+    hospitalCode: parseInt(urlParams.get("hospitalCode")),
+    locationCode: parseInt(urlParams.get("locationCode")),
+    departmentCode: parseInt(urlParams.get("departmentCode")),
+    timeAttendance: urlParams.get("time"),
+  };
+  $.ajax({
+    url: link + "/api/dutySchedule/stampTimeAttendance",
+    type: "POST",
+    data: JSON.stringify(objData),
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (res) {
+      if (res.status.code == 200) {
+        $("#attendanceType").html(res.data.status);
+        $("#attendanceStatus").html("สำเร็จ");
+        $("#crossMarkImg").hide();
+        $("#checkImg").show();
+      } else {
+        $("#attendanceType").html(res.data.status);
+        $("#attendanceStatus").html("ไม่สำเร็จ");
+        $("#crossMarkImg").show();
+        $("#checkImg").hide();
+        toastr.error(res.status.message);
+      }
+    },
+    error: function (res) {
+      $("#attendanceType").html(res.data.status);
+      $("#attendanceStatus").html("ไม่สำเร็จ");
+      $("#crossMarkImg").show();
+      $("#checkImg").hide();
+      toastr.error("ไม่สามารถบันทึกเวลาได้", "Error");
+    },
+  });
+};
