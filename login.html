@@ -34,6 +34,9 @@
   </head>
 
   <body class="bg-gradient-primary">
+    <div class="col-sm-12" style="position: fixed; bottom: 10px; z-index: 99">
+      <span class="text-white small" id="version"></span>
+    </div>
     <div class="container">
       <!-- Outer Row -->
       <div class="row justify-content-center">
@@ -95,6 +98,11 @@
                         class="btn btn-primary btn-user btn-block"
                         id="loginButton"
                       >
+                        <i
+                          class="fa fa-spinner fa-spin"
+                          style="display: none"
+                          id="loginSpinner"
+                        ></i>
                         Login
                       </a>
                     </form>

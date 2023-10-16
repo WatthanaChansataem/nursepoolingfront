@@ -47,69 +47,76 @@
     });
 })(jQuery);
 
+var resultContainer = document.getElementById("qr-reader-results");
+var lastResult,
+  countResults = 0;
+
 $(document).ready(function () {
   let setupDataDefered = $.Deferred();
   SetupData.init(setupDataDefered);
+
+  var html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", {
+    fps: 30,
+    qrbox: 350,
+  });
+  html5QrcodeScanner.render(onScanSuccess);
 
   $.when(setupDataDefered).done(function (success) {
     if (!success) {
       return;
     }
+    // renderPage();
   });
 });
 
-$("#resetPasswordButton").on("click", function () {
-  let email = $(`#email`).val();
-  let objData = {
-    email: email,
-  };
-  $.ajax({
-    url: link + "/api/user/resetPassword",
-    type: "POST",
-    data: JSON.stringify(objData),
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    success: function (res) {
-      if (res.status.code == 200) {
-        toastr.success("กรุณาตรวจสอบ Email เพื่อทำการ ResetPassword");
-      } else {
-        toastr.error(res.status.message);
-      }
-    },
-    error: function (res) {
-      toastr.error("ไม่สามารถ Login ได้", "Error");
-    },
-  });
-});
+function onScanSuccess(decodedText, decodedResult) {
+  if (decodedText !== lastResult) {
+    // $("#result").attr("href", decodedText);
+    // $("#result").html(decodedText);
+    window.location.href = decodedText;
+  }
+}
 
 let SetupData = (function () {
   let loadUserData = function (defered) {
     $.ajax({
-      url: link + "/api/user/version",
+      url: link + "/api/user/details",
       type: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
       success: function (res) {
         if (res.status.code == 200) {
           let userData = res.data;
           $("#version").html("Version " + userData.version);
+          $("#currentUserName").html(
+            userData.firstName + " " + userData.lastName
+          );
+          $("#navProfileImg").attr(
+            "src",
+            `${link}/api/document/avatar/${userData.userId}`
+          );
           defered.resolve(true);
         } else {
           defered.resolve(false);
-          toastr.error("ไม่สามารถดึงข้อมูลเวอร์ชันได้", "Error");
+          toastr.error("ไม่สามารถดึงข้อมูลผู้ใช้ได้", "Error");
+          window.location.href = "login.html";
         }
       },
       error: function (res) {
         defered.resolve(false);
-        toastr.error("ไม่สามารถดึงข้อมูลเวอร์ชันได้", "Error");
+        toastr.error("ไม่สามารถดึงข้อมูลผู้ใช้ได้", "Error");
+        window.location.href = "login.html";
       },
     });
   };
   return {
     init: function (defered) {
-      let loadUserDefer = $.Deferred();
-      loadUserData(loadUserDefer);
+      let userDataDefered = $.Deferred();
+      loadUserData(userDataDefered);
 
-      $.when(loadUserDefer).done(function (loadUserResult) {
-        if (loadUserResult) {
+      $.when(userDataDefered).done(function (userDataResult) {
+        if (userDataResult) {
           defered.resolve(true);
         } else {
           defered.resolve(false);
@@ -118,3 +125,8 @@ let SetupData = (function () {
     },
   };
 })();
+
+$("#logoutConfirm").on("click", function () {
+  localStorage.clear();
+  window.location.href = "login.html";
+});

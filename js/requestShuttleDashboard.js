@@ -233,7 +233,34 @@ let SetupData = (function () {
       success: function (res) {
         if (res.status.code == 200) {
           userData = res.data;
+          $("#version").html("Version " + userData.version);
           $("#currentUserName").html(userData.firstName);
+          if (
+            userData.approveUserList != null &&
+            userData.approveUserList.length > 0
+          ) {
+            $("#notifyCount").html(1);
+            $("#notifyDropdown")
+              .append(`<a class="dropdown-item d-flex align-items-center" href="userManagement.html?from=notification">
+              <div class="mr-3">
+                <div class="icon-circle bg-primary">
+                  <i class="fas fa-user text-white"></i>
+                </div>
+              </div>
+              <div>
+                <div class="small text-gray-500">${userData.notifyDateString}</div>
+                <span class="font-weight-bold"
+                  >มีผู้ใช้ที่ยังไม่ได้รับการอนุมัติจำนวน ${userData.approveUserList.length} รายการ</span
+                >
+              </div>
+            </a>`);
+          } else {
+            $("#notifyDropdown").append(`<a
+            class="dropdown-item text-center small text-gray-500"
+            href="#"
+            >ไม่พบรายการ</a
+          >`);
+          }
           $("#navProfileImg").attr(
             "src",
             `${link}/api/document/avatar/${userData.userId}`
@@ -327,14 +354,6 @@ let SetupData = (function () {
 })();
 
 let renderPage = function () {
-  $.each(dutyScheduleStatusMastersForDashboard, function (i, item) {
-    $("select[name=statusCode]").append(
-      $("<option>", {
-        value: item.statusCode,
-        text: item.statusDesc,
-      })
-    );
-  });
   $("#beginDate")
     .datepicker({
       format: "dd/mm/yyyy",
@@ -396,24 +415,16 @@ let CreateDatatable = (function () {
     table = $("#dataTable").DataTable({
       responsive: false,
       data: [],
-      // scrollY: "50vh",
       scrollX: true,
       scrollCollapse: true,
       columns: [
         { data: "", className: "text-center" },
-        { data: "firstName", className: "text-center" },
-        { data: "dutyDate", className: "text-center" },
         { data: "approveHospitalCode", className: "text-center" },
         { data: "approveLocationCode", className: "text-center" },
         { data: "approveDepartmentCode", className: "text-center" },
-        { data: "positionCode", className: "text-center" },
-        { data: "approveShiftStart", className: "text-center" },
-        { data: "realShiftStart", className: "text-center" },
-        { data: "totalRealDuration", className: "text-center" },
-        { data: "status", className: "text-center" },
-        { data: "score", className: "text-center" },
-        { data: "departmentRemark", className: "text-center" },
-        // { data: "", className: "text-center" },
+        { data: "dutyDate", className: "text-center" },
+        // { data: "approveShiftStart", className: "text-center" },
+        { data: "requestShuttleNumber", className: "text-center" },
       ],
       order: [[0, "asc"]],
       columnDefs: [
@@ -426,22 +437,6 @@ let CreateDatatable = (function () {
         },
         {
           targets: 1,
-          title: "ชื่อ - นามสกุล",
-          render: function (data, type, full, meta) {
-            return `<a class="" href="profilePreview.html?userId=${
-              full.userId
-            }" target="_blank">${full.firstName + " " + full.lastName}</a>`;
-          },
-        },
-        {
-          targets: 2,
-          title: "วันเดือนปี",
-          render: function (data, type, full, meta) {
-            return isDateTime(data) ? moment(data).format("DD/MM/YYYY") : data;
-          },
-        },
-        {
-          targets: 3,
           title: "โรงพยาบาล",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -450,7 +445,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 4,
+          targets: 2,
           title: "Location",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -459,7 +454,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 5,
+          targets: 3,
           title: "แผนก",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -468,67 +463,19 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 6,
-          title: "ตำแหน่ง",
+          targets: 4,
+          title: "วันที่",
           render: function (data, type, full, meta) {
-            return data == null || isNaN(data)
-              ? "-"
-              : positionMap.get(data).positionDesc;
+            return isDateTime(data) ? moment(data).format("DD/MM/YYYY") : data;
           },
         },
         {
-          targets: 7,
-          title: "ช่วงเวลาที่อนุมัติ",
+          targets: 5,
+          title: "จำนวนที่มีการขอรถรับส่ง",
           render: function (data, type, full, meta) {
-            return full.approveShiftStart == null
-              ? "-"
-              : full.approveShiftStart + "-" + full.approveShiftEnd;
+            return `<a class="btn btn-info btn-circle btn-sm choose-button">${full.dutyScheduleList.length}</a>`;
           },
         },
-        {
-          targets: 8,
-          title: "ช่วงเวลาที่เข้างานจริง",
-          render: function (data, type, full, meta) {
-            return full.realShiftStart == null
-              ? "-"
-              : full.realShiftStart + "-" + full.realShiftEnd;
-          },
-        },
-        {
-          targets: 9,
-          title: "จำนวนชั่วโมงที่เข้างาน",
-          render: function (data, type, full, meta) {
-            return data == null ? "-" : data;
-          },
-        },
-        {
-          targets: 10,
-          title: "สถานะ",
-          render: function (data, type, full, meta) {
-            return `<a class="btn btn-${dutyScheduleSStatusMap[data].state}" style="width: 90px;">${dutyScheduleSStatusMap[data].desc}</a>`;
-          },
-        },
-        {
-          targets: 11,
-          title: "ผลประเมิน",
-          render: function (data, type, full, meta) {
-            return `<a class="btn btn-${scoreConstant[data].state}" style="width: 90px;">${scoreConstant[data].desc}</a>`;
-          },
-        },
-        {
-          targets: 12,
-          title: "หมายเหตุจากหน่วยงาน",
-          render: function (data, type, full, meta) {
-            return data == null ? "-" : data;
-          },
-        },
-        // {
-        //   targets: 11,
-        //   title: "แก้ไข",
-        //   render: function (data, type, full, meta) {
-        //     return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`;
-        //   },
-        // },
       ],
     });
   };
@@ -543,89 +490,72 @@ let CreateDatatable = (function () {
         let data = table.row($(this).closest("tr")).data();
         currentDutyScheduleId = data.dutyScheduleId;
         currentRow = $(this).closest("tr");
-        globalScore = 0;
-        removeStar();
-        $("#editScheduleModal").modal();
       });
 
-      $("#editScheduleBtnModal").on("click", function () {
-        let realShiftStart = $("#realShiftStartModal").val();
-        let realShiftEnd = $("#realShiftEndModal").val();
-        let remark = $("#remarkEditModal").val();
-        let objadddata = {
-          departmentRemark: remark,
-          realShiftStart: realShiftStart,
-          realShiftEnd: realShiftEnd,
-          score: globalScore,
-          dutyScheduleId: currentDutyScheduleId,
-        };
-        console.log(objadddata);
-        isValidate = 0;
-
-        if (
-          objadddata["realShiftStart"] == null ||
-          objadddata["realShiftStart"] == ""
-        ) {
-          modalEdit
-            .find(`.div-input-realShiftStartModal .form-control`)
-            .addClass(isInvalidClass);
-          modalEdit
-            .find(
-              `.div-input-realShiftStartModal .${validationErrorMessageClass}`
-            )
-            .html(`กรุณาระบุ`);
-          isValidate = 1;
-        } else {
-          modalEdit
-            .find(`.div-input-realShiftStartModal .form-control`)
-            .removeClass(isInvalidClass);
-        }
-
-        if (
-          objadddata["realShiftEnd"] == null ||
-          objadddata["realShiftEnd"] == ""
-        ) {
-          modalEdit
-            .find(`.div-input-realShiftEndModal .form-control`)
-            .addClass(isInvalidClass);
-          modalEdit
-            .find(
-              `.div-input-realShiftEndModal .${validationErrorMessageClass}`
-            )
-            .html(`กรุณาระบุ`);
-          isValidate = 1;
-        } else {
-          modalEdit
-            .find(`.div-input-realShiftEndModal .form-control`)
-            .removeClass(isInvalidClass);
-        }
-
-        if (isValidate == 1) {
-          return;
-        }
-
-        $.ajax({
-          url: link + "/api/dutySchedule/updateEmployeeAppraisal",
-          type: "POST",
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-          data: JSON.stringify(objadddata),
-          contentType: "application/json; charset=utf-8",
-          dataType: "json",
-          success: function (res) {
-            if (res.status.code == 200) {
-              toastr.success("อัพเดทรายการสำเร็จ");
-              $("#editScheduleModal").modal("hide");
-              LoadDutyScheduleRequest();
-            } else {
-              toastr.error(res.status.message);
+      table.on("click", ".choose-button", function () {
+        let tr = $(this).closest("tr");
+        if (tr !== undefined) {
+          let row = table.table().row(tr);
+          let data = table.row(row).data();
+          let dutyScheduleRequestItemList =
+            data.dutyScheduleDetailList == null
+              ? []
+              : data.dutyScheduleDetailList;
+          if (row.child.isShown()) {
+            row.child.hide();
+            $(this).closest("td").css("border-left", "none");
+            tr.removeClass("shown");
+          } else {
+            row.child(CreateRowParentBody()).show();
+            if (row.child() !== undefined) {
+              let elementAccountParent1 = row.child().find(`#table-rowparent`);
+              tr.addClass("shown");
+              elementAccountParent1.DataTable({
+                responsive: false,
+                data: dutyScheduleRequestItemList,
+                order: [0, "asc"],
+                dom: `<'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>`,
+                language: {
+                  emptyTable: "ไม่มีข้อมูล",
+                },
+                lengthChange: false,
+                info: false,
+                paginate: false,
+                columns: [
+                  { data: "", className: "text-center" },
+                  { data: "approveShiftStart", className: "text-right" },
+                  { data: "requestShuttleNumber", className: "text-right" },
+                ],
+                columnDefs: [
+                  {
+                    targets: 0,
+                    orderable: false,
+                    render: function (data, type, full, meta) {
+                      return parseInt(meta.row) + 1;
+                    },
+                  },
+                  {
+                    targets: 1,
+                    orderable: false,
+                    render: function (data, type, full, meta) {
+                      return (
+                        full.approveShiftStart + "-" + full.approveShiftEnd
+                      );
+                    },
+                  },
+                  {
+                    targets: 2,
+                    orderable: false,
+                    render: function (data, type, full, meta) {
+                      return data;
+                    },
+                  },
+                ],
+              });
             }
-          },
-          error: function (res) {
-            toastr.error("ไม่สามารถอัพเดทรายการได้");
-          },
-        });
+          }
+          CreateDatatable.adjust();
+        }
       });
     },
     data: function (data) {
@@ -659,7 +589,6 @@ let LoadDutyScheduleRequest = function () {
   let departmentCode = parseInt($("#departmentCode").val());
   let positionCode = parseInt($("#positionCode").val());
   let isJustMonth = $(`#isJustMonth`).is(":checked") ? 1 : 0;
-  let statusCode = $("#statusCode").val();
 
   let objData = {
     dutyDate: dutyDate,
@@ -668,11 +597,10 @@ let LoadDutyScheduleRequest = function () {
     departmentCode: departmentCode,
     positionCode: positionCode,
     isJustMonth: isJustMonth,
-    statusCode: statusCode,
   };
   console.log(objData);
   $.ajax({
-    url: link + "/api/dutySchedule/searchDutyScheduleDashboard",
+    url: link + "/api/dutySchedule/searchForRequestShuttleDashboard",
     type: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token"),
@@ -683,53 +611,7 @@ let LoadDutyScheduleRequest = function () {
     success: function (res) {
       if (res.status.code == 200) {
         let dashboardData = res.data;
-        CreateDatatable.data(dashboardData.dutyScheduleList);
-
-        $("#requestNumberProgress").attr("style", "width: 100%");
-        $("#allRequestNumber").html(dashboardData.allRequestNumber);
-        $("#totalDuration").html(
-          "คิดเป็นจำนวนชั่วโมง : " + dashboardData.totalDuration + " ชัวโมง"
-        );
-
-        $("#approveNumberProgress").attr(
-          "style",
-          `width: ${FindPercenOf(
-            dashboardData.allApproveNumber,
-            dashboardData.allRequestNumber
-          )}%`
-        );
-        $("#allApproveNumber").html(dashboardData.allApproveNumber);
-        $("#totalApproveDuration").html(
-          "คิดเป็นจำนวนชั่วโมง : " +
-            dashboardData.totalApproveDuration +
-            " ชัวโมง"
-        );
-
-        $("#allRealNumberProgress").attr(
-          "style",
-          `width: ${FindPercenOf(
-            dashboardData.allRealNumber,
-            dashboardData.allRequestNumber
-          )}%`
-        );
-        $("#allRealNumber").html(dashboardData.allRealNumber);
-        $("#totalAllRealDuration").html(
-          "คิดเป็นจำนวนชั่วโมง : " +
-            dashboardData.totalAllRealDuration +
-            " ชัวโมง"
-        );
-
-        $("#allOffNumberProgress").attr(
-          "style",
-          `width: ${FindPercenOf(
-            dashboardData.allOffNumber,
-            dashboardData.allRequestNumber
-          )}%`
-        );
-        $("#allOffNumber").html(dashboardData.allOffNumber);
-        $("#totalOffDuration").html(
-          "คิดเป็นจำนวนชั่วโมง : " + dashboardData.totalOffDuration + " ชัวโมง"
-        );
+        CreateDatatable.data(dashboardData);
       } else {
         toastr.error(res.status.message);
       }
@@ -775,6 +657,27 @@ let removeStar = function () {
   // });
 };
 
-let FindPercenOf = function (x, y) {
-  return (x * 100) / y;
+let CreateRowParentBody = function () {
+  let childRow = `
+        <div class="row">
+        <div class="col-lg-7"></div>
+        <div class="col-lg-5">
+        <div style="height : auto;">
+        <table class="table table-striped-table-hover table-checkable" id="table-rowparent">
+          <thead class="thead-light">
+              <tr>
+                  <th>ลำดับ</th>
+                  <th>เวลา</th>
+                  <th>จำนวนที่มีการขอรถรับส่ง</th>
+              </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+        
+        </div>
+      
+        </div>
+        `;
+  return childRow;
 };

@@ -184,33 +184,59 @@ let SetupData = (function () {
       },
     });
   };
+
+  let loadUserData = function (defered) {
+    $.ajax({
+      url: link + "/api/user/version",
+      type: "GET",
+      success: function (res) {
+        if (res.status.code == 200) {
+          let userData = res.data;
+          $("#version").html("Version " + userData.version);
+          defered.resolve(true);
+        } else {
+          defered.resolve(false);
+          toastr.error("ไม่สามารถดึงข้อมูลเวอร์ชันได้", "Error");
+        }
+      },
+      error: function (res) {
+        defered.resolve(false);
+        toastr.error("ไม่สามารถดึงข้อมูลเวอร์ชันได้", "Error");
+      },
+    });
+  };
   return {
     init: function (defered) {
       let titleDefered = $.Deferred();
       let positionDefered = $.Deferred();
       let educationalQualificationDefered = $.Deferred();
       let experienceTypeDefer = $.Deferred();
+      let loadUserDefer = $.Deferred();
       loadTitle(titleDefered);
       loadPosition(positionDefered);
       loadEducationalQualification(educationalQualificationDefered);
       loadExperienceType(experienceTypeDefer);
+      loadUserData(loadUserDefer);
 
       $.when(
         titleDefered,
         positionDefered,
         educationalQualificationDefered,
-        experienceTypeDefer
+        experienceTypeDefer,
+        loadUserDefer
       ).done(function (
         titleResult,
         positionDefered,
         educationalQualificationResult,
-        experienceTypeResult
+        experienceTypeResult,
+        loadUserResult
       ) {
         if (
           titleResult &&
           positionDefered &&
           educationalQualificationResult &&
-          experienceTypeResult
+          experienceTypeResult &&
+          loadUserResult
         ) {
           defered.resolve(true);
         } else {

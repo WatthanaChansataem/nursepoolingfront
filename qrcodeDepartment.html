@@ -10,7 +10,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
 
-    <title>NursePooling - Employee Appraisal Form</title>
+    <title>NursePooling - RegulationsAndWelfare</title>
 
     <!-- Custom fonts for this template -->
     <link
@@ -42,42 +42,12 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css"
       rel="stylesheet"
     />
-
-    <!-- Fontawesome CDN Link -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
-    />
   </head>
   <style>
-    .rating-box {
-      position: relative;
-      background: #fff;
-      padding: 25px 50px 35px;
-      border-radius: 25px;
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
-    }
-    .rating-box header {
-      font-size: 22px;
-      /* color: #dadada; */
-      /* font-weight: 500; */
-      margin-bottom: 20px;
-      /* text-align: center; */
-    }
-    .rating-box .stars {
-      display: flex;
-      align-items: center;
-      gap: 25px;
-    }
-    .stars i {
-      color: #e6e6e6;
-      font-size: 35px;
-      cursor: pointer;
-      transition: color 0.2s ease;
-    }
-    .stars i.active {
-      color: #ff9c1a;
-    }
+    /* Set font size for the entire table */
+    /* table.dataTable {
+      font-size: 1em;
+    } */
   </style>
 
   <body id="page-top">
@@ -110,60 +80,40 @@
 
         <!-- Heading -->
         <div class="sidebar-heading">MENU</div>
+
         <!-- Nav Item - Tables -->
-
         <li class="nav-item">
-          <a class="nav-link" href="individualApproval.html">
-            <i class="fas fa-fw fa-address-book"></i>
-            <span>อนุมัติเวรรายบุคคล</span></a
+          <a class="nav-link" href="dutyScheduleRequest.html">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>ฟอร์มขออัตรากำลัง</span></a
           >
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="agencyApproval.html">
-            <i class="fas fa-fw fa-h-square"></i>
-            <span>อนุมัติเวรตามหน่วยงาน</span></a
-          >
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="dutyScheduleDashboard.html">
+          <a class="nav-link" href="dutyScheduleRequestTable.html">
             <i class="fas fa-fw fa-table"></i>
-            <span>Dashboard ตารางเวร</span></a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="workforceManagementData.html">
-            <i class="fas fa-fw fa-bar-chart"></i>
-            <span>ข้อมูลบริหารอัตรากำลัง</span></a
+            <span>ตารางเวรหน่วยงาน</span></a
           >
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="employeePerformance.html">
-            <i class="fas fa-fw fa-id-badge"></i>
-            <span>Performance รายบุคคล</span></a
-          >
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="agencyPerformance.html">
-            <i class="fas fa-fw fa-hospital"></i>
-            <span>Performance รายหน่วยงาน</span></a
+          <a class="nav-link" href="employeeAppraisalForm.html">
+            <i class="fas fa-fw fa-address-book"></i>
+            <span>บันทึกเวลาและการประเมิน</span></a
           >
         </li>
 
         <li class="nav-item active">
-          <a class="nav-link" href="requestShuttleDashboard.html">
-            <i class="fas fa-fw fa-bus"></i>
-            <span>รายการขอรถรับส่ง</span></a
+          <a class="nav-link" href="qrcodeDepartment.html">
+            <i class="fas fa-fw fa-qrcode"></i>
+            <span> QR Code Generator</span></a
           >
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="userManagement.html">
+          <a class="nav-link" href="profileDepartment.html">
             <i class="fas fa-fw fa-user"></i>
-            <span>ตั้งค่าผู้ใช้</span></a
+            <span>ข้อมูลส่วนตัว</span></a
           >
         </li>
 
@@ -194,6 +144,15 @@
                 <i class="fa fa-bars"></i>
               </button>
             </form>
+            <span>โรงพยาบาล:</span>&nbsp;<span id="navHospitalCode">-</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span>Location:</span>&nbsp;<span
+              id="navLocationCode"
+              >-</span
+            >
+            &nbsp;&nbsp;&nbsp;&nbsp;<span>แผนก:</span>&nbsp;<span
+              id="navDepartmentCode"
+              >-</span
+            >
 
             <!-- Topbar Navbar -->
             <ul class="navbar-nav ml-auto">
@@ -233,31 +192,7 @@
                   </form>
                 </div>
               </li>
-              <!-- Nav Item - Alerts -->
-              <li class="nav-item dropdown no-arrow mx-1">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  id="alertsDropdown"
-                  role="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  <i class="fas fa-bell fa-fw"></i>
-                  <span
-                    class="badge badge-danger badge-counter"
-                    id="notifyCount"
-                  ></span>
-                </a>
-                <div
-                  class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                  aria-labelledby="alertsDropdown"
-                  id="notifyDropdown"
-                >
-                  <h6 class="dropdown-header">การแจ้งเตือน</h6>
-                </div>
-              </li>
+
               <div class="topbar-divider d-none d-sm-block"></div>
 
               <!-- Nav Item - User Information -->
@@ -287,10 +222,10 @@
                   class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                   aria-labelledby="userDropdown"
                 >
-                  <!-- <a class="dropdown-item" href="profile.html">
+                  <a class="dropdown-item" href="profileDepartment.html">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     ข้อมูลส่วนตัว
-                  </a> -->
+                  </a>
                   <!-- <a class="dropdown-item" href="#">
                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                     Settings
@@ -299,7 +234,7 @@
                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                     Activity Log
                   </a> -->
-                  <!-- <div class="dropdown-divider"></div> -->
+                  <div class="dropdown-divider"></div>
                   <a
                     class="dropdown-item"
                     href="#"
@@ -320,162 +255,43 @@
           <!-- Begin Page Content -->
           <div class="container-fluid">
             <!-- Page Heading -->
-            <h1 class="h3 mb-2 text-gray-800">รายการขอรถรับส่ง</h1>
-            <div class="form-group row">
-              <div class="col-sm-3 div-input-hospitalCode">
-                <label for="hospitalCode" class="col-form-label-sm"
-                  >โรงพยาบาล</label
-                >
-                <select
-                  class="custom-select hospitalCode"
-                  name="hospitalCode"
-                  id="hospitalCode"
-                  data-size="4"
-                >
-                  <option selected value="-1">ทั้งหมด</option>
-                </select>
-              </div>
-              <div class="col-sm-3 div-input-locationCode">
-                <label for="locationCode" class="col-form-label-sm"
-                  >Location</label
-                >
-                <select
-                  class="custom-select locationCode"
-                  name="locationCode"
-                  id="locationCode"
-                  data-size="4"
-                >
-                  <option selected value="-1">ทั้งหมด</option>
-                </select>
-              </div>
-              <div class="col-sm-3 div-input-departmentCode">
-                <label for="departmentCode" class="col-form-label-sm"
-                  >แผนก</label
-                >
-                <select
-                  class="custom-select departmentCode"
-                  name="departmentCode"
-                  id="departmentCode"
-                  data-size="4"
-                >
-                  <option selected value="-1">ทั้งหมด</option>
-                </select>
-              </div>
+            <!-- <h1 class="h3 mb-2 text-gray-800">ระเบียบปฏิบัติ สวัสดิการ</h1> -->
+            <div class="card o-hidden border-0 shadow-lg my-5">
+              <div class="card-body p-0">
+                <!-- <div class="row"> -->
+                <div class="col-lg-12">
+                  <div class="p-5">
+                    <div class="text-left">
+                      <h1 class="h4 text-gray-900 mb-4">QR Code Generator</h1>
+                    </div>
+                    <hr />
+                    <form class="user">
+                      <div class="form-group row">
+                        <div
+                          class="col-lg-12"
+                          style="
+                            display: flex;
+                            padding-bottom: 10px;
+                            justify-content: center;
+                          "
+                        >
+                          <div id="qrcode"></div>
+                        </div>
 
-              <div class="col-sm-3 div-input-positionCode">
-                <label for="positionCode" class="col-form-label-sm"
-                  >ตำแหน่ง</label
-                >
-                <select
-                  class="custom-select positionCode"
-                  name="positionCode"
-                  id="positionCode"
-                  data-size="4"
-                >
-                  <option selected value="-1">ทั้งหมด</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <div class="col-sm-3">
-                <label for="beginDate" class="col-form-label-sm">วันที่</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="beginDate"
-                  id="beginDate"
-                  placeholder="ปีที่เริ่ม"
-                />
-                <!-- <div class="form-group" style="padding-top: 4px"> -->
-                <div
-                  class="custom-control custom-checkbox small"
-                  style="padding-top: 4px"
-                >
-                  <input
-                    type="checkbox"
-                    class="custom-control-input"
-                    id="isJustMonth"
-                  />
-                  <label class="custom-control-label" for="isJustMonth"
-                    >ค้นหาทั้งเดือน</label
-                  >
+                        <div class="col-lg-12 text-center digital-clock"></div>
+                      </div>
+                    </form>
+                    <form class="user">
+                      <br />
+                      <div class="form-group row"></div>
+                      <hr />
+                    </form>
+                  </div>
                 </div>
                 <!-- </div> -->
               </div>
-              <!-- <div class="col-sm-3 div-input-statusCode">
-                <label for="statusCode" class="col-form-label-sm">สถานะ</label>
-                <select
-                  class="custom-select statusCode"
-                  name="statusCode"
-                  id="statusCode"
-                  data-size="4"
-                >
-                  <option selected value="-1">ทั้งหมด</option>
-                </select>
-              </div> -->
-            </div>
-            <div
-              class="col-sm-12"
-              style="display: flex; justify-content: flex-end"
-            >
-              <a
-                class="btn btn-secondary btn-icon-split"
-                style="height: 38px"
-                id="generalSearch"
-              >
-                <span class="icon text-white-50">
-                  <i class="fa fa-search"></i>
-                </span>
-                <span class="text">ค้นหา</span>
-              </a>
-            </div>
-
-            <div class="my-2"></div>
-            <!-- DataTales Example -->
-            <div class="card shadow mb-4">
-              <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">รายการ</h6>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table
-                    class="table table-bordered nowrap"
-                    id="dataTable"
-                    width="100%"
-                    cellspacing="0"
-                  >
-                    <thead>
-                      <tr>
-                        <th>No.</th>
-                        <th>โรงพยาบาล</th>
-                        <th>Location</th>
-                        <th>แผนก</th>
-                        <th>วันที่</th>
-                        <!-- <th>ช่วงเวลาที่ต้องเข้างาน</th> -->
-                        <th>จำนวนที่มีการขอรถรับส่ง</th>
-                        <!-- <th>แก้ไข</th> -->
-                      </tr>
-                    </thead>
-                  </table>
-                </div>
-              </div>
-            </div>
-            <div class="form-group row" style="display: none">
-              <div
-                class="col-sm-12"
-                style="display: flex; justify-content: flex-end"
-              >
-                <a class="btn btn-success btn-icon-split" id="exportExcel">
-                  <span class="icon text-white-50">
-                    <i class="fa fa-download"></i>
-                  </span>
-                  <span class="text">Export Excel</span>
-                </a>
-              </div>
             </div>
           </div>
-
           <!-- /.container-fluid -->
         </div>
         <!-- End of Main Content -->
@@ -536,8 +352,6 @@
       </div>
     </div>
 
-    <!-- EditSchedule Modal-->
-
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -545,13 +359,15 @@
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
+    <!-- <script src="js/_GlobalConfig.js"></script> -->
 
     <!-- Page level plugins -->
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
+    <!--  -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
+    <!-- <script src="https://netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
 
     <!-- toastr -->
@@ -560,8 +376,14 @@
     <!-- moment -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
+    <!-- qrcode -->
+    <script type="text/javascript" src="js/qrcode.min.js"></script>
+
     <!-- Custom scripts for all pages-->
     <script src="js/_GlobalConfig.js"></script>
-    <script src="js/requestShuttleDashboard.js"></script>
+    <script src="js/qrcodeDepartment.js"></script>
+
+    <!-- Page level custom scripts -->
+    <!-- <script src="js/demo/datatables-demo.js"></script> -->
   </body>
 </html>

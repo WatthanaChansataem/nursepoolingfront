@@ -256,6 +256,26 @@ let SetupData = (function () {
       },
     });
   };
+  let loadUserData = function (defered) {
+    $.ajax({
+      url: link + "/api/user/version",
+      type: "GET",
+      success: function (res) {
+        if (res.status.code == 200) {
+          let userData = res.data;
+          $("#version").html("Version " + userData.version);
+          defered.resolve(true);
+        } else {
+          defered.resolve(false);
+          toastr.error("ไม่สามารถดึงข้อมูลเวอร์ชันได้", "Error");
+        }
+      },
+      error: function (res) {
+        defered.resolve(false);
+        toastr.error("ไม่สามารถดึงข้อมูลเวอร์ชันได้", "Error");
+      },
+    });
+  };
   return {
     init: function (defered) {
       let titleDefered = $.Deferred();
@@ -265,6 +285,7 @@ let SetupData = (function () {
       let hospitalDefered = $.Deferred();
       let locationDefered = $.Deferred();
       let departmentDefered = $.Deferred();
+      let loadUserDefer = $.Deferred();
       loadTitle(titleDefered);
       loadPosition(positionDefered);
       loadEducationalQualification(educationalQualificationDefered);
@@ -272,6 +293,7 @@ let SetupData = (function () {
       loadHospital(hospitalDefered);
       loadLocation(locationDefered);
       loadDepartment(departmentDefered);
+      loadUserData(loadUserDefer);
 
       $.when(
         titleDefered,
@@ -280,7 +302,8 @@ let SetupData = (function () {
         experienceTypeDefer,
         hospitalDefered,
         locationDefered,
-        departmentDefered
+        departmentDefered,
+        loadUserDefer
       ).done(function (
         titleResult,
         positionDefered,
@@ -288,7 +311,8 @@ let SetupData = (function () {
         experienceTypeResult,
         hospitalResult,
         locationResult,
-        departmentResult
+        departmentResult,
+        loadUserResult
       ) {
         if (
           titleResult &&
@@ -297,7 +321,8 @@ let SetupData = (function () {
           experienceTypeResult &&
           hospitalResult &&
           locationResult &&
-          departmentResult
+          departmentResult &&
+          loadUserResult
         ) {
           defered.resolve(true);
         } else {

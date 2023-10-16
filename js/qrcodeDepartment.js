@@ -87,6 +87,8 @@ let DocumentTypeCode = {
   ProfileImg: 4,
 };
 
+var qrcode = new QRCode("qrcode");
+
 $(document).ready(function () {
   let setupDataDefered = $.Deferred();
   // LoadDutyFile();
@@ -99,6 +101,8 @@ $(document).ready(function () {
     }
 
     renderPage();
+    clockUpdate();
+    setInterval(clockUpdate, 1000);
   });
 });
 let SetupData = (function () {
@@ -219,10 +223,6 @@ let SetupData = (function () {
       success: function (res) {
         if (res.status.code == 200) {
           userData = res.data;
-          //   positionMaster = res.data;
-          //   for (let data of res.data) {
-          //     positionMap.set(data.positionCode, data);
-          //   }
           $("#version").html("Version " + userData.version);
           $("#currentUserName").html(userData.firstName);
           if (userData.role != userRoleConstant.Department) {
@@ -399,24 +399,6 @@ let renderPage = function () {
     );
   });
 
-  // $.each(locationMaster, function (i, item) {
-  //   $("select[name=locationCode]").append(
-  //     $("<option>", {
-  //       value: item.locationCode,
-  //       text: item.locationDesc,
-  //     })
-  //   );
-  // });
-
-  // $.each(departmentMaster, function (i, item) {
-  //   $("select[name=departmentCode]").append(
-  //     $("<option>", {
-  //       value: item.departmentCode,
-  //       text: item.departmentDesc,
-  //     })
-  //   );
-  // });
-
   $(".alert").hide();
 
   $("#firstName").val(userData.firstName);
@@ -441,320 +423,40 @@ let renderPage = function () {
   $("#departmentCode").val(userData.departmentCode).change();
 };
 
-$("#hospitalCode").on("change", function () {
-  $("#locationCode")
-    .empty()
-    .append("<option selected disabled hidden>กรุณาเลือก</option>");
-
-  $("#departmentCode")
-    .empty()
-    .append("<option selected disabled hidden>กรุณาเลือก</option>");
-
-  $.each(locationMaster, function (i, item) {
-    $("select[name=locationCode]").append(
-      $("<option>", {
-        value: item.locationCode,
-        text: item.locationDesc,
-      })
-    );
-  });
-});
-$("#locationCode").on("change", function () {
-  $("#departmentCode")
-    .empty()
-    .append("<option selected disabled hidden>กรุณาเลือก</option>");
-
-  $.each(
-    departmentMaster.filter(
-      (e) =>
-        e.hospitalCode == $("#hospitalCode").val() &&
-        e.locationCode == $("#locationCode").val()
-    ),
-    function (i, item) {
-      $("select[name=departmentCode]").append(
-        $("<option>", {
-          value: item.departmentCode,
-          text: item.departmentDesc,
-        })
-      );
-    }
-  );
-});
-
-$("input[name=changeProfileImage]").on("change", function () {
-  let changeElement = $("input[name=changeProfileImage]");
-  var uploadata = new FormData();
-  uploadata.append("documentName", changeElement[0].files[0].name);
-  uploadata.append("document", changeElement[0].files[0]);
-  uploadata.append("documentTypeCode", DocumentTypeCode.ProfileImg);
-  uploadata.append("insertUserId", userData.userId);
-  if (changeElement[0].files[0].size > maximumSize) {
-    toastr.error("ไฟล์มีขนาดใหญ่เกินไป");
-  } else {
-    let defer = $.Deferred();
-    upLoadFileWithContent(uploadata, defer);
-    $.when(defer).done(function (result) {
-      if (result) {
-        resData = result;
-        changeElement.attr("documentId", resData.documentId);
-      }
-    });
-  }
-});
-
-$("#editProfile").on("click", function () {
-  $("#changeProfileImage").trigger("click");
-});
-
-let renderSelectElement = function (
-  target,
-  data,
-  key,
-  value,
-  initialValue = 0,
-  defaultKey = null,
-  defaultValue = null
-) {
-  target.empty();
-  target.selectpicker("refresh");
-  if (defaultKey != null) {
-    target.append(new Option(defaultValue, defaultKey));
-  }
-  for (let d of data) {
-    target.append(new Option(d[value], d[key]));
-  }
-  if (initialValue != 0) {
-    target.val(initialValue);
-  }
-  target.selectpicker("refresh");
-};
-
-function removeItemEducation(value) {
-  educationIdList = jQuery.grep(educationIdList, function (item) {
-    return item != value;
-  });
-
-  let elementId = "education" + value;
-  const element = document.getElementById(elementId);
-  element.remove();
-}
-
-function removeItemExperience(value) {
-  experienceIdList = jQuery.grep(experienceIdList, function (item) {
-    return item != value;
-  });
-
-  let elementId = "experience" + value;
-  const element = document.getElementById(elementId);
-  element.remove();
-}
-
-function removeItemCourse(value) {
-  courseIdList = jQuery.grep(courseIdList, function (item) {
-    return item != value;
-  });
-
-  let elementId = "course" + value;
-  const element = document.getElementById(elementId);
-  element.remove();
-}
-
-$("#submitRegister").on("click", function () {
-  isValidate = 0;
-
-  let firstName = $("#firstName").val();
-  let lastName = $("#lastName").val();
-  let agencyNo = $("#agencyNo").val();
-  let email = $("#email").val();
-  let phone = $("#phone").val();
-  let hospitalCode = $("#hospitalCode").val();
-  let locationCode = $("#locationCode").val();
-  let departmentCode = $("#departmentCode").val();
-
-  let objadddata = {
-    userId: userData.userId,
-    firstName: firstName,
-    lastName: lastName,
-    agencyNo: agencyNo,
-    email: email,
-    phone: phone,
-    hospitalCode: hospitalCode,
-    locationCode: locationCode,
-    departmentCode: departmentCode,
-  };
-
-  if (objadddata["firstName"] == "" || objadddata["firstName"] == null) {
-    $(`.div-input-firstName .form-control`).addClass(isInvalidClass);
-    $(`.div-input-firstName .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
-    scrollToElement($(`.div-input-firstName .form-control`));
-    isValidate = 1;
-  } else {
-    $(`.div-input-firstName .form-control`).removeClass(isInvalidClass);
-  }
-
-  //   if (objadddata["lastName"] == "" || objadddata["lastName"] == null) {
-  //     $(`.div-input-lastName .form-control`).addClass(isInvalidClass);
-  //     $(`.div-input-lastName .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
-  //     scrollToElement($(`.div-input-lastName .form-control`));
-  //     isValidate = 1;
-  //   } else {
-  //     $(`.div-input-lastName .form-control`).removeClass(isInvalidClass);
-  //   }
-
-  if (objadddata["agencyNo"] == "" || objadddata["agencyNo"] == null) {
-    $(`.div-input-agencyNo .form-control`).addClass(isInvalidClass);
-    $(`.div-input-agencyNo .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
-    scrollToElement($(`.div-input-agencyNo .form-control`));
-    isValidate = 1;
-  } else {
-    $(`.div-input-agencyNo .form-control`).removeClass(isInvalidClass);
-  }
-
-  if (objadddata["email"] == "" || objadddata["email"] == null) {
-    $(`.div-input-email .form-control`).addClass(isInvalidClass);
-    $(`.div-input-email .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
-    scrollToElement($(`.div-input-email .form-control`));
-    isValidate = 1;
-  } else {
-    $(`.div-input-email .form-control`).removeClass(isInvalidClass);
-  }
-
-  if (
-    objadddata["phone"] == "" ||
-    objadddata["phone"] == null ||
-    objadddata["phone"].length > 10
-  ) {
-    $(`.div-input-phone .form-control`).addClass(isInvalidClass);
-    $(`.div-input-phone .${validationErrorMessageClass}`).html(`กรุณาระบุ`);
-    scrollToElement($(`.div-input-phone .form-control`));
-    isValidate = 1;
-  } else if (isNaN(Number(objadddata["phone"]))) {
-    $(`.div-input-phone .form-control`).addClass(isInvalidClass);
-    $(`.div-input-phone .${validationErrorMessageClass}`).html(
-      `ไม่สามารถมีตัวอักษรได้`
-    );
-    scrollToElement($(`.div-input-phone .form-control`));
-    isValidate = 1;
-  } else {
-    $(`.div-input-phone .form-control`).removeClass(isInvalidClass);
-  }
-
-  if (
-    objadddata["hospitalCode"] == "" ||
-    objadddata["hospitalCode"] == null ||
-    isNaN(objadddata["hospitalCode"])
-  ) {
-    $(`.div-input-hospitalCode .custom-select`).addClass(isInvalidClass);
-    $(`.div-input-hospitalCode .${validationErrorMessageClass}`).html(
-      `กรุณาระบุ`
-    );
-
-    isValidate = 1;
-  } else {
-    $(`.div-input-hospitalCode .custom-select`).removeClass(isInvalidClass);
-  }
-
-  if (
-    objadddata["locationCode"] == "" ||
-    objadddata["locationCode"] == null ||
-    isNaN(objadddata["locationCode"])
-  ) {
-    $(`.div-input-locationCode .custom-select`).addClass(isInvalidClass);
-    $(`.div-input-locationCode .${validationErrorMessageClass}`).html(
-      `กรุณาระบุ`
-    );
-
-    isValidate = 1;
-  } else {
-    $(`.div-input-locationCode .custom-select`).removeClass(isInvalidClass);
-  }
-
-  if (
-    objadddata["departmentCode"] == "" ||
-    objadddata["departmentCode"] == null ||
-    isNaN(objadddata["departmentCode"])
-  ) {
-    $(`.div-input-departmentCode .custom-select`).addClass(isInvalidClass);
-    $(`.div-input-departmentCode .${validationErrorMessageClass}`).html(
-      `กรุณาระบุ`
-    );
-
-    isValidate = 1;
-  } else {
-    $(`.div-input-departmentCode .custom-select`).removeClass(isInvalidClass);
-  }
-  console.log(objadddata);
-
-  if (isValidate == 1) {
-    return;
-  }
-
-  $.ajax({
-    url: link + "/api/user/updatedepartment",
-    type: "POST",
-    headers: {
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
-    data: JSON.stringify(objadddata),
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    success: function (res) {
-      if (res.status.code == 200) {
-        toastr.success("บันทึกสำเร็จสำเร็จ");
-      } else {
-        toastr.error(res.status.message);
-      }
-    },
-    error: function (res) {
-      toastr.error("ไม่สามารถบันทึกได้");
-    },
-  });
-});
-
-function readURL(input) {
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
-
-    reader.onload = function (e) {
-      $("#profileImg").attr("src", e.target.result).width(100).height(100);
-    };
-
-    reader.readAsDataURL(input.files[0]);
-  }
-}
-
-let upLoadFileWithContent = function (uploadFileData, defer) {
-  $.ajax({
-    url: link + "/api/document/createWithContent",
-    method: "POST",
-    data: uploadFileData,
-    dataType: "json",
-    contentType: false,
-    processData: false,
-    success: function (res) {
-      if (res.status.code == 200) {
-        toastr.success("บันทึกสำเร็จ");
-        defer.resolve(res.data);
-      } else {
-        toastr.error(res.status.message);
-        defer.resolve(false);
-      }
-    },
-    error: function (res) {
-      toastr.error("ไม่สามารถบันทึกได้");
-      defer.resolve(false);
-    },
-  });
-};
-
 $("#logoutConfirm").on("click", function () {
   localStorage.clear();
   window.location.href = "login.html";
 });
 
-let scrollToElement = function (element) {
-  let windowHeight = $(window).height();
-  let offset = element.offset().top;
-  let scrollOffset = offset - windowHeight / 2;
-  $("html, body").animate({ scrollTop: scrollOffset }, 1000);
-};
+function clockUpdate() {
+  var currentTime = new Date();
+  // Operating System Clock Hours for 12h clock
+  var currentHoursAP = currentTime.getHours();
+  // Operating System Clock Hours for 24h clock
+  var currentHours = currentTime.getHours();
+  // Operating System Clock Minutes
+  var currentMinutes = currentTime.getMinutes();
+  // Operating System Clock Seconds
+  var currentSeconds = currentTime.getSeconds();
+  // Adding 0 if Minutes & Seconds is More or Less than 10
+  currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
+  currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
+  // Picking "AM" or "PM" 12h clock if time is more or less than 12
+  var timeOfDay = currentHours < 12 ? "AM" : "PM";
+  // transform clock to 12h version if needed
+  currentHoursAP = currentHours > 12 ? currentHours - 12 : currentHours;
+  // transform clock to 12h version after mid night
+  currentHoursAP = currentHoursAP == 0 ? 12 : currentHoursAP;
+
+  // var currentTimeString =
+  //   "24h kello: " + currentHours + ":" + currentMinutes + ":" + currentSeconds;
+
+  let time = currentHours + ":" + currentMinutes + ":" + currentSeconds;
+  $(".digital-clock").text(time);
+  let qrvalue = `${flink}/login.html?from=qrcode&hospitalCode=${
+    userData.hospitalCode
+  }&locationCode=${userData.locationCode}&departmentCode=${
+    userData.departmentCode
+  }&time=${currentHours + "" + currentMinutes + "" + currentSeconds}`;
+  qrcode.makeCode(qrvalue);
+}
