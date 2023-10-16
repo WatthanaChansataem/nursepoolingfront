@@ -47,7 +47,16 @@
     });
 })(jQuery);
 
-$(document).ready(function () {});
+$(document).ready(function () {
+  let setupDataDefered = $.Deferred();
+  SetupData.init(setupDataDefered);
+
+  $.when(setupDataDefered).done(function (success) {
+    if (!success) {
+      return;
+    }
+  });
+});
 
 $("#resetPasswordButton").on("click", function () {
   let email = $(`#email`).val();
@@ -72,3 +81,40 @@ $("#resetPasswordButton").on("click", function () {
     },
   });
 });
+
+let SetupData = (function () {
+  let loadUserData = function (defered) {
+    $.ajax({
+      url: link + "/api/user/version",
+      type: "GET",
+      success: function (res) {
+        if (res.status.code == 200) {
+          let userData = res.data;
+          $("#version").html("Version " + userData.version);
+          defered.resolve(true);
+        } else {
+          defered.resolve(false);
+          toastr.error("ไม่สามารถดึงข้อมูลเวอร์ชันได้", "Error");
+        }
+      },
+      error: function (res) {
+        defered.resolve(false);
+        toastr.error("ไม่สามารถดึงข้อมูลเวอร์ชันได้", "Error");
+      },
+    });
+  };
+  return {
+    init: function (defered) {
+      let loadUserDefer = $.Deferred();
+      loadUserData(loadUserDefer);
+
+      $.when(loadUserDefer).done(function (loadUserResult) {
+        if (loadUserResult) {
+          defered.resolve(true);
+        } else {
+          defered.resolve(false);
+        }
+      });
+    },
+  };
+})();

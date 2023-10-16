@@ -56,6 +56,7 @@ $(document).ready(function () {
       return;
     }
     // renderPage();
+    // $("#pdfViewer").attr("src", `${link}/api/document/getFilePolicy`);
   });
 });
 
@@ -70,6 +71,7 @@ let SetupData = (function () {
       success: function (res) {
         if (res.status.code == 200) {
           let userData = res.data;
+          $("#version").html("Version " + userData.version);
           $("#currentUserName").html(
             userData.firstName + " " + userData.lastName
           );
