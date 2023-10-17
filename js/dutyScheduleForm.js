@@ -706,6 +706,7 @@ let CreateDatatable = (function () {
         { data: "departmentCode2", className: "text-center" },
         { data: "departmentCode3", className: "text-center" },
         { data: "status", className: "text-center" },
+        { data: "requestShuttle", className: "text-center" },
         { data: "remark", className: "text-center" },
         { data: "", className: "text-center" },
       ],
@@ -786,13 +787,24 @@ let CreateDatatable = (function () {
         },
         {
           targets: 9,
+          title: "ขอรถรับส่ง",
+          render: function (data, type, full, meta) {
+            if (data == 1) {
+              return `<i class="fa fa-circle text-success"></i>`;
+            } else {
+              return `<i class="fa fa-circle"></i>`;
+            }
+          },
+        },
+        {
+          targets: 10,
           title: "หมายเหตุ",
           render: function (data, type, full, meta) {
             return data;
           },
         },
         {
-          targets: 10,
+          targets: 11,
           title: "แก้ไข",
           render: function (data, type, full, meta) {
             return full.status == dutyScheduleStatusConstant.Wait ||

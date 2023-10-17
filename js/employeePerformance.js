@@ -385,6 +385,22 @@ let renderPage = function () {
     );
   });
 
+  $("#startDate").datepicker({
+    format: "dd/mm/yyyy",
+    autoclose: true,
+    todayHighlight: true,
+    todayBtn: true,
+  });
+  // .datepicker("setDate", new Date());
+
+  $("#endDate").datepicker({
+    format: "dd/mm/yyyy",
+    autoclose: true,
+    todayHighlight: true,
+    todayBtn: true,
+  });
+  // .datepicker("setDate", new Date());
+
   $.each(approveStatusMasters, function (i, item) {
     $("select[name=isApprove]").append(
       $("<option>", {
@@ -781,6 +797,8 @@ let CreateDatatable = (function () {
 let LoadDutySchedule = function () {
   let objData = {
     insertDate: $("#beginDate").val(),
+    startDate: $("#startDate").val(),
+    endDate: $("#endDate").val(),
     positionCode: parseInt($("#positionCode").val()),
   };
   $.ajax({
