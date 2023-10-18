@@ -551,6 +551,7 @@ let CreateDatatable = (function () {
         { data: "departmentCode1", className: "text-center" },
         { data: "departmentCode2", className: "text-center" },
         { data: "departmentCode3", className: "text-center" },
+        { data: "requestShuttle", className: "text-center" },
         { data: "remark", className: "text-center" },
         { data: "realShiftEnd", className: "text-center" },
         { data: "totalRealDuration", className: "text-center" },
@@ -669,13 +670,24 @@ let CreateDatatable = (function () {
         },
         {
           targets: 13,
+          title: "ขอรถรับส่ง",
+          render: function (data, type, full, meta) {
+            if (data == 1) {
+              return `<i class="fa fa-circle text-success"></i>`;
+            } else {
+              return `<i class="fa fa-circle"></i>`;
+            }
+          },
+        },
+        {
+          targets: 14,
           title: "หมายเหตุ",
           render: function (data, type, full, meta) {
             return data;
           },
         },
         {
-          targets: 14,
+          targets: 15,
           title: "ช่วงเวลาที่เข้างาน",
           render: function (data, type, full, meta) {
             return full.realShiftStart == null
@@ -684,14 +696,14 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 15,
+          targets: 16,
           title: "จำนวนชั่วโมงที่เข้างาน",
           render: function (data, type, full, meta) {
             return data;
           },
         },
         {
-          targets: 16,
+          targets: 17,
           title: "แก้ไข",
           render: function (data, type, full, meta) {
             return full.status == dutyScheduleSStatusConstant.Wait
@@ -731,7 +743,10 @@ let CreateDatatable = (function () {
         $("#departmentCode3EditModal").val(data.departmentCode3).change();
         $("#remarkEditModal").val(data.remark);
         $("#statusCodeModal").val(data.status);
-
+        $("#requestShuttleEdit").prop(
+          "checked",
+          data.requestShuttle == null || data.requestShuttle == 0 ? false : true
+        );
         $("#editScheduleModal").modal();
       });
 
@@ -746,6 +761,7 @@ let CreateDatatable = (function () {
         let departmentCode3 = parseInt($("#departmentCode3EditModal").val());
         let remark = $("#remarkEditModal").val();
         let status = $("#statusCodeModal").val();
+        let requestShuttle = $(`#requestShuttleEdit`).is(":checked") ? 1 : 0;
 
         let objadddata = {
           dutyDate: dutyDate,
@@ -759,6 +775,7 @@ let CreateDatatable = (function () {
           remark: remark,
           dutyScheduleId: currentDutyScheduleId,
           status: status,
+          requestShuttle: requestShuttle,
         };
         isValidate = 0;
 

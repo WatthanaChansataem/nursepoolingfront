@@ -366,7 +366,21 @@ let renderPage = function () {
     todayHighlight: true,
     todayBtn: true,
   });
+  $("#startDate").datepicker({
+    format: "dd/mm/yyyy",
+    autoclose: true,
+    todayHighlight: true,
+    todayBtn: true,
+  });
+  // .datepicker("setDate", new Date());
 
+  $("#endDate").datepicker({
+    format: "dd/mm/yyyy",
+    autoclose: true,
+    todayHighlight: true,
+    todayBtn: true,
+  });
+  // .datepicker("setDate", new Date());
   $.each(userLevelMaster, function (i, item) {
     $("select[name=userLevelCode]").append(
       $("<option>", {
@@ -847,6 +861,8 @@ let LoadDutySchedule = function () {
     hospitalCode: hospitalCode,
     locationCode: locationCode,
     departmentCode: departmentCode,
+    startDate: $("#startDate").val(),
+    endDate: $("#endDate").val(),
   };
   $.ajax({
     url: link + "/api/dutySchedule/searchForAgencyPerformance",
