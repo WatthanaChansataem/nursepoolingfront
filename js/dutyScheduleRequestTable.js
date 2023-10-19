@@ -1794,7 +1794,6 @@ let CreateDatatableDetail = (function () {
         { data: "approveDepartmentCode", className: "text-center" },
         { data: "approveShiftStart", className: "text-center" },
         { data: "realShiftStart", className: "text-center" },
-        { data: "score", className: "text-center" },
         { data: "remark", className: "text-center" },
       ],
       order: [[0, "asc"]],
@@ -1858,15 +1857,6 @@ let CreateDatatableDetail = (function () {
         },
         {
           targets: 7,
-          title: "ผลประเมิน",
-          render: function (data, type, full, meta) {
-            return '<span class="fa fa-star checked" style="color:orange"></span>'.repeat(
-              data
-            );
-          },
-        },
-        {
-          targets: 8,
           title: "หมายเหตุ",
           render: function (data, type, full, meta) {
             return data;

@@ -48,6 +48,11 @@
 })(jQuery);
 let userData;
 let urlParams;
+let dutyScheduleId;
+let UserAttendanceStatusConstant = {
+  Accept: "A",
+  Quit: "Q",
+};
 $(document).ready(function () {
   let setupDataDefered = $.Deferred();
   SetupData.init(setupDataDefered);
@@ -138,12 +143,20 @@ let stampTimeAttendance = function () {
         $("#attendanceType").html(res.data.status);
         $("#attendanceStatus").html("สำเร็จ");
         $("#crossMarkImg").hide();
-        $("#checkImg").show();
+        dutyScheduleId = res.data.dutyScheduleId;
+        if (res.data.userRatingStatus == UserAttendanceStatusConstant.Quit) {
+          $("#checkImg").hide();
+          $("#feelingField").show();
+        } else {
+          $("#checkImg").show();
+          $("#feelingField").hide();
+        }
       } else {
         $("#attendanceType").html(res.data.status);
         $("#attendanceStatus").html("ไม่สำเร็จ");
         $("#crossMarkImg").show();
         $("#checkImg").hide();
+        $("#feelingField").hide();
         toastr.error(res.status.message);
       }
     },
@@ -153,6 +166,56 @@ let stampTimeAttendance = function () {
       $("#crossMarkImg").show();
       $("#checkImg").hide();
       toastr.error("ไม่สามารถบันทึกเวลาได้", "Error");
+    },
+  });
+};
+
+$(".terrible, .badly, .normal, .good, .verygood").on("click", function () {
+  event.preventDefault();
+  $(".active").removeClass("active");
+  $(this).addClass("active");
+  let score = 0;
+  if ($(this).attr("id") == "terrible") {
+    score = 1;
+  } else if ($(this).attr("id") == "badly") {
+    score = 2;
+  } else if ($(this).attr("id") == "normal") {
+    score = 3;
+  } else if ($(this).attr("id") == "good") {
+    score = 4;
+  } else if ($(this).attr("id") == "verygood") {
+    score = 5;
+  }
+
+  ratingDepartment(dutyScheduleId, score);
+});
+
+let ratingDepartment = function (dutyScheduleIdScore, score) {
+  let objData = {
+    userId: userData.userId,
+    dutyScheduleId: dutyScheduleIdScore,
+    score: score,
+  };
+  console.log(objData);
+  $.ajax({
+    url: link + "/api/dutySchedule/userRatingDepartment",
+    type: "POST",
+    data: JSON.stringify(objData),
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (res) {
+      if (res.status.code == 200) {
+        $("#checkImg").show();
+        $("#feelingField").hide();
+      } else {
+        // toastr.error(res.status.message);
+      }
+    },
+    error: function (res) {
+      // toastr.error("ไม่สามารถบันทึกเวลาได้", "Error");
     },
   });
 };

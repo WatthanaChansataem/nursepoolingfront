@@ -123,6 +123,7 @@ $(document).ready(function () {
           ? star.classList.add("active")
           : star.classList.remove("active");
       });
+      $("#ratingScore").val(index1 + 1);
     });
   });
 
@@ -439,7 +440,7 @@ let CreateDatatable = (function () {
         { data: "shiftStart", className: "text-center" },
         { data: "approveShiftStart", className: "text-center" },
         { data: "realShiftStart", className: "text-center" },
-        { data: "score", className: "text-center" },
+        // { data: "score", className: "text-center" },
         // { data: "active", className: "text-center" },
         { data: "ratingScore", className: "text-center" },
         { data: "evaluatorEmployeeCode", className: "text-center" },
@@ -574,36 +575,27 @@ let CreateDatatable = (function () {
         },
         {
           targets: 10,
-          title: "ผลประเมิน",
-          render: function (data, type, full, meta) {
-            return '<span class="fa fa-star checked" style="color:orange"></span>'.repeat(
-              data
-            );
-          },
-        },
-        {
-          targets: 11,
           title: "คะแนนการทำงานของเจ้าหน้าที่",
           render: function (data, type, full, meta) {
             return data == null ? "-" : data;
           },
         },
         {
-          targets: 12,
+          targets: 11,
           title: "รหัสพนักงานผู้ประเมิน",
           render: function (data, type, full, meta) {
             return data == null ? "-" : data;
           },
         },
         {
-          targets: 13,
+          targets: 12,
           title: "หมายเหตุ",
           render: function (data, type, full, meta) {
             return data == null ? "-" : data;
           },
         },
         {
-          targets: 14,
+          targets: 13,
           title: "แก้ไข",
           render: function (data, type, full, meta) {
             return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`;
@@ -656,6 +648,55 @@ let CreateDatatable = (function () {
         currentRow = $(this).closest("tr");
         globalScore = 0;
         removeStar();
+
+        $("#ratingScore").val(data.ratingScore);
+
+        if (data.b5FServiceScript != null) {
+          let b5FServiceScriptData = data.b5FServiceScript;
+          $("#focusStrength").prop(
+            "checked",
+            b5FServiceScriptData.focusStrength == 0 ? false : true
+          );
+          $("#fastStrength").prop(
+            "checked",
+            b5FServiceScriptData.fastStrength == 0 ? false : true
+          );
+          $("#flexibleStrength").prop(
+            "checked",
+            b5FServiceScriptData.flexibleStrength == 0 ? false : true
+          );
+          $("#foreGrabStrength").prop(
+            "checked",
+            b5FServiceScriptData.foreGrabStrength == 0 ? false : true
+          );
+          $("#forecastStrength").prop(
+            "checked",
+            b5FServiceScriptData.forecastStrength == 0 ? false : true
+          );
+
+          $("#focusWeaknesses").prop(
+            "checked",
+            b5FServiceScriptData.focusWeaknesses == 0 ? false : true
+          );
+          $("#fastWeaknesses").prop(
+            "checked",
+            b5FServiceScriptData.fastWeaknesses == 0 ? false : true
+          );
+          $("#flexibleWeaknesses").prop(
+            "checked",
+            b5FServiceScriptData.flexibleWeaknesses == 0 ? false : true
+          );
+          $("#foreGrabWeaknesses").prop(
+            "checked",
+            b5FServiceScriptData.foreGrabWeaknesses == 0 ? false : true
+          );
+          $("#forecastWeaknesses").prop(
+            "checked",
+            b5FServiceScriptData.forecastWeaknesses == 0 ? false : true
+          );
+        } else {
+          $(".bf5:checked").prop("checked", false);
+        }
         $("#editScheduleModal").modal();
       });
 
@@ -665,6 +706,22 @@ let CreateDatatable = (function () {
         let remark = $("#remarkEditModal").val();
         let ratingScore = $("#ratingScore").val();
         let evaluatorEmployeeCode = $("#evaluatorEmployeeCode").val();
+        let focusStrength = $("#focusStrength").is(":checked") ? 1 : 0;
+        let fastStrength = $("#fastStrength").is(":checked") ? 1 : 0;
+        let flexibleStrength = $("#flexibleStrength").is(":checked") ? 1 : 0;
+        let foreGrabStrength = $("#foreGrabStrength").is(":checked") ? 1 : 0;
+        let forecastStrength = $("#forecastStrength").is(":checked") ? 1 : 0;
+        let focusWeaknesses = $("#focusWeaknesses").is(":checked") ? 1 : 0;
+        let fastWeaknesses = $("#fastWeaknesses").is(":checked") ? 1 : 0;
+        let flexibleWeaknesses = $("#flexibleWeaknesses").is(":checked")
+          ? 1
+          : 0;
+        let foreGrabWeaknesses = $("#foreGrabWeaknesses").is(":checked")
+          ? 1
+          : 0;
+        let forecastWeaknesses = $("#forecastWeaknesses").is(":checked")
+          ? 1
+          : 0;
 
         let objadddata = {
           departmentRemark: remark,
@@ -674,6 +731,16 @@ let CreateDatatable = (function () {
           dutyScheduleId: currentDutyScheduleId,
           ratingScore: ratingScore,
           evaluatorEmployeeCode: evaluatorEmployeeCode,
+          focusStrength: focusStrength,
+          fastStrength: fastStrength,
+          flexibleStrength: flexibleStrength,
+          foreGrabStrength: foreGrabStrength,
+          forecastStrength: forecastStrength,
+          focusWeaknesses: focusWeaknesses,
+          fastWeaknesses: fastWeaknesses,
+          flexibleWeaknesses: flexibleWeaknesses,
+          foreGrabWeaknesses: foreGrabWeaknesses,
+          forecastWeaknesses: forecastWeaknesses,
         };
         isValidate = 0;
 
