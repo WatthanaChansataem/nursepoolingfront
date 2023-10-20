@@ -63,6 +63,9 @@ let positionMaster;
 let currentRow;
 let currentDutyScheduleId;
 
+let userCategoryMap = new Map();
+let userCategoryMaster;
+
 let approveStatusMasters = [
   { statusCode: 0, statusDesc: "ยังไม่อนุมัติ" },
   { statusCode: 1, statusDesc: "อนุมัติแล้ว" },
@@ -321,6 +324,32 @@ let SetupData = (function () {
       },
     });
   };
+
+  let loadUserCategory = function (defered) {
+    $.ajax({
+      url: link + "/api/userCategory/list",
+      type: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      success: function (res) {
+        if (res.status.code == 200) {
+          userCategoryMaster = res.data;
+          for (let data of res.data) {
+            userCategoryMap.set(data.userCategoryCode, data);
+          }
+          defered.resolve(true);
+        } else {
+          defered.resolve(false);
+          toastr.error("ไม่สามารถดึงข้อมูล UserCategory ได้", "Error");
+        }
+      },
+      error: function (res) {
+        defered.resolve(false);
+        toastr.error("ไม่สามารถดึงข้อมูล UserCategory ได้", "Error");
+      },
+    });
+  };
   return {
     init: function (defered) {
       let hospitalDefered = $.Deferred();
@@ -328,31 +357,36 @@ let SetupData = (function () {
       let departmentDefered = $.Deferred();
       let userDataDefered = $.Deferred();
       let positionDefered = $.Deferred();
+      let userCategoryDefered = $.Deferred();
       loadHospital(hospitalDefered);
       loadLocation(locationDefered);
       loadDepartment(departmentDefered);
       loadUserData(userDataDefered);
       loadPosition(positionDefered);
+      loadUserCategory(userCategoryDefered);
 
       $.when(
         hospitalDefered,
         locationDefered,
         departmentDefered,
         userDataDefered,
-        positionDefered
+        positionDefered,
+        userCategoryDefered
       ).done(function (
         hospitalResult,
         locationDefered,
         departmentDefered,
         userDataResult,
-        positionResult
+        positionResult,
+        userCategoryResult
       ) {
         if (
           hospitalResult &&
           locationDefered &&
           departmentDefered &&
           userDataResult &&
-          positionResult
+          positionResult &&
+          userCategoryResult
         ) {
           defered.resolve(true);
         } else {
@@ -430,6 +464,15 @@ let renderPage = function () {
       $("<option>", {
         value: item.locationCode,
         text: item.locationDesc,
+      })
+    );
+  });
+
+  $.each(userCategoryMaster, function (i, item) {
+    $("select[name=userCategoryCode]").append(
+      $("<option>", {
+        value: item.userCategoryCode,
+        text: item.userCategoryDesc,
       })
     );
   });
@@ -622,10 +665,9 @@ let CreateDatatable = (function () {
           $("#lineId").html(
             '<strong class="text-gray-900">Line ID:  </strong>' + data.lineID
           );
-
           $("#vendorNo").val(data.vendorNo);
-
           $("#userLevelCode").val(data.userLevelCode);
+          $("#userCategoryCode").val(data.userCategoryCode);
         }
 
         if (data.role == userRoleConstant.Department) {
@@ -688,12 +730,18 @@ let CreateDatatable = (function () {
         let hospitalCode = parseInt($("#hospitalCodeEditModal").val());
         let locationCode = parseInt($("#locationCodeEditModal").val());
         let departmentCode = parseInt($("#departmentCodeEditModal").val());
+        let userCategoryCode =
+          $("#userCategoryCode").val() == NaN ||
+          $("#userCategoryCode").val() == null
+            ? 0
+            : parseInt($("#userCategoryCode").val());
 
         if (rowData.role == userRoleConstant.User) {
           objData = {
             userId: rowData.userId,
             vendorNo: vendorNo,
             userLevelCode: userLevelCode,
+            userCategoryCode: userCategoryCode,
             isApprove: isApprove,
             active: active,
           };
@@ -706,12 +754,14 @@ let CreateDatatable = (function () {
             locationCode: locationCode,
             departmentCode: departmentCode,
             isApprove: isApprove,
+            userCategoryCode: userCategoryCode,
             active: active,
           };
         }
         if (rowData.role == userRoleConstant.Admin) {
           objData = {
             userId: rowData.userId,
+            userCategoryCode: userCategoryCode,
             firstName: $("#adminName").val(),
           };
         }
