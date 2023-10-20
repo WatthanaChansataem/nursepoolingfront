@@ -50,7 +50,8 @@
 let isInvalidClass = "is-invalid";
 let validationErrorMessageClass = "validation-error-message";
 let modalEdit = $("#editScheduleModal");
-
+let endDateGlobal;
+let startDateGlobal;
 let hospitalMap = new Map();
 let hospitalMaster;
 let locationMap = new Map();
@@ -135,6 +136,8 @@ let DocumentTypeCode = {
 
 $(document).ready(function () {
   CreateDatatable.init();
+  RequestDatatable.init();
+  CreateDatatableDetail.init();
   readURL = function (input) {};
 
   let setupDataDefered = $.Deferred();
@@ -508,11 +511,9 @@ let CreateDatatable = (function () {
       scrollCollapse: true,
       columns: [
         { data: "", className: "text-center" },
-        { data: "firstName", className: "text-center" },
         { data: "hospitalCode", className: "text-center" },
         { data: "locationCode", className: "text-center" },
         { data: "departmentCode", className: "text-center" },
-        { data: "role", className: "text-center" },
         { data: "requestNumber", className: "text-center" },
         { data: "approveNumber", className: "text-center" },
         { data: "realNumber", className: "text-center" },
@@ -521,9 +522,6 @@ let CreateDatatable = (function () {
         { data: "totalApproveDuration", className: "text-center" },
         { data: "totalRealDuration", className: "text-center" },
         { data: "totalOFFDuration", className: "text-center" },
-        { data: "active", className: "text-center" },
-        { data: "insertDateTime", className: "text-center" },
-        { data: "", className: "text-center" },
       ],
       order: [[0, "asc"]],
       columnDefs: [
@@ -536,19 +534,6 @@ let CreateDatatable = (function () {
         },
         {
           targets: 1,
-          title: "ชื่อ",
-          render: function (data, type, full, meta) {
-            if (full.role == userRoleConstant.User) {
-              return `<a class="" href="profilePreview.html?userId=${
-                full.userId
-              }" target="_blank">${full.firstName + " " + full.lastName}</a>`;
-            } else {
-              return full.firstName;
-            }
-          },
-        },
-        {
-          targets: 2,
           title: "โรงพยาบาล",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -557,7 +542,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 3,
+          targets: 2,
           title: "Location",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -566,7 +551,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 4,
+          targets: 3,
           title: "แผนก",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -575,91 +560,75 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 5,
-          title: "UserRole",
+          targets: 4,
+          title: "จำนวนเวรที่ขอ",
           render: function (data, type, full, meta) {
-            return userRoleMap[data].desc;
+            return data == 0
+              ? data
+              : `<a  class="btn btn-secondary btn-sm display-button" type="request"> ${data}</i></a>`;
+          },
+        },
+        {
+          targets: 5,
+          title: "จำนวนเวรที่ได้รับบการอนุมัติ",
+          render: function (data, type, full, meta) {
+            return data == 0
+              ? data
+              : `<a  class="btn btn-primary btn-sm display-button" type="approve"> ${data}</i></a>`;
           },
         },
         {
           targets: 6,
-          title: "จำนวนเวรที่ขอ",
+          title: "จำนวนเวรที่เข้างาน",
           render: function (data, type, full, meta) {
-            return data;
+            return data == 0
+              ? data
+              : `<a  class="btn btn-success btn-sm display-button" type="real"> ${data}</i></a>`;
           },
         },
         {
           targets: 7,
-          title: "จำนวนเวรที่ได้รับบการอนุมัติ",
+          title: "จำนวนเวรที่OFF",
           render: function (data, type, full, meta) {
-            return data;
+            return data == 0
+              ? data
+              : `<a  class="btn btn-warning btn-sm display-button" type="off"> ${data}</i></a>`;
           },
         },
         {
           targets: 8,
-          title: "จำนวนเวรที่เข้างาน",
+          title: "จำนวนชั่วโมงที่ขอ",
           render: function (data, type, full, meta) {
-            return data;
+            return data == "00:00"
+              ? data
+              : `<a class="btn btn-secondary btn-sm display-button" type="request">${data}</a>`;
           },
         },
         {
           targets: 9,
-          title: "จำนวนเวรที่OFF",
+          title: "จำนวนชั่วโมงที่ได้รับบการอนุมัติ",
           render: function (data, type, full, meta) {
-            return data;
+            return data == "00:00"
+              ? data
+              : `<a class="btn btn-primary btn-sm display-button" type="approve">${data}</a>`;
           },
         },
         {
           targets: 10,
-          title: "จำนวนชั่วโมงที่ขอ",
+          title: "จำนวนชั่วโมงที่เข้างาน",
           render: function (data, type, full, meta) {
-            return data;
+            return data == "00:00"
+              ? data
+              : `<a class="btn btn-success btn-sm display-button" type="real">${data}</a>`;
           },
         },
         {
           targets: 11,
-          title: "จำนวนชั่วโมงที่ได้รับบการอนุมัติ",
-          render: function (data, type, full, meta) {
-            return data;
-          },
-        },
-        {
-          targets: 12,
-          title: "จำนวนชั่วโมงที่เข้างาน",
-          render: function (data, type, full, meta) {
-            return data;
-          },
-        },
-        {
-          targets: 13,
           title: "จำนวนชั่วโมงที่OFF",
           render: function (data, type, full, meta) {
-            return data;
-          },
-        },
-        {
-          targets: 14,
-          title: "สถานะ",
-          render: function (data, type, full, meta) {
-            if (data == 0) {
-              return `<i class="fa fa-circle"></i>`;
-            } else {
-              return `<i class="fa fa-circle text-success"></i>`;
-            }
-          },
-        },
-        {
-          targets: 15,
-          title: "วันที่ลงทะเบียน",
-          render: function (data, type, full, meta) {
-            return isDateTime(data) ? moment(data).format("DD/MM/YYYY") : data;
-          },
-        },
-        {
-          targets: 16,
-          title: "แก้ไข",
-          render: function (data, type, full, meta) {
-            return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`;
+            return data == "00:00"
+              ? data
+              : `<a class="btn btn-warning btn-sm display-button" type="off">${data}</a>`;
           },
         },
       ],
@@ -670,6 +639,13 @@ let CreateDatatable = (function () {
     init: function () {
       initTable1();
       let containerTable = $(table.table().container());
+
+      containerTable.on("click", ".display-button", function () {
+        let rowIndex = table.row($(this).closest("tr")).index();
+        let data = table.row($(this).closest("tr")).data();
+        currentRow = $(this).closest("tr");
+        loadUserDataForDisplayModal(data, $(this).attr("type"));
+      });
 
       containerTable.on("click", ".edit-button", function () {
         // let contractNo = $(this).attr("contractNo");
@@ -864,6 +840,8 @@ let LoadDutySchedule = function () {
     startDate: $("#startDate").val(),
     endDate: $("#endDate").val(),
   };
+  endDateGlobal = $("#endDate").val();
+  startDateGlobal = $("#startDate").val();
   $.ajax({
     url: link + "/api/dutySchedule/searchForAgencyPerformance",
     type: "POST",
@@ -992,6 +970,570 @@ var Spinner = (function () {
     deactivateCenterSpinner: function (buttonElement) {
       buttonElement.removeClass(centerSpinnerClass);
       buttonElement.prop("disabled", false);
+    },
+  };
+})();
+
+$("#displayDetailModal").on("shown.bs.modal", function () {
+  CreateDatatableDetail.adjust();
+});
+
+let loadUserDataForDisplayModal = function (data, type) {
+  let objData = {
+    type: type,
+    hospitalCode: data.hospitalCode,
+    locationCode: data.locationCode,
+    departmentCode: data.departmentCode,
+    endDate: endDateGlobal,
+    startDate: startDateGlobal,
+  };
+  if (type != "request") {
+    $.ajax({
+      url: link + "/api/dutySchedule/searchForAgencyPerformanceDetail",
+      type: "POST",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      data: JSON.stringify(objData),
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      success: function (res) {
+        if (res.status.code == 200) {
+          let approvalDetaildata = res.data;
+          CreateDatatableDetail.data(approvalDetaildata);
+
+          $("#hospitalCodeModal").html(
+            '<strong class="text-gray-900">โรงพยาบาล:  </strong> ' +
+              hospitalMap.get(data.hospitalCode).hospitalDesc
+          );
+
+          $("#locationCodeModal").html(
+            '<strong class="text-gray-900">Location:  </strong> ' +
+              locationMap.get(data.locationCode).locationDesc
+          );
+
+          $("#departmentCodeModal").html(
+            '<strong class="text-gray-900">แผนก:  </strong> ' +
+              departmentMap.get(data.departmentCode).departmentDesc
+          );
+
+          $("#displayDetailModal").modal("show");
+        } else {
+          toastr.error(res.status.message);
+        }
+      },
+      error: function (res) {
+        toastr.error("ไม่สามารถดึงข้อมูลได้");
+      },
+    });
+  } else {
+    $.ajax({
+      url: link + "/api/dutyScheduleRequest/searchForAgencyPerformanceDetail",
+      type: "POST",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      data: JSON.stringify(objData),
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      success: function (res) {
+        if (res.status.code == 200) {
+          $("#hospitalCodeModal").html(
+            '<strong class="text-gray-900">โรงพยาบาล:  </strong> ' +
+              hospitalMap.get(data.hospitalCode).hospitalDesc
+          );
+
+          $("#locationCodeModal").html(
+            '<strong class="text-gray-900">Location:  </strong> ' +
+              locationMap.get(data.locationCode).locationDesc
+          );
+
+          $("#departmentCodeModal").html(
+            '<strong class="text-gray-900">แผนก:  </strong> ' +
+              departmentMap.get(data.departmentCode).departmentDesc
+          );
+          RequestDatatable.data(res.data);
+          $("#displayDetailRequestModal").modal("show");
+        } else {
+          toastr.error(res.status.message);
+        }
+      },
+      error: function (res) {
+        toastr.error("ไม่สามารถดึงข้อมูลรายการขออัตรากำลังได้");
+      },
+    });
+  }
+};
+
+let CreateDatatableDetail = (function () {
+  let table;
+  let currentPage = 0;
+  let initTable1 = function () {
+    table = $("#dataTableDetail").DataTable({
+      responsive: false,
+      data: [],
+      // scrollY: "50vh",
+      scrollX: true,
+      scrollCollapse: true,
+      columns: [
+        { data: "", className: "text-center" },
+        { data: "dutyDate", className: "text-center" },
+        { data: "firstName", className: "text-center" },
+        { data: "approveHospitalCode", className: "text-center" },
+        { data: "approveLocationCode", className: "text-center" },
+        { data: "approveDepartmentCode", className: "text-center" },
+        { data: "positionCode", className: "text-center" },
+        { data: "approveShiftStart", className: "text-center" },
+        { data: "realShiftStart", className: "text-center" },
+        { data: "status", className: "text-center" },
+        { data: "remark", className: "text-center" },
+      ],
+      order: [[0, "asc"]],
+      columnDefs: [
+        {
+          targets: 0,
+          title: "No.",
+          render: function (data, type, full, meta) {
+            return parseInt(meta.row) + 1;
+          },
+        },
+        {
+          targets: 1,
+          title: "วันที่ส่งเวร",
+          render: function (data, type, full, meta) {
+            return isDateTime(data) ? moment(data).format("DD/MM/YYYY") : data;
+          },
+        },
+        {
+          targets: 2,
+          title: "ชื่อ - นามสกุล",
+          render: function (data, type, full, meta) {
+            return full.firstName + " " + full.lastName;
+          },
+        },
+        {
+          targets: 3,
+          title: "โรงพยาบาลที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? ""
+              : hospitalMap.get(data).hospitalDesc;
+          },
+        },
+        {
+          targets: 4,
+          title: "Locationที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? ""
+              : locationMap.get(data).locationDesc;
+          },
+        },
+        {
+          targets: 5,
+          title: "แผนกที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? ""
+              : departmentMap.get(data).departmentDesc;
+          },
+        },
+        {
+          targets: 6,
+          title: "ตำแหน่ง",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? ""
+              : positionMap.get(data).positionDesc;
+          },
+        },
+        {
+          targets: 7,
+          title: "ช่วงเวลาที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return full.approveShiftStart + "-" + full.approveShiftEnd;
+          },
+        },
+        {
+          targets: 8,
+          title: "ช่วงเวลาที่เข้างานจริง",
+          render: function (data, type, full, meta) {
+            return full.realShiftStart == null
+              ? "-"
+              : full.realShiftStart + "-" + full.realShiftEnd;
+          },
+        },
+        {
+          targets: 9,
+          title: "สถานะ",
+          render: function (data, type, full, meta) {
+            return `<a class="btn btn-${dutyScheduleSStatusMap[data].state}" style="width: 90px;">${dutyScheduleSStatusMap[data].desc}</a>`;
+          },
+        },
+        {
+          targets: 10,
+          title: "หมายเหตุ",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+      ],
+    });
+  };
+
+  return {
+    init: function () {
+      initTable1();
+      let containerTable = $(table.table().container());
+    },
+    data: function (data) {
+      table.clear();
+      table.rows.add(data);
+      table.draw();
+    },
+    addData: function (data) {
+      table.rows.add(data);
+      table.draw();
+    },
+    getData: function (index) {
+      if (index) {
+        return table.row(index).data();
+      }
+      return table.rows().data().toArray();
+    },
+    datatable: function () {
+      return table;
+    },
+    adjust: function () {
+      table.columns.adjust();
+    },
+  };
+})();
+
+$("#displayDetailRequestModal").on("shown.bs.modal", function () {
+  RequestDatatable.adjust();
+});
+
+let RequestDatatable = (function () {
+  let table;
+  let currentPage = 0;
+  let initTable1 = function () {
+    table = $("#dataTableRequest").DataTable({
+      responsive: false,
+      data: [],
+      scrollX: true,
+      scrollCollapse: true,
+      columns: [
+        { data: "", className: "text-center" },
+        { data: "dutyDate", className: "text-center" },
+        { data: "hospitalCode", className: "text-center" },
+        { data: "locationCode", className: "text-center" },
+        { data: "departmentCode", className: "text-center" },
+        { data: "positionCode", className: "text-center" },
+        { data: "requestNumber1", className: "text-center" },
+        { data: "requestNumber2", className: "text-center" },
+        { data: "requestNumber3", className: "text-center" },
+        { data: "requestNumber4", className: "text-center" },
+        { data: "requestNumber5", className: "text-center" },
+        { data: "requestNumber6", className: "text-center" },
+        { data: "requestNumber7", className: "text-center" },
+        { data: "requestNumber8", className: "text-center" },
+        { data: "requestNumberOther", className: "text-center" },
+        { data: "allRequestNumber", className: "text-center" },
+        { data: "allApproveNumber", className: "text-center" },
+        { data: "totalDurationRequest", className: "text-center" },
+        { data: "totalDurationApprove", className: "text-center" },
+        { data: "active", className: "text-center" },
+        { data: "remark", className: "text-center" },
+      ],
+      order: [[0, "asc"]],
+      columnDefs: [
+        {
+          targets: 0,
+          title: "No.",
+          render: function (data, type, full, meta) {
+            return parseInt(meta.row) + 1;
+          },
+        },
+        {
+          targets: 1,
+          title: "วันเดือนปี",
+          render: function (data, type, full, meta) {
+            return isDateTime(data) ? moment(data).format("DD/MM/YYYY") : data;
+          },
+        },
+        {
+          targets: 2,
+          title: "โรงพยาบาล",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? ""
+              : hospitalMap.get(data).hospitalDesc;
+          },
+        },
+        {
+          targets: 3,
+          title: "Location",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? ""
+              : locationMap.get(data).locationDesc;
+          },
+        },
+        {
+          targets: 4,
+          title: "แผนก",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? ""
+              : departmentMap.get(data).departmentDesc;
+          },
+        },
+        {
+          targets: 5,
+          title: "ตำแหน่ง",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? ""
+              : positionMap.get(data).positionDesc;
+          },
+        },
+        {
+          targets: 6,
+          title: "07.00-15.00",
+          render: function (data, type, full, meta) {
+            if (data == 0) {
+              return data;
+            } else {
+              return `<a  class="btn btn-${
+                full.approveNumber1 >= full.requestNumber1
+                  ? "success"
+                  : full.approveNumber1 > 0
+                  ? "primary"
+                  : "warning"
+              } btn-circle btn-sm"> ${data}</i></a>`;
+            }
+          },
+        },
+        {
+          targets: 7,
+          title: "15.00-23.00",
+          render: function (data, type, full, meta) {
+            if (data == 0) {
+              return data;
+            } else {
+              return `<a  class="btn btn-${
+                full.approveNumber2 >= full.requestNumber2
+                  ? "success"
+                  : full.approveNumber2 > 0
+                  ? "primary"
+                  : "warning"
+              } btn-circle btn-sm"> ${data}</i></a>`;
+            }
+          },
+        },
+        {
+          targets: 8,
+          title: "23.00-07.00",
+          render: function (data, type, full, meta) {
+            if (data == 0) {
+              return data;
+            } else {
+              return `<a  class="btn btn-${
+                full.approveNumber3 >= full.requestNumber3
+                  ? "success"
+                  : full.approveNumber3 > 0
+                  ? "primary"
+                  : "warning"
+              } btn-circle btn-sm"> ${data}</i></a>`;
+            }
+          },
+        },
+        {
+          targets: 9,
+          title: "07.00-19.00",
+          render: function (data, type, full, meta) {
+            if (data == 0) {
+              return data;
+            } else {
+              return `<a  class="btn btn-${
+                full.approveNumber4 >= full.requestNumber4
+                  ? "success"
+                  : full.approveNumber4 > 0
+                  ? "primary"
+                  : "warning"
+              } btn-circle btn-sm"> ${data}</i></a>`;
+            }
+          },
+        },
+        {
+          targets: 10,
+          title: "19.00-07.00",
+          render: function (data, type, full, meta) {
+            if (data == 0) {
+              return data;
+            } else {
+              return `<a  class="btn btn-${
+                full.approveNumber5 >= full.requestNumber5
+                  ? "success"
+                  : full.approveNumber5 > 0
+                  ? "primary"
+                  : "warning"
+              } btn-circle btn-sm"> ${data}</i></a>`;
+            }
+          },
+        },
+        {
+          targets: 11,
+          title: "08.00-16.00",
+          render: function (data, type, full, meta) {
+            if (data == 0) {
+              return data;
+            } else {
+              return `<a  class="btn btn-${
+                full.approveNumber6 >= full.requestNumber6
+                  ? "success"
+                  : full.approveNumber6 > 0
+                  ? "primary"
+                  : "warning"
+              } btn-circle btn-sm"> ${data}</i></a>`;
+            }
+          },
+        },
+        {
+          targets: 12,
+          title: "08.00-20.00",
+          render: function (data, type, full, meta) {
+            if (data == 0) {
+              return data;
+            } else {
+              return `<a  class="btn btn-${
+                full.approveNumber7 >= full.requestNumber7
+                  ? "success"
+                  : full.approveNumber7 > 0
+                  ? "primary"
+                  : "warning"
+              } btn-circle btn-sm"> ${data}</i></a>`;
+            }
+          },
+        },
+        {
+          targets: 13,
+          title: "09.00-17.00",
+          render: function (data, type, full, meta) {
+            if (data == 0) {
+              return data;
+            } else {
+              return `<a  class="btn btn-${
+                full.approveNumber8 >= full.requestNumber8
+                  ? "success"
+                  : full.approveNumber8 > 0
+                  ? "primary"
+                  : "warning"
+              } btn-circle btn-sm"> ${data}</i></a>`;
+            }
+          },
+        },
+        {
+          targets: 14,
+          title: "อื่นๆ",
+          render: function (data, type, full, meta) {
+            return full.shiftStart == null || full.shiftStart == ""
+              ? "-"
+              : full.shiftStart +
+                  "-" +
+                  full.shiftEnd +
+                  ": " +
+                  full.requestNumberOther;
+          },
+        },
+        {
+          targets: 15,
+          title: "จำนวนที่ขอ",
+          render: function (data, type, full, meta) {
+            return `<a  class="btn btn-${
+              full.allApproveNumber >= full.allRequestNumber
+                ? "success"
+                : full.allApproveNumber > 0
+                ? "primary"
+                : "warning"
+            } btn-circle btn-sm"> ${data}</i></a>`;
+          },
+        },
+        {
+          targets: 16,
+          title: "จำนวนที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return `<a  class="btn btn-${
+              full.allApproveNumber >= full.allRequestNumber
+                ? "success"
+                : full.allApproveNumber > 0
+                ? "primary"
+                : "warning"
+            } btn-circle btn-sm display-button"> ${data}</i></a>`;
+          },
+        },
+        {
+          targets: 17,
+          title: "ชั่วโมงที่ขอ",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+        {
+          targets: 18,
+          title: "ชั่วโมงที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+        {
+          targets: 19,
+          title: "สถานะ",
+          render: function (data, type, full, meta) {
+            if (data == 0) {
+              return `<i class="fa fa-circle"></i>`;
+            } else {
+              return `<i class="fa fa-circle text-success"></i>`;
+            }
+          },
+        },
+        {
+          targets: 20,
+          title: "หมายเหตุ",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        }
+      ],
+    });
+  };
+
+  return {
+    init: function () {
+      initTable1();
+      let containerTable = $(table.table().container());
+    },
+    data: function (data) {
+      table.clear();
+      table.rows.add(data);
+      table.draw();
+    },
+    addData: function (data) {
+      table.rows.add(data);
+      table.draw();
+    },
+    getData: function (index) {
+      if (index) {
+        return table.row(index).data();
+      }
+      return table.rows().data().toArray();
+    },
+    datatable: function () {
+      return table;
+    },
+    adjust: function () {
+      table.columns.adjust();
     },
   };
 })();

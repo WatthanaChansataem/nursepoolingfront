@@ -363,7 +363,7 @@
               >.
             </p> -->
             <div class="form-group row">
-              <div class="col-sm-3">
+              <div class="col-sm-3" style="display: none">
                 <label for="beginDate" class="col-form-label-sm"
                   >วันที่ลงทะเบียน</label
                 >
@@ -423,7 +423,6 @@
                   class="form-control"
                   name="startDate"
                   id="startDate"
-                 
                 />
               </div>
               <div class="col-sm-3">
@@ -433,7 +432,6 @@
                   class="form-control"
                   name="endDate"
                   id="endDate"
-                  
                 />
               </div>
             </div>
@@ -474,11 +472,9 @@
                     <thead>
                       <tr>
                         <th>No.</th>
-                        <th>ชื่อ</th>
                         <th>โรงพยาบาล</th>
                         <th>Location</th>
                         <th>แผนก</th>
-                        <th>UserRole</th>
                         <th>จำนวนเวรที่ขอ</th>
                         <th>จำนวนเวรที่ได้รับบการอนุมัติ</th>
                         <th>จำนวนเวรที่เข้างาน</th>
@@ -487,9 +483,6 @@
                         <th>จำนวนชั่วโมงที่ได้รับการอนุมัติ</th>
                         <th>จำนวนชั่วโมงที่เข้างาน</th>
                         <th>จำนวนชั่วโมงที่OFF</th>
-                        <th>สถานะ</th>
-                        <th>วันที่ลงทะเบียน</th>
-                        <th>แก้ไข</th>
                       </tr>
                     </thead>
                   </table>
@@ -797,6 +790,198 @@
               บันทึก
             </button>
             <!-- <a class="btn btn-success" id="editScheduleBtnModal">บันทึก</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="displayDetailModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog"
+        style="max-width: 100%; max-height: 100%"
+        role="document"
+      >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              <strong class="text-gray-900"> รายชื่อเจ้าหน้าที่ </strong>
+            </h5>
+            <button
+              class="close"
+              type="button"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="col-sm-12">
+              <p id="dutyDateDisplayModal"></p>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label class="col-sm-3 col-form-label-sm" id="hospitalCodeModal"
+                  >โรงพยาบาล: -</label
+                >
+                <label class="col-sm-3 col-form-label-sm" id="locationCodeModal"
+                  >Location: -</label
+                >
+                <label
+                  class="col-sm-3 col-form-label-sm"
+                  id="departmentCodeModal"
+                  >แผนก: -</label
+                >
+              </div>
+            </div>
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">รายการ</h6>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table
+                    class="table table-bordered nowrap"
+                    id="dataTableDetail"
+                    width="100%"
+                    cellspacing="0"
+                  >
+                    <thead>
+                      <tr>
+                        <th>No.</th>
+                        <th>วันที่ส่งเวร</th>
+                        <th>ชื่อ</th>
+                        <th>โรงพยาบาลที่อนุมัติ</th>
+                        <th>Locationที่อนุมัติ</th>
+                        <th>แผนกที่อนุมัติ</th>
+                        <th>ตำแหน่ง</th>
+                        <th>ช่วงเวลาที่อนุมัติ</th>
+                        <th>ช่วงเวลาที่เข้างานจริง</th>
+                        <th>สถานะ</th>
+                        <th>หมายเหตุ</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-dismiss="modal"
+            >
+              ปิด
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="displayDetailRequestModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog"
+        style="max-width: 100%; max-height: 100%"
+        role="document"
+      >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              <strong class="text-gray-900"> ตารางเวรหน่วยงาน </strong>
+            </h5>
+            <button
+              class="close"
+              type="button"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="col-sm-12">
+              <p id="dutyDateDisplayModal"></p>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label class="col-sm-3 col-form-label-sm" id="hospitalCodeModal"
+                  >โรงพยาบาล: -</label
+                >
+                <label class="col-sm-3 col-form-label-sm" id="locationCodeModal"
+                  >Location: -</label
+                >
+                <label
+                  class="col-sm-3 col-form-label-sm"
+                  id="departmentCodeModal"
+                  >แผนก: -</label
+                >
+              </div>
+            </div>
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">รายการ</h6>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table
+                    class="table table-bordered nowrap"
+                    id="dataTableRequest"
+                    width="100%"
+                    cellspacing="0"
+                  >
+                    <thead>
+                      <tr>
+                        <th>No.</th>
+                        <th>วันเดือนปี</th>
+                        <th>โรงพยาบาล</th>
+                        <th>Location</th>
+                        <th>แผนก</th>
+                        <th>ตำแหน่ง</th>
+                        <th>07.00-15.00</th>
+                        <th>15.00-23.00</th>
+                        <th>23.00-07.00</th>
+                        <th>07.00-19.00</th>
+                        <th>19.00-07.00</th>
+                        <th>08.00-16.00</th>
+                        <th>08.00-20.00</th>
+                        <th>09.00-17.00</th>
+                        <th>อื่นๆ</th>
+                        <th>จำนวนที่ขอ</th>
+                        <th>จำนวนที่อนุมัติ</th>
+                        <th>ชั่วโมงที่ขอ</th>
+                        <th>ชั่วโมงที่อนุมัติ</th>
+                        <th>สถานะ</th>
+                        <th>หมายเหตุ</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-dismiss="modal"
+            >
+              ปิด
+            </button>
           </div>
         </div>
       </div>

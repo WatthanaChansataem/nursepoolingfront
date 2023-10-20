@@ -594,7 +594,7 @@ let CreateDatatable = (function () {
           render: function (data, type, full, meta) {
             return data == 0
               ? data
-              : `<a  class="btn btn-secondary btn-circle btn-sm display-button" type="request"> ${data}</i></a>`;
+              : `<a  class="btn btn-secondary btn-sm display-button" type="request"> ${data}</i></a>`;
           },
         },
         {
@@ -603,7 +603,7 @@ let CreateDatatable = (function () {
           render: function (data, type, full, meta) {
             return data == 0
               ? data
-              : `<a  class="btn btn-primary btn-circle btn-sm display-button" type="approve"> ${data}</i></a>`;
+              : `<a  class="btn btn-primary btn-sm display-button" type="approve"> ${data}</i></a>`;
           },
         },
         {
@@ -612,7 +612,7 @@ let CreateDatatable = (function () {
           render: function (data, type, full, meta) {
             return data == 0
               ? data
-              : `<a  class="btn btn-success btn-circle btn-sm display-button" type="real"> ${data}</i></a>`;
+              : `<a  class="btn btn-success btn-sm display-button" type="real"> ${data}</i></a>`;
           },
         },
         {
@@ -621,7 +621,7 @@ let CreateDatatable = (function () {
           render: function (data, type, full, meta) {
             return data == 0
               ? data
-              : `<a  class="btn btn-warning btn-circle btn-sm display-button" type="off"> ${data}</i></a>`;
+              : `<a  class="btn btn-warning btn-sm display-button" type="off"> ${data}</i></a>`;
           },
         },
         {
@@ -630,7 +630,7 @@ let CreateDatatable = (function () {
           render: function (data, type, full, meta) {
             return data == "00:00"
               ? data
-              : `<a class="btn btn-secondary display-button" type="request">${data}</a>`;
+              : `<a class="btn btn-secondary btn-sm display-button" type="request">${data}</a>`;
           },
         },
         {
@@ -639,7 +639,7 @@ let CreateDatatable = (function () {
           render: function (data, type, full, meta) {
             return data == "00:00"
               ? data
-              : `<a class="btn btn-primary display-button" type="approve">${data}</a>`;
+              : `<a class="btn btn-primary btn-sm display-button" type="approve">${data}</a>`;
           },
         },
         {
@@ -648,7 +648,7 @@ let CreateDatatable = (function () {
           render: function (data, type, full, meta) {
             return data == "00:00"
               ? data
-              : `<a class="btn btn-success display-button" type="real">${data}</a>`;
+              : `<a class="btn btn-success btn-sm display-button" type="real">${data}</a>`;
           },
         },
         {
@@ -657,7 +657,7 @@ let CreateDatatable = (function () {
           render: function (data, type, full, meta) {
             return data == "00:00"
               ? data
-              : `<a class="btn btn-warning display-button" type="off">${data}</a>`;
+              : `<a class="btn btn-warning btn-sm display-button" type="off">${data}</a>`;
           },
         },
         {
@@ -897,7 +897,7 @@ let LoadDutySchedule = function () {
     endDate: $("#endDate").val(),
     positionCode: parseInt($("#positionCode").val()),
   };
-  endDateGlobal = $("#beginDate").val();
+  endDateGlobal = $("#endDate").val();
   startDateGlobal = $("#startDate").val();
   $.ajax({
     url: link + "/api/dutySchedule/searchForEmployeePerformance",
@@ -1055,9 +1055,9 @@ let loadUserDateForApproveModal = function (type, data) {
           "href",
           "profilePreview.html?userId=" + approvalDetaildata.userId
         );
-        $("#dutyDateDisplayModal").html(
-          moment(approvalDetaildata.dutyDate).format("DD/MM/YYYY")
-        );
+        // $("#dutyDateDisplayModal").html(
+        //   moment(approvalDetaildata.dutyDate).format("DD/MM/YYYY")
+        // );
         $("#profileImg").attr(
           "src",
           `${link}/api/document/avatar/${approvalDetaildata.userId}`
