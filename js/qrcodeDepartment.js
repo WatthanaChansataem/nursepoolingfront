@@ -225,6 +225,32 @@ let SetupData = (function () {
           userData = res.data;
           $("#version").html("Version " + userData.version);
           $("#currentUserName").html(userData.firstName);
+          if (
+            userData.dutyScheduleList != null &&
+            userData.dutyScheduleList.length > 0
+          ) {
+            $("#notifyCount").html(1);
+            $("#notifyDropdown")
+              .append(`<a class="dropdown-item d-flex align-items-center" href="employeeAppraisalForm.html?from=notification">
+              <div class="mr-3">
+                <div class="icon-circle bg-primary">
+                  <i class="fas fa-user text-white"></i>
+                </div>
+              </div>
+              <div>
+                <div class="small text-gray-500">${userData.notifyDateString}</div>
+                <span class="font-weight-bold"
+                  >มีผู้ใช้ที่ยังไม่ได้รับการประเมิน ${userData.dutyScheduleList.length} รายการ</span
+                >
+              </div>
+            </a>`);
+          } else {
+            $("#notifyDropdown").append(`<a
+            class="dropdown-item text-center small text-gray-500"
+            href="#"
+            >ไม่พบรายการ</a
+          >`);
+          }
           if (userData.role != userRoleConstant.Department) {
             localStorage.clear();
             window.location.href = "login.html";

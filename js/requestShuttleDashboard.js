@@ -426,7 +426,8 @@ let CreateDatatable = (function () {
         { data: "approveLocationCode", className: "text-center" },
         { data: "approveDepartmentCode", className: "text-center" },
         { data: "approveShiftStart", className: "text-center" },
-        { data: "approveDepartmentCode", className: "text-center" },
+        { data: "shuttleTimeStart", className: "text-center" },
+        { data: "shuttleTimeEnd", className: "text-center" },
       ],
       order: [[0, "asc"]],
       columnDefs: [
@@ -496,9 +497,15 @@ let CreateDatatable = (function () {
         },
         {
           targets: 8,
-          title: "จำนวนที่มีการขอรถรับส่ง",
+          title: "เวลารับ",
           render: function (data, type, full, meta) {
-            // return `<a class="btn btn-info btn-circle btn-sm choose-button">${full.dutyScheduleList.length}</a>`;
+            return data;
+          },
+        },
+        {
+          targets: 9,
+          title: "เวลาส่ง",
+          render: function (data, type, full, meta) {
             return data;
           },
         },

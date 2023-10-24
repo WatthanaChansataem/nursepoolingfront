@@ -481,6 +481,8 @@ let CreateDatatable = (function () {
         { data: "status", className: "text-center" },
         { data: "score", className: "text-center" },
         { data: "requestShuttle", className: "text-center" },
+        { data: "shuttleTimeStart", className: "text-center" },
+        { data: "shuttleTimeEnd", className: "text-center" },
         { data: "departmentRemark", className: "text-center" },
         // { data: "", className: "text-center" },
       ],
@@ -597,6 +599,20 @@ let CreateDatatable = (function () {
         },
         {
           targets: 13,
+          title: "เวลารับ",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+        {
+          targets: 14,
+          title: "เวลาส่ง",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+        {
+          targets: 15,
           title: "หมายเหตุจากหน่วยงาน",
           render: function (data, type, full, meta) {
             return data == null ? "-" : data;

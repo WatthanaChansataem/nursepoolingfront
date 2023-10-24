@@ -232,6 +232,32 @@ let SetupData = (function () {
           userData = res.data;
           $("#version").html("Version " + userData.version);
           $("#currentUserName").html(userData.firstName);
+          if (
+            userData.dutyScheduleList != null &&
+            userData.dutyScheduleList.length > 0
+          ) {
+            $("#notifyCount").html(1);
+            $("#notifyDropdown")
+              .append(`<a class="dropdown-item d-flex align-items-center" href="employeeAppraisalForm.html?from=notification">
+              <div class="mr-3">
+                <div class="icon-circle bg-primary">
+                  <i class="fas fa-user text-white"></i>
+                </div>
+              </div>
+              <div>
+                <div class="small text-gray-500">${userData.notifyDateString}</div>
+                <span class="font-weight-bold"
+                  >มีผู้ใช้ที่ยังไม่ได้รับการประเมิน ${userData.dutyScheduleList.length} รายการ</span
+                >
+              </div>
+            </a>`);
+          } else {
+            $("#notifyDropdown").append(`<a
+            class="dropdown-item text-center small text-gray-500"
+            href="#"
+            >ไม่พบรายการ</a
+          >`);
+          }
           $("#navProfileImg").attr(
             "src",
             `${link}/api/document/avatar/${userData.userId}`
@@ -384,27 +410,18 @@ let renderPage = function () {
   $("#navDepartmentCode").html(
     departmentMap.get(userData.departmentCode).departmentDesc
   );
-  LoadDutyScheduleRequest();
+
+  urlParams = new URLSearchParams(window.location.search);
+  from = urlParams.get("from");
+  if (from == "notification") {
+    LoadDutyScheduleRequestNotify();
+  } else {
+    LoadDutyScheduleRequest();
+  }
 };
 $("#generalSearch").on("click", function () {
   LoadDutyScheduleRequest();
 });
-
-// $("#hospitalCode").on("change", function () {
-//   LoadDutyScheduleRequest();
-// });
-// $("#locationCode").on("change", function () {
-//   LoadDutyScheduleRequest();
-// });
-// $("#departmentCode").on("change", function () {
-//   LoadDutyScheduleRequest();
-// });
-// $("#positionCode").on("change", function () {
-//   LoadDutyScheduleRequest();
-// });
-// $("#beginDate").on("change", function () {
-//   LoadDutyScheduleRequest();
-// });
 
 $("#sidebarToggle").on("click", function () {
   CreateDatatable.adjust();
@@ -838,7 +855,13 @@ let CreateDatatable = (function () {
             if (res.status.code == 200) {
               toastr.success("อัพเดทรายการสำเร็จ");
               $("#editScheduleModal").modal("hide");
-              LoadDutyScheduleRequest();
+              urlParams = new URLSearchParams(window.location.search);
+              from = urlParams.get("from");
+              if (from == "notification") {
+                LoadDutyScheduleRequestNotify();
+              } else {
+                LoadDutyScheduleRequest();
+              }
             } else {
               toastr.error(res.status.message);
             }
@@ -944,4 +967,44 @@ let removeStar = function () {
   });
   //   });
   // });
+};
+
+let LoadDutyScheduleRequestNotify = function () {
+  let dutyDate = $("#beginDate").val();
+  let hospitalCode = parseInt($("#hospitalCode").val());
+  let locationCode = parseInt($("#locationCode").val());
+  let departmentCode = parseInt($("#departmentCode").val());
+  let positionCode = parseInt($("#positionCode").val());
+  let isJustMonth = $(`#isJustMonth`).is(":checked") ? 1 : 0;
+
+  let objData = {
+    dutyDate: dutyDate,
+    hospitalCode: hospitalCode,
+    locationCode: locationCode,
+    departmentCode: departmentCode,
+    positionCode: positionCode,
+    isJustMonth: isJustMonth,
+  };
+  $.ajax({
+    url:
+      link +
+      "/api/dutySchedule/searchDutyScheduleForEmployeeAppraisalFormNotification",
+    type: "POST",
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+    data: JSON.stringify(objData),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (res) {
+      if (res.status.code == 200) {
+        CreateDatatable.data(res.data);
+      } else {
+        toastr.error(res.status.message);
+      }
+    },
+    error: function (res) {
+      toastr.error("ไม่สามารถดึงข้อมูลเจ้าหน้าที่ที่เข้าเวรได้");
+    },
+  });
 };
