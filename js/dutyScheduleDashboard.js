@@ -480,6 +480,7 @@ let CreateDatatable = (function () {
         { data: "totalRealDuration", className: "text-center" },
         { data: "status", className: "text-center" },
         { data: "score", className: "text-center" },
+        { data: "requestShuttle", className: "text-center" },
         { data: "departmentRemark", className: "text-center" },
         // { data: "", className: "text-center" },
       ],
@@ -585,6 +586,17 @@ let CreateDatatable = (function () {
         },
         {
           targets: 12,
+          title: "ขอรถรับส่ง",
+          render: function (data, type, full, meta) {
+            if (data == 1) {
+              return `<i class="fa fa-circle text-success"></i>`;
+            } else {
+              return `<i class="fa fa-circle"></i>`;
+            }
+          },
+        },
+        {
+          targets: 13,
           title: "หมายเหตุจากหน่วยงาน",
           render: function (data, type, full, meta) {
             return data == null ? "-" : data;
@@ -727,6 +739,9 @@ let LoadDutyScheduleRequest = function () {
   let departmentCode = parseInt($("#departmentCode").val());
   let positionCode = parseInt($("#positionCode").val());
   let isJustMonth = $(`#isJustMonth`).is(":checked") ? 1 : 0;
+  let requestShuttle = parseInt(
+    $("input[name='requestShuttle']:checked").val()
+  );
   let statusCode = $("#statusCode").val();
 
   let objData = {
@@ -736,6 +751,7 @@ let LoadDutyScheduleRequest = function () {
     departmentCode: departmentCode,
     positionCode: positionCode,
     isJustMonth: isJustMonth,
+    requestShuttle: requestShuttle,
     statusCode: statusCode,
   };
   console.log(objData);

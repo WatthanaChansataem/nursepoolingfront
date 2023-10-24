@@ -419,12 +419,14 @@ let CreateDatatable = (function () {
       scrollCollapse: true,
       columns: [
         { data: "", className: "text-center" },
+        { data: "firstName", className: "text-center" },
+        { data: "positionCode", className: "text-center" },
+        { data: "dutyDate", className: "text-center" },
         { data: "approveHospitalCode", className: "text-center" },
         { data: "approveLocationCode", className: "text-center" },
         { data: "approveDepartmentCode", className: "text-center" },
-        { data: "dutyDate", className: "text-center" },
-        // { data: "approveShiftStart", className: "text-center" },
-        { data: "requestShuttleNumber", className: "text-center" },
+        { data: "approveShiftStart", className: "text-center" },
+        { data: "approveDepartmentCode", className: "text-center" },
       ],
       order: [[0, "asc"]],
       columnDefs: [
@@ -437,6 +439,27 @@ let CreateDatatable = (function () {
         },
         {
           targets: 1,
+          title: "ชื่อ - นามสกุล",
+          render: function (data, type, full, meta) {
+            return full.firstName + " " + full.lastName;
+          },
+        },
+        {
+          targets: 2,
+          title: "ตำแหน่ง",
+          render: function (data, type, full, meta) {
+            return positionMap.get(full.positionCode).positionDesc;
+          },
+        },
+        {
+          targets: 3,
+          title: "วันที่ส่งเวร",
+          render: function (data, type, full, meta) {
+            return isDateTime(data) ? moment(data).format("DD/MM/YYYY") : data;
+          },
+        },
+        {
+          targets: 4,
           title: "โรงพยาบาล",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -445,7 +468,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 2,
+          targets: 5,
           title: "Location",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -454,7 +477,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 3,
+          targets: 6,
           title: "แผนก",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -463,17 +486,20 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 4,
-          title: "วันที่",
+          targets: 7,
+          title: "ช่วงเวลาที่อนุมัติ",
           render: function (data, type, full, meta) {
-            return isDateTime(data) ? moment(data).format("DD/MM/YYYY") : data;
+            return full.approveShiftStart == null
+              ? "-"
+              : full.approveShiftStart + "-" + full.approveShiftEnd;
           },
         },
         {
-          targets: 5,
+          targets: 8,
           title: "จำนวนที่มีการขอรถรับส่ง",
           render: function (data, type, full, meta) {
-            return `<a class="btn btn-info btn-circle btn-sm choose-button">${full.dutyScheduleList.length}</a>`;
+            // return `<a class="btn btn-info btn-circle btn-sm choose-button">${full.dutyScheduleList.length}</a>`;
+            return data;
           },
         },
       ],
@@ -492,71 +518,71 @@ let CreateDatatable = (function () {
         currentRow = $(this).closest("tr");
       });
 
-      table.on("click", ".choose-button", function () {
-        let tr = $(this).closest("tr");
-        if (tr !== undefined) {
-          let row = table.table().row(tr);
-          let data = table.row(row).data();
-          let dutyScheduleRequestItemList =
-            data.dutyScheduleDetailList == null
-              ? []
-              : data.dutyScheduleDetailList;
-          if (row.child.isShown()) {
-            row.child.hide();
-            $(this).closest("td").css("border-left", "none");
-            tr.removeClass("shown");
-          } else {
-            row.child(CreateRowParentBody()).show();
-            if (row.child() !== undefined) {
-              let elementAccountParent1 = row.child().find(`#table-rowparent`);
-              tr.addClass("shown");
-              elementAccountParent1.DataTable({
-                responsive: false,
-                data: dutyScheduleRequestItemList,
-                order: [0, "asc"],
-                dom: `<'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>`,
-                language: {
-                  emptyTable: "ไม่มีข้อมูล",
-                },
-                lengthChange: false,
-                info: false,
-                paginate: false,
-                columns: [
-                  { data: "", className: "text-center" },
-                  { data: "approveShiftStart", className: "text-right" },
-                  { data: "requestShuttleNumber", className: "text-right" },
-                ],
-                columnDefs: [
-                  {
-                    targets: 0,
-                    orderable: false,
-                    render: function (data, type, full, meta) {
-                      return parseInt(meta.row) + 1;
-                    },
-                  },
-                  {
-                    targets: 1,
-                    orderable: false,
-                    render: function (data, type, full, meta) {
-                      return (
-                        full.approveShiftStart + "-" + full.approveShiftEnd
-                      );
-                    },
-                  },
-                  {
-                    targets: 2,
-                    orderable: false,
-                    render: function (data, type, full, meta) {
-                      return data;
-                    },
-                  },
-                ],
-              });
-            }
-          }
-          CreateDatatable.adjust();
-        }
-      });
+      // table.on("click", ".choose-button", function () {
+      //   let tr = $(this).closest("tr");
+      //   if (tr !== undefined) {
+      //     let row = table.table().row(tr);
+      //     let data = table.row(row).data();
+      //     let dutyScheduleRequestItemList =
+      //       data.dutyScheduleDetailList == null
+      //         ? []
+      //         : data.dutyScheduleDetailList;
+      //     if (row.child.isShown()) {
+      //       row.child.hide();
+      //       $(this).closest("td").css("border-left", "none");
+      //       tr.removeClass("shown");
+      //     } else {
+      //       row.child(CreateRowParentBody()).show();
+      //       if (row.child() !== undefined) {
+      //         let elementAccountParent1 = row.child().find(`#table-rowparent`);
+      //         tr.addClass("shown");
+      //         elementAccountParent1.DataTable({
+      //           responsive: false,
+      //           data: dutyScheduleRequestItemList,
+      //           order: [0, "asc"],
+      //           dom: `<'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>`,
+      //           language: {
+      //             emptyTable: "ไม่มีข้อมูล",
+      //           },
+      //           lengthChange: false,
+      //           info: false,
+      //           paginate: false,
+      //           columns: [
+      //             { data: "", className: "text-center" },
+      //             { data: "approveShiftStart", className: "text-right" },
+      //             { data: "requestShuttleNumber", className: "text-right" },
+      //           ],
+      //           columnDefs: [
+      //             {
+      //               targets: 0,
+      //               orderable: false,
+      //               render: function (data, type, full, meta) {
+      //                 return parseInt(meta.row) + 1;
+      //               },
+      //             },
+      //             {
+      //               targets: 1,
+      //               orderable: false,
+      //               render: function (data, type, full, meta) {
+      //                 return (
+      //                   full.approveShiftStart + "-" + full.approveShiftEnd
+      //                 );
+      //               },
+      //             },
+      //             {
+      //               targets: 2,
+      //               orderable: false,
+      //               render: function (data, type, full, meta) {
+      //                 return data;
+      //               },
+      //             },
+      //           ],
+      //         });
+      //       }
+      //     }
+      //     CreateDatatable.adjust();
+      //   }
+      // });
     },
     data: function (data) {
       table.clear();
@@ -588,7 +614,7 @@ let LoadDutyScheduleRequest = function () {
   let locationCode = parseInt($("#locationCode").val());
   let departmentCode = parseInt($("#departmentCode").val());
   let positionCode = parseInt($("#positionCode").val());
-  let isJustMonth = $(`#isJustMonth`).is(":checked") ? 1 : 0;
+  // let isJustMonth = $(`#isJustMonth`).is(":checked") ? 1 : 0;
 
   let objData = {
     dutyDate: dutyDate,
@@ -596,7 +622,7 @@ let LoadDutyScheduleRequest = function () {
     locationCode: locationCode,
     departmentCode: departmentCode,
     positionCode: positionCode,
-    isJustMonth: isJustMonth,
+    // isJustMonth: isJustMonth,
   };
   console.log(objData);
   $.ajax({
