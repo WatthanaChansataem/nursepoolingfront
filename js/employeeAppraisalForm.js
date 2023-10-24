@@ -123,6 +123,7 @@ $(document).ready(function () {
           ? star.classList.add("active")
           : star.classList.remove("active");
       });
+      $("#ratingScore").val(index1 + 1);
     });
   });
 
@@ -231,6 +232,32 @@ let SetupData = (function () {
           userData = res.data;
           $("#version").html("Version " + userData.version);
           $("#currentUserName").html(userData.firstName);
+          if (
+            userData.dutyScheduleList != null &&
+            userData.dutyScheduleList.length > 0
+          ) {
+            $("#notifyCount").html(1);
+            $("#notifyDropdown")
+              .append(`<a class="dropdown-item d-flex align-items-center" href="employeeAppraisalForm.html?from=notification">
+              <div class="mr-3">
+                <div class="icon-circle bg-primary">
+                  <i class="fas fa-user text-white"></i>
+                </div>
+              </div>
+              <div>
+                <div class="small text-gray-500">${userData.notifyDateString}</div>
+                <span class="font-weight-bold"
+                  >มีผู้ใช้ที่ยังไม่ได้รับการประเมิน ${userData.dutyScheduleList.length} รายการ</span
+                >
+              </div>
+            </a>`);
+          } else {
+            $("#notifyDropdown").append(`<a
+            class="dropdown-item text-center small text-gray-500"
+            href="#"
+            >ไม่พบรายการ</a
+          >`);
+          }
           $("#navProfileImg").attr(
             "src",
             `${link}/api/document/avatar/${userData.userId}`
@@ -383,27 +410,18 @@ let renderPage = function () {
   $("#navDepartmentCode").html(
     departmentMap.get(userData.departmentCode).departmentDesc
   );
-  LoadDutyScheduleRequest();
+
+  urlParams = new URLSearchParams(window.location.search);
+  from = urlParams.get("from");
+  if (from == "notification") {
+    LoadDutyScheduleRequestNotify();
+  } else {
+    LoadDutyScheduleRequest();
+  }
 };
 $("#generalSearch").on("click", function () {
   LoadDutyScheduleRequest();
 });
-
-// $("#hospitalCode").on("change", function () {
-//   LoadDutyScheduleRequest();
-// });
-// $("#locationCode").on("change", function () {
-//   LoadDutyScheduleRequest();
-// });
-// $("#departmentCode").on("change", function () {
-//   LoadDutyScheduleRequest();
-// });
-// $("#positionCode").on("change", function () {
-//   LoadDutyScheduleRequest();
-// });
-// $("#beginDate").on("change", function () {
-//   LoadDutyScheduleRequest();
-// });
 
 $("#sidebarToggle").on("click", function () {
   CreateDatatable.adjust();
@@ -439,7 +457,7 @@ let CreateDatatable = (function () {
         { data: "shiftStart", className: "text-center" },
         { data: "approveShiftStart", className: "text-center" },
         { data: "realShiftStart", className: "text-center" },
-        { data: "score", className: "text-center" },
+        // { data: "score", className: "text-center" },
         // { data: "active", className: "text-center" },
         { data: "ratingScore", className: "text-center" },
         { data: "evaluatorEmployeeCode", className: "text-center" },
@@ -574,36 +592,27 @@ let CreateDatatable = (function () {
         },
         {
           targets: 10,
-          title: "ผลประเมิน",
-          render: function (data, type, full, meta) {
-            return '<span class="fa fa-star checked" style="color:orange"></span>'.repeat(
-              data
-            );
-          },
-        },
-        {
-          targets: 11,
           title: "คะแนนการทำงานของเจ้าหน้าที่",
           render: function (data, type, full, meta) {
             return data == null ? "-" : data;
           },
         },
         {
-          targets: 12,
+          targets: 11,
           title: "รหัสพนักงานผู้ประเมิน",
           render: function (data, type, full, meta) {
             return data == null ? "-" : data;
           },
         },
         {
-          targets: 13,
+          targets: 12,
           title: "หมายเหตุ",
           render: function (data, type, full, meta) {
             return data == null ? "-" : data;
           },
         },
         {
-          targets: 14,
+          targets: 13,
           title: "แก้ไข",
           render: function (data, type, full, meta) {
             return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`;
@@ -656,6 +665,55 @@ let CreateDatatable = (function () {
         currentRow = $(this).closest("tr");
         globalScore = 0;
         removeStar();
+
+        $("#ratingScore").val(data.ratingScore);
+
+        if (data.b5FServiceScript != null) {
+          let b5FServiceScriptData = data.b5FServiceScript;
+          $("#focusStrength").prop(
+            "checked",
+            b5FServiceScriptData.focusStrength == 0 ? false : true
+          );
+          $("#fastStrength").prop(
+            "checked",
+            b5FServiceScriptData.fastStrength == 0 ? false : true
+          );
+          $("#flexibleStrength").prop(
+            "checked",
+            b5FServiceScriptData.flexibleStrength == 0 ? false : true
+          );
+          $("#foreGrabStrength").prop(
+            "checked",
+            b5FServiceScriptData.foreGrabStrength == 0 ? false : true
+          );
+          $("#forecastStrength").prop(
+            "checked",
+            b5FServiceScriptData.forecastStrength == 0 ? false : true
+          );
+
+          $("#focusWeaknesses").prop(
+            "checked",
+            b5FServiceScriptData.focusWeaknesses == 0 ? false : true
+          );
+          $("#fastWeaknesses").prop(
+            "checked",
+            b5FServiceScriptData.fastWeaknesses == 0 ? false : true
+          );
+          $("#flexibleWeaknesses").prop(
+            "checked",
+            b5FServiceScriptData.flexibleWeaknesses == 0 ? false : true
+          );
+          $("#foreGrabWeaknesses").prop(
+            "checked",
+            b5FServiceScriptData.foreGrabWeaknesses == 0 ? false : true
+          );
+          $("#forecastWeaknesses").prop(
+            "checked",
+            b5FServiceScriptData.forecastWeaknesses == 0 ? false : true
+          );
+        } else {
+          $(".bf5:checked").prop("checked", false);
+        }
         $("#editScheduleModal").modal();
       });
 
@@ -665,6 +723,22 @@ let CreateDatatable = (function () {
         let remark = $("#remarkEditModal").val();
         let ratingScore = $("#ratingScore").val();
         let evaluatorEmployeeCode = $("#evaluatorEmployeeCode").val();
+        let focusStrength = $("#focusStrength").is(":checked") ? 1 : 0;
+        let fastStrength = $("#fastStrength").is(":checked") ? 1 : 0;
+        let flexibleStrength = $("#flexibleStrength").is(":checked") ? 1 : 0;
+        let foreGrabStrength = $("#foreGrabStrength").is(":checked") ? 1 : 0;
+        let forecastStrength = $("#forecastStrength").is(":checked") ? 1 : 0;
+        let focusWeaknesses = $("#focusWeaknesses").is(":checked") ? 1 : 0;
+        let fastWeaknesses = $("#fastWeaknesses").is(":checked") ? 1 : 0;
+        let flexibleWeaknesses = $("#flexibleWeaknesses").is(":checked")
+          ? 1
+          : 0;
+        let foreGrabWeaknesses = $("#foreGrabWeaknesses").is(":checked")
+          ? 1
+          : 0;
+        let forecastWeaknesses = $("#forecastWeaknesses").is(":checked")
+          ? 1
+          : 0;
 
         let objadddata = {
           departmentRemark: remark,
@@ -674,6 +748,16 @@ let CreateDatatable = (function () {
           dutyScheduleId: currentDutyScheduleId,
           ratingScore: ratingScore,
           evaluatorEmployeeCode: evaluatorEmployeeCode,
+          focusStrength: focusStrength,
+          fastStrength: fastStrength,
+          flexibleStrength: flexibleStrength,
+          foreGrabStrength: foreGrabStrength,
+          forecastStrength: forecastStrength,
+          focusWeaknesses: focusWeaknesses,
+          fastWeaknesses: fastWeaknesses,
+          flexibleWeaknesses: flexibleWeaknesses,
+          foreGrabWeaknesses: foreGrabWeaknesses,
+          forecastWeaknesses: forecastWeaknesses,
         };
         isValidate = 0;
 
@@ -771,7 +855,13 @@ let CreateDatatable = (function () {
             if (res.status.code == 200) {
               toastr.success("อัพเดทรายการสำเร็จ");
               $("#editScheduleModal").modal("hide");
-              LoadDutyScheduleRequest();
+              urlParams = new URLSearchParams(window.location.search);
+              from = urlParams.get("from");
+              if (from == "notification") {
+                LoadDutyScheduleRequestNotify();
+              } else {
+                LoadDutyScheduleRequest();
+              }
             } else {
               toastr.error(res.status.message);
             }
@@ -877,4 +967,44 @@ let removeStar = function () {
   });
   //   });
   // });
+};
+
+let LoadDutyScheduleRequestNotify = function () {
+  let dutyDate = $("#beginDate").val();
+  let hospitalCode = parseInt($("#hospitalCode").val());
+  let locationCode = parseInt($("#locationCode").val());
+  let departmentCode = parseInt($("#departmentCode").val());
+  let positionCode = parseInt($("#positionCode").val());
+  let isJustMonth = $(`#isJustMonth`).is(":checked") ? 1 : 0;
+
+  let objData = {
+    dutyDate: dutyDate,
+    hospitalCode: hospitalCode,
+    locationCode: locationCode,
+    departmentCode: departmentCode,
+    positionCode: positionCode,
+    isJustMonth: isJustMonth,
+  };
+  $.ajax({
+    url:
+      link +
+      "/api/dutySchedule/searchDutyScheduleForEmployeeAppraisalFormNotification",
+    type: "POST",
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+    data: JSON.stringify(objData),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (res) {
+      if (res.status.code == 200) {
+        CreateDatatable.data(res.data);
+      } else {
+        toastr.error(res.status.message);
+      }
+    },
+    error: function (res) {
+      toastr.error("ไม่สามารถดึงข้อมูลเจ้าหน้าที่ที่เข้าเวรได้");
+    },
+  });
 };

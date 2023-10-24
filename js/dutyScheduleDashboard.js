@@ -104,11 +104,11 @@ let dutyScheduleStatusConstant = {
 };
 
 let scoreConstant = {
-  1: { desc: "แย่มาก", state: "danger" },
-  2: { desc: "แย่", state: "warning" },
-  3: { desc: "พอใช้", state: "primary" },
-  4: { desc: "ดี", state: "info" },
-  5: { desc: "ดีมาก", state: "success" },
+  1: { desc: "Poor", state: "danger" },
+  2: { desc: "Unsatisfactory", state: "warning" },
+  3: { desc: "Satisfactory", state: "primary" },
+  4: { desc: "Very Satisfactory", state: "info" },
+  5: { desc: "Outstanding", state: "success" },
   null: { desc: "ไม่มี", state: "light" },
 };
 let locationCodeConstant = {
@@ -453,6 +453,10 @@ $("#generalSearch").on("click", function () {
   LoadDutyScheduleRequest();
 });
 
+$("#exportExcel").on("click", function () {
+  ExportExcel();
+});
+
 $("#sidebarToggle").on("click", function () {
   CreateDatatable.adjust();
 });
@@ -467,6 +471,9 @@ let CreateDatatable = (function () {
       // scrollY: "50vh",
       scrollX: true,
       scrollCollapse: true,
+      // dom: "Bfrtip",
+      // buttons: ["copy", "csv", "excel", "pdf", "print"],
+      // buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
       columns: [
         { data: "", className: "text-center" },
         { data: "firstName", className: "text-center" },
@@ -479,7 +486,10 @@ let CreateDatatable = (function () {
         { data: "realShiftStart", className: "text-center" },
         { data: "totalRealDuration", className: "text-center" },
         { data: "status", className: "text-center" },
-        { data: "score", className: "text-center" },
+        { data: "ratingScore", className: "text-center" },
+        { data: "requestShuttle", className: "text-center" },
+        { data: "shuttleTimeStart", className: "text-center" },
+        { data: "shuttleTimeEnd", className: "text-center" },
         { data: "departmentRemark", className: "text-center" },
         // { data: "", className: "text-center" },
       ],
@@ -580,11 +590,36 @@ let CreateDatatable = (function () {
           targets: 11,
           title: "ผลประเมิน",
           render: function (data, type, full, meta) {
-            return `<a class="btn btn-${scoreConstant[data].state}" style="width: 90px;">${scoreConstant[data].desc}</a>`;
+            return `<a class="btn btn-${scoreConstant[data].state}" >${scoreConstant[data].desc}</a>`;
           },
         },
         {
           targets: 12,
+          title: "ขอรถรับส่ง",
+          render: function (data, type, full, meta) {
+            if (data == 1) {
+              return `<i class="fa fa-circle text-success"></i>`;
+            } else {
+              return `<i class="fa fa-circle"></i>`;
+            }
+          },
+        },
+        {
+          targets: 13,
+          title: "เวลารับ",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+        {
+          targets: 14,
+          title: "เวลาส่ง",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+        {
+          targets: 15,
           title: "หมายเหตุจากหน่วยงาน",
           render: function (data, type, full, meta) {
             return data == null ? "-" : data;
@@ -727,6 +762,9 @@ let LoadDutyScheduleRequest = function () {
   let departmentCode = parseInt($("#departmentCode").val());
   let positionCode = parseInt($("#positionCode").val());
   let isJustMonth = $(`#isJustMonth`).is(":checked") ? 1 : 0;
+  let requestShuttle = parseInt(
+    $("input[name='requestShuttle']:checked").val()
+  );
   let statusCode = $("#statusCode").val();
 
   let objData = {
@@ -736,6 +774,7 @@ let LoadDutyScheduleRequest = function () {
     departmentCode: departmentCode,
     positionCode: positionCode,
     isJustMonth: isJustMonth,
+    requestShuttle: requestShuttle,
     statusCode: statusCode,
   };
   console.log(objData);
@@ -845,4 +884,57 @@ let removeStar = function () {
 
 let FindPercenOf = function (x, y) {
   return (x * 100) / y;
+};
+
+let ExportExcel = function () {
+  let dutyDate = $("#beginDate").val();
+  let hospitalCode = parseInt($("#hospitalCode").val());
+  let locationCode = parseInt($("#locationCode").val());
+  let departmentCode = parseInt($("#departmentCode").val());
+  let positionCode = parseInt($("#positionCode").val());
+  let isJustMonth = $(`#isJustMonth`).is(":checked") ? 1 : 0;
+  let requestShuttle = parseInt(
+    $("input[name='requestShuttle']:checked").val()
+  );
+  let statusCode = $("#statusCode").val();
+
+  let objData = {
+    dutyDate: dutyDate,
+    hospitalCode: hospitalCode,
+    locationCode: locationCode,
+    departmentCode: departmentCode,
+    positionCode: positionCode,
+    isJustMonth: isJustMonth,
+    requestShuttle: requestShuttle,
+    statusCode: statusCode,
+  };
+
+  let data = {
+    stringQuery: JSON.stringify(objData),
+  };
+
+  $.ajax({
+    // url: `${siteRootUrl}api/exportquery/addqurey`,
+    url: link + "/api/exportquery/addqurey",
+    method: "POST",
+    data: JSON.stringify(data),
+    dataType: "json",
+    contentType: "application/json; charset=UTF-8;",
+    success: function (res) {
+      if (res.status.code == 200) {
+        let requestParams = {
+          exportId: res.data,
+        };
+        let urlParams = $.param(requestParams);
+        window.open(
+          `${link}/api/dutySchedule/searchDutyScheduleDashboardExportExcel?${urlParams}`
+        );
+      } else {
+        toastr.error(res.status.message);
+      }
+    },
+    error: function (res) {
+      toastr.error("ไม่สามารถ export ได้");
+    },
+  });
 };

@@ -50,7 +50,9 @@
 let isInvalidClass = "is-invalid";
 let validationErrorMessageClass = "validation-error-message";
 let modalEdit = $("#editScheduleModal");
-
+let modal = $("#approveModal");
+let endDateGlobal;
+let startDateGlobal;
 let hospitalMap = new Map();
 let hospitalMaster;
 let locationMap = new Map();
@@ -61,6 +63,17 @@ let positionMap = new Map();
 let positionMaster;
 let currentRow;
 let currentDutyScheduleId;
+let educationalQualificationMap = new Map();
+let educationalQualificationMaster;
+let experienceTypeMap = new Map();
+let experienceTypeMaster;
+
+let dutyScheduleStatusConstant = {
+  Wait: "N",
+  Approve: "A",
+  Cancel: "C",
+  Off: "O",
+};
 
 let approveStatusMasters = [
   { statusCode: 0, statusDesc: "ยังไม่อนุมัติ" },
@@ -135,6 +148,7 @@ let DocumentTypeCode = {
 
 $(document).ready(function () {
   CreateDatatable.init();
+  CreateDatatableDetail.init();
   readURL = function (input) {};
 
   let setupDataDefered = $.Deferred();
@@ -315,6 +329,55 @@ let SetupData = (function () {
       },
     });
   };
+
+  let loadEducationalQualification = function (defered) {
+    $.ajax({
+      url: link + "/api/educationalQualification/list",
+      type: "GET",
+      success: function (res) {
+        if (res.status.code == 200) {
+          educationalQualificationMaster = res.data;
+          for (let data of res.data) {
+            educationalQualificationMap.set(
+              data.educationalQualificationCode,
+              data
+            );
+          }
+          defered.resolve(true);
+        } else {
+          defered.resolve(false);
+          toastr.error("ไม่สามารถดึงข้อมูลวุฒิการศึกษาได้", "Error");
+        }
+      },
+      error: function (res) {
+        defered.resolve(false);
+        toastr.error("ไม่สามารถดึงข้อมูลวุฒิการศึกษาได้", "Error");
+      },
+    });
+  };
+
+  let loadExperienceType = function (defered) {
+    $.ajax({
+      url: link + "/api/experienceType/list",
+      type: "GET",
+      success: function (res) {
+        if (res.status.code == 200) {
+          experienceTypeMaster = res.data;
+          for (let data of res.data) {
+            experienceTypeMap.set(data.experienceTypeCode, data);
+          }
+          defered.resolve(true);
+        } else {
+          defered.resolve(false);
+          toastr.error("ไม่สามารถดึงข้อมูลประเภทประสบการณ์ได้", "Error");
+        }
+      },
+      error: function (res) {
+        defered.resolve(false);
+        toastr.error("ไม่สามารถดึงข้อมูลประเภทประสบการณ์ได้", "Error");
+      },
+    });
+  };
   return {
     init: function (defered) {
       let hospitalDefered = $.Deferred();
@@ -322,31 +385,41 @@ let SetupData = (function () {
       let departmentDefered = $.Deferred();
       let userDataDefered = $.Deferred();
       let positionDefered = $.Deferred();
+      let educationalQualificationDefered = $.Deferred();
+      let experienceTypeDefer = $.Deferred();
       loadHospital(hospitalDefered);
       loadLocation(locationDefered);
       loadDepartment(departmentDefered);
       loadUserData(userDataDefered);
       loadPosition(positionDefered);
+      loadEducationalQualification(educationalQualificationDefered);
+      loadExperienceType(experienceTypeDefer);
 
       $.when(
         hospitalDefered,
         locationDefered,
         departmentDefered,
         userDataDefered,
-        positionDefered
+        positionDefered,
+        educationalQualificationDefered,
+        experienceTypeDefer
       ).done(function (
         hospitalResult,
         locationDefered,
         departmentDefered,
         userDataResult,
-        positionResult
+        positionResult,
+        educationalQualificationResult,
+        experienceTypeResult
       ) {
         if (
           hospitalResult &&
           locationDefered &&
           departmentDefered &&
           userDataResult &&
-          positionResult
+          positionResult &&
+          educationalQualificationResult &&
+          experienceTypeResult
         ) {
           defered.resolve(true);
         } else {
@@ -519,56 +592,72 @@ let CreateDatatable = (function () {
           targets: 4,
           title: "จำนวนเวรที่ขอ",
           render: function (data, type, full, meta) {
-            return data;
+            return data == 0
+              ? data
+              : `<a  class="btn btn-secondary btn-sm display-button" type="request"> ${data}</i></a>`;
           },
         },
         {
           targets: 5,
           title: "จำนวนเวรที่ได้รับบการอนุมัติ",
           render: function (data, type, full, meta) {
-            return data;
+            return data == 0
+              ? data
+              : `<a  class="btn btn-primary btn-sm display-button" type="approve"> ${data}</i></a>`;
           },
         },
         {
           targets: 6,
           title: "จำนวนเวรที่เข้างาน",
           render: function (data, type, full, meta) {
-            return data;
+            return data == 0
+              ? data
+              : `<a  class="btn btn-success btn-sm display-button" type="real"> ${data}</i></a>`;
           },
         },
         {
           targets: 7,
           title: "จำนวนเวรที่OFF",
           render: function (data, type, full, meta) {
-            return data;
+            return data == 0
+              ? data
+              : `<a  class="btn btn-warning btn-sm display-button" type="off"> ${data}</i></a>`;
           },
         },
         {
           targets: 8,
           title: "จำนวนชั่วโมงที่ขอ",
           render: function (data, type, full, meta) {
-            return data;
+            return data == "00:00"
+              ? data
+              : `<a class="btn btn-secondary btn-sm display-button" type="request">${data}</a>`;
           },
         },
         {
           targets: 9,
           title: "จำนวนชั่วโมงที่ได้รับบการอนุมัติ",
           render: function (data, type, full, meta) {
-            return data;
+            return data == "00:00"
+              ? data
+              : `<a class="btn btn-primary btn-sm display-button" type="approve">${data}</a>`;
           },
         },
         {
           targets: 10,
           title: "จำนวนชั่วโมงที่เข้างาน",
           render: function (data, type, full, meta) {
-            return data;
+            return data == "00:00"
+              ? data
+              : `<a class="btn btn-success btn-sm display-button" type="real">${data}</a>`;
           },
         },
         {
           targets: 11,
           title: "จำนวนชั่วโมงที่OFF",
           render: function (data, type, full, meta) {
-            return data;
+            return data == "00:00"
+              ? data
+              : `<a class="btn btn-warning btn-sm display-button" type="off">${data}</a>`;
           },
         },
         {
@@ -599,9 +688,9 @@ let CreateDatatable = (function () {
         },
         {
           targets: 15,
-          title: "แก้ไข",
+          title: "รายละเอียด",
           render: function (data, type, full, meta) {
-            return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`;
+            return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-info"></i></a>`;
           },
         },
       ],
@@ -613,8 +702,15 @@ let CreateDatatable = (function () {
       initTable1();
       let containerTable = $(table.table().container());
 
+      containerTable.on("click", ".display-button", function () {
+        let rowIndex = table.row($(this).closest("tr")).index();
+        let data = table.row($(this).closest("tr")).data();
+        currentRow = $(this).closest("tr");
+
+        loadUserDateForApproveModal($(this).attr("type"), data);
+      });
+
       containerTable.on("click", ".edit-button", function () {
-        // let contractNo = $(this).attr("contractNo");
         let rowIndex = table.row($(this).closest("tr")).index();
         let data = table.row($(this).closest("tr")).data();
         currentRow = $(this).closest("tr");
@@ -801,6 +897,8 @@ let LoadDutySchedule = function () {
     endDate: $("#endDate").val(),
     positionCode: parseInt($("#positionCode").val()),
   };
+  endDateGlobal = $("#endDate").val();
+  startDateGlobal = $("#startDate").val();
   $.ajax({
     url: link + "/api/dutySchedule/searchForEmployeePerformance",
     type: "POST",
@@ -929,6 +1027,364 @@ var Spinner = (function () {
     deactivateCenterSpinner: function (buttonElement) {
       buttonElement.removeClass(centerSpinnerClass);
       buttonElement.prop("disabled", false);
+    },
+  };
+})();
+
+let loadUserDateForApproveModal = function (type, data) {
+  let objData = {
+    type: type,
+    userId: data.userId,
+    endDate: endDateGlobal,
+    startDate: startDateGlobal,
+  };
+
+  $.ajax({
+    url: link + "/api/dutySchedule/searchemployeePerformance",
+    type: "POST",
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+    data: JSON.stringify(objData),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (res) {
+      if (res.status.code == 200) {
+        let approvalDetaildata = res.data;
+        $("#previewProfile").attr(
+          "href",
+          "profilePreview.html?userId=" + approvalDetaildata.userId
+        );
+        // $("#dutyDateDisplayModal").html(
+        //   moment(approvalDetaildata.dutyDate).format("DD/MM/YYYY")
+        // );
+        $("#profileImg").attr(
+          "src",
+          `${link}/api/document/avatar/${approvalDetaildata.userId}`
+        );
+
+        $("#firstNameModal").html(
+          '<strong class="text-gray-900">ชื่อ:  </strong> ' +
+            approvalDetaildata.firstName +
+            " " +
+            approvalDetaildata.lastName
+        );
+
+        $("#positionCodeModal").html(
+          '<strong class="text-gray-900">ตำแหน่ง:  </strong> ' +
+            approvalDetaildata.positionDesc
+        );
+
+        $("#workplaceModal").html(
+          '<strong class="text-gray-900">สถานที่ทำงาน:  </strong> ' +
+            approvalDetaildata.workplace
+        );
+
+        $("#userLevelCode").html(
+          '<strong class="text-gray-900">Level:  </strong> ' +
+            approvalDetaildata.userLevelCode
+        );
+
+        $("#phone").html(
+          '<strong class="text-gray-900">หมายเลขโทรศพท์:  </strong> ' +
+            approvalDetaildata.phone
+        );
+
+        $("#email").html(
+          '<strong class="text-gray-900">Email:  </strong> ' +
+            approvalDetaildata.email
+        );
+
+        if (approvalDetaildata.educationList.length != 0) {
+          $("#educationalQualificationCode").html(
+            '<strong class="text-gray-900">วุฒิการศึกษา:  </strong> ' +
+              educationalQualificationMap.get(
+                approvalDetaildata.educationList[0].educationalQualificationCode
+              ).educationalQualificationDesc
+          );
+
+          $("#majorCode").html(
+            '<strong class="text-gray-900">สาขา:  </strong> ' +
+              approvalDetaildata.educationList[0].majorCode
+          );
+
+          $("#graduationYear").html(
+            '<strong class="text-gray-900">ปีที่จบ:  </strong> ' +
+              approvalDetaildata.educationList[0].graduationYear
+          );
+
+          $("#university").html(
+            '<strong class="text-gray-900">มหาวิทยาลัย:  </strong> ' +
+              approvalDetaildata.educationList[0].university
+          );
+        }
+
+        if (approvalDetaildata.experienceList.length != 0) {
+          $("#experienceTypeCode").html(
+            '<strong class="text-gray-900">ประสบการณ์:  </strong> ' +
+              experienceTypeMap.get(
+                approvalDetaildata.experienceList[0].experienceTypeCode
+              ).experienceTypeDesc
+          );
+
+          $("#positionCode").html(
+            '<strong class="text-gray-900">ตำแหน่ง:  </strong> ' +
+              approvalDetaildata.experienceList[0].positionCode
+          );
+
+          $("#beginYear").html(
+            '<strong class="text-gray-900">ปีที่เริ่ม:  </strong> ' +
+              approvalDetaildata.experienceList[0].beginYear
+          );
+
+          $("#endYear").html(
+            '<strong class="text-gray-900">ปีที่สิ้นสุด:  </strong> ' +
+              approvalDetaildata.experienceList[0].endYear
+          );
+        }
+        CreateDatatableDetail.data(approvalDetaildata.dutyScheduleList);
+        modal.modal("show");
+      } else {
+        toastr.error(res.status.message);
+      }
+    },
+    error: function (res) {
+      toastr.error("ไม่สามารถดึงข้อมูลได้");
+    },
+  });
+};
+
+modal.on("shown.bs.modal", function () {
+  CreateDatatableDetail.adjust();
+});
+
+let CreateDatatableDetail = (function () {
+  let table;
+  let currentPage = 0;
+  let initTable1 = function () {
+    table = $("#dataTableDetail").DataTable({
+      responsive: false,
+      data: [],
+      // scrollY: "50vh",
+      scrollX: true,
+      scrollCollapse: true,
+      columns: [
+        { data: "", className: "text-center" },
+        { data: "hospitalCode", className: "text-center" },
+        { data: "locationCode", className: "text-center" },
+        { data: "departmentCode1", className: "text-center" },
+        { data: "departmentCode2", className: "text-center" },
+        { data: "departmentCode3", className: "text-center" },
+        { data: "shiftStart", className: "text-center" },
+        { data: "hospitalCode", className: "text-center" },
+        { data: "hospitalCode", className: "text-center" },
+        { data: "hospitalCode", className: "text-center" },
+        { data: "hospitalCode", className: "text-center" },
+        { data: "status", className: "text-center" },
+        { data: "adminRemark", className: "text-center" },
+        // { data: "", className: "text-center" },
+      ],
+      order: [[0, "asc"]],
+      columnDefs: [
+        {
+          targets: 0,
+          title: "No.",
+          render: function (data, type, full, meta) {
+            return parseInt(meta.row) + 1;
+          },
+        },
+        {
+          targets: 1,
+          title: "โรงพยาบาล",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? "-"
+              : hospitalMap.get(data).hospitalDesc;
+          },
+        },
+        {
+          targets: 2,
+          title: "Location",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? "-"
+              : locationMap.get(data).locationDesc;
+          },
+        },
+        {
+          targets: 3,
+          title: "แผนกลำดับที่ 1",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? "-"
+              : departmentMap.get(data).departmentDesc;
+          },
+        },
+        {
+          targets: 4,
+          title: "แผนกลำดับที่ 2",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? "-"
+              : departmentMap.get(data).departmentDesc;
+          },
+        },
+        {
+          targets: 5,
+          title: "แผนกลำดับที่ 3",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? "-"
+              : departmentMap.get(data).departmentDesc;
+          },
+        },
+        {
+          targets: 6,
+          title: "ช่วงเวลา",
+          render: function (data, type, full, meta) {
+            return full.shiftStart + "-" + full.shiftEnd;
+          },
+        },
+        {
+          targets: 7,
+          title: "โรงพยาบาลที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            if (full.isUpdate === true) {
+              return `<select class="custom-select hospitalCode" name="hospitalCode" id="hospitalCode" data-size="4">
+                        <option selected disabled>ตำแหน่ง</option>
+                    </select>`;
+            } else {
+              return full.approveHospitalCode == null ||
+                isNaN(full.approveHospitalCode)
+                ? "-"
+                : hospitalMap.get(full.approveHospitalCode).hospitalDesc;
+            }
+          },
+        },
+        {
+          targets: 8,
+          title: "Locationที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            if (full.isUpdate === true) {
+              return `<select class="custom-select locationCode" name="locationCode" id="locationCode" data-size="4">
+                          <option selected disabled>Location</option>
+                      </select>`;
+            } else {
+              return full.approveLocationCode == null ||
+                isNaN(full.approveLocationCode)
+                ? "-"
+                : locationMap.get(full.approveLocationCode).locationDesc;
+            }
+          },
+        },
+        {
+          targets: 9,
+          title: "แผนกที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            if (full.isUpdate === true) {
+              return `<select class="custom-select departmentCode" name="departmentCode" id="departmentCode" data-size="4">
+                            <option selected disabled>แผนก</option>
+                        </select>`;
+            } else {
+              return full.approveDepartmentCode == null ||
+                isNaN(full.approveDepartmentCode)
+                ? "-"
+                : departmentMap.get(full.approveDepartmentCode).departmentDesc;
+            }
+          },
+        },
+        {
+          targets: 10,
+          title: "ช่วงเวลาที่อนุมัติ",
+          render: function (data, type, full, meta) {
+            if (full.isUpdate === true) {
+              return `<input type="time" class="form-control form-control-sm" name="shiftStartEdit" id="shiftStartEdit" value="${full.approveShiftStart}" /> 
+              <input type="time" class="form-control form-control-sm" name="shiftEndEdit" id="shiftEndEdit" value="${full.approveShiftEnd}" />
+              <label class="small" style="color: red;" id="labelAlert">* กรุณาตรวจสอบก่อนทำการอนุมัติ </label>`;
+            } else {
+              return full.approveShiftStart != null &&
+                full.approveShiftEnd != null
+                ? full.approveShiftStart + "-" + full.approveShiftEnd
+                : "-";
+            }
+          },
+        },
+        {
+          targets: 11,
+          title: "สถานะ",
+          render: function (data, type, full, meta) {
+            if (full.isUpdate === true) {
+              return `<select class="custom-select statusCode" name="statusCode" id="statusCode" data-size="4">
+                <option selected disabled>สถานะ</option>
+            </select>`;
+            } else {
+              return `<a class="btn btn-${dutyScheduleSStatusMap[data].state}" style="width: 90px;">${dutyScheduleSStatusMap[data].desc}</a>`;
+            }
+          },
+        },
+        {
+          targets: 12,
+          title: "หมายเหตุ",
+          render: function (data, type, full, meta) {
+            if (full.isUpdate === true) {
+              return `<input type="text" class="form-control form-control-sm" name="remarkEdit" id="remarkEdit" value="${
+                data == null ? "" : data
+              }" />`;
+            } else {
+              return data;
+            }
+          },
+        },
+        // {
+        //   targets: 13,
+        //   title: "แก้ไข",
+        //   render: function (data, type, full, meta) {
+        //     if (
+        //       full.status == dutyScheduleStatusConstant.Off ||
+        //       full.status == dutyScheduleStatusConstant.Wait ||
+        //       full.status == dutyScheduleStatusConstant.Approve
+        //     ) {
+        //       if (full.isUpdate == false) {
+        //         return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`;
+        //       } else {
+        //         return `
+        //         <a class="btn btn-success btn-circle btn-sm confirm-button"><i class="fas fa-check"></i></a>
+        //         <a class="btn btn-danger btn-circle btn-sm cancel-button" ><i class="fas fa-times"></i></a>`;
+        //       }
+        //     } else {
+        //       return "-";
+        //     }
+        //   },
+        // },
+      ],
+    });
+  };
+
+  return {
+    init: function () {
+      initTable1();
+      let containerTable = $(table.table().container());
+    },
+    data: function (data) {
+      table.clear();
+      table.rows.add(data);
+      table.draw();
+    },
+    addData: function (data) {
+      table.rows.add(data);
+      table.draw();
+    },
+    getData: function (index) {
+      if (index) {
+        return table.row(index).data();
+      }
+      return table.rows().data().toArray();
+    },
+    datatable: function () {
+      return table;
+    },
+    adjust: function () {
+      table.columns.adjust();
     },
   };
 })();

@@ -57,6 +57,65 @@
       position: fixed;
       z-index: 100;
     }
+
+    .face {
+      display: inline-block;
+      width: 100%;
+      margin-top: -40px;
+      padding-top: 40px;
+      text-align: center;
+    }
+    .terrible,
+    .badly,
+    .normal,
+    .good,
+    .verygood {
+      display: inline-block;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    .terrible:hover {
+      color: black;
+      transition: all 0.2s ease-in-out;
+      transform: scale(1.1);
+    }
+    .badly:hover {
+      color: black;
+      transition: all 0.2s ease-in-out;
+      transform: scale(1.1);
+    }
+    .normal:hover {
+      color: black;
+      transition: all 0.2s ease-in-out;
+      transform: scale(1.1);
+    }
+    .good:hover {
+      color: black;
+      transition: all 0.2s ease-in-out;
+      transform: scale(1.1);
+    }
+    .verygood:hover {
+      color: black;
+      transition: all 0.2s ease-in-out;
+      transform: scale(1.1);
+    }
+
+    .terrible.active {
+      color: black;
+    }
+    .badly.active {
+      color: black;
+    }
+    .normal.active {
+      color: black;
+    }
+    .good.active {
+      color: black;
+    }
+    .verygood.active {
+      color: black;
+    }
   </style>
 
   <body id="page-top">
@@ -263,6 +322,31 @@
                         justify-content: center;
                       "
                     >
+                      <fieldset id="feelingField">
+                        <legend class="text-center" id="terrible">
+                          คุณรู้สึกอย่างไรในวันนี้
+                        </legend>
+                        <div class="terrible" id="terrible">
+                          <span style="font-size: 100px">😭</span>
+                          <legend class="text-center">แย่มาก</legend>
+                        </div>
+                        <div class="badly" id="badly">
+                          <span style="font-size: 100px">😣</span>
+                          <legend class="text-center">แย่</legend>
+                        </div>
+                        <div class="normal" id="normal">
+                          <span style="font-size: 100px">🙂</span>
+                          <legend class="text-center">ปกติ</legend>
+                        </div>
+                        <div class="good" id="good">
+                          <span style="font-size: 100px">😀</span>
+                          <legend class="text-center">ดี</legend>
+                        </div>
+                        <div class="verygood" id="verygood">
+                          <span style="font-size: 100px">😍</span>
+                          <legend class="text-center">ดีมาก</legend>
+                        </div>
+                      </fieldset>
                       <img
                         class="img-check rounded-circle"
                         id="checkImg"

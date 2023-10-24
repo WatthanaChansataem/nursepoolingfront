@@ -53,7 +53,7 @@
     .rating-box {
       position: relative;
       background: #fff;
-      padding: 25px 50px 35px;
+      padding: 12px 25px 17px;
       border-radius: 25px;
       box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
     }
@@ -67,16 +67,17 @@
     .rating-box .stars {
       display: flex;
       align-items: center;
-      gap: 25px;
+      gap: 5px;
     }
     .stars i {
       color: #e6e6e6;
-      font-size: 35px;
+      font-size: 20px;
       cursor: pointer;
       transition: color 0.2s ease;
+      color: rgb(108, 108, 211);
     }
     .stars i.active {
-      color: #ff9c1a;
+      color: rgb(108, 108, 211);
     }
   </style>
 
@@ -220,6 +221,30 @@
                       </div>
                     </div>
                   </form>
+                </div>
+              </li>
+              <li class="nav-item dropdown no-arrow mx-1">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="alertsDropdown"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <i class="fas fa-bell fa-fw"></i>
+                  <span
+                    class="badge badge-danger badge-counter"
+                    id="notifyCount"
+                  ></span>
+                </a>
+                <div
+                  class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                  aria-labelledby="alertsDropdown"
+                  id="notifyDropdown"
+                >
+                  <h6 class="dropdown-header">การแจ้งเตือน</h6>
                 </div>
               </li>
 
@@ -436,7 +461,7 @@
                         <th>ช่วงเวลาที่ขอ</th>
                         <th>ช่วงเวลาที่อนุมัติ</th>
                         <th>ช่วงเวลาที่เข้างานจริง</th>
-                        <th>ผลประเมิน</th>
+                        <!-- <th>ผลประเมิน</th> -->
                         <th>คะแนนการทำงานของเจ้าหน้าที่</th>
                         <th>รหัสพนักงานผู้ประเมิน</th>
                         <!-- <th>สถานะ</th> -->
@@ -593,13 +618,28 @@
               </div>
             </div>
             <div class="rating-box">
-              <header>การประเมิน</header>
+              <header>คะแนนการทำงาน</header>
               <div class="stars">
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
+                <div class="ratingMeaning text-center">
+                  <i class="fa-solid"> 1</i>
+                  <label style="font-size: 12px">Poor</label>
+                </div>
+                <div class="ratingMeaning text-center">
+                  <i class="fa-solid"> 2</i>
+                  <label style="font-size: 12px">Unsatisfactory</label>
+                </div>
+                <div class="ratingMeaning text-center">
+                  <i class="fa-solid"> 3</i>
+                  <label style="font-size: 12px">Satisfactory</label>
+                </div>
+                <div class="ratingMeaning text-center">
+                  <i class="fa-solid"> 4</i>
+                  <label style="font-size: 12px">Very Satisfactory</label>
+                </div>
+                <div class="ratingMeaning text-center">
+                  <i class="fa-solid"> 5</i>
+                  <label style="font-size: 12px">Outstanding</label>
+                </div>
               </div>
             </div>
             <div class="form-group row">
@@ -632,6 +672,118 @@
                 />
                 <div class="invalid-feedback validation-error-message"></div>
                 <span class="form-text text-muted"></span>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="alert alert-success row" role="alert">
+                <label>จุดแข็ง/สิ่งที่ทำได้ดี</label>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <input
+                      class="bf5"
+                      type="checkbox"
+                      id="focusStrength"
+                      name="focusStrength"
+                    />
+                    <label for="focusStrength">Focus</label>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <input
+                      class="bf5"
+                      type="checkbox"
+                      id="fastStrength"
+                      name="fastStrength"
+                    />
+                    <label for="fastStrength">Fast</label>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <input
+                      class="bf5"
+                      type="checkbox"
+                      id="flexibleStrength"
+                      name="flexibleStrength"
+                    />
+                    <label for="flexibleStrength">Flexible</label>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <input
+                      class="bf5"
+                      type="checkbox"
+                      id="foreGrabStrength"
+                      name="foreGrabStrength"
+                    />
+                    <label for="foreGrabStrength">Fore Grab</label>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <input
+                      class="bf5"
+                      type="checkbox"
+                      id="forecastStrength"
+                      name="forecastStrength"
+                    />
+                    <label for="forecastStrength">Forecast</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="alert alert-warning row" role="alert">
+                <label>จุดอ่อน/สิ่งที่ต้องพัฒนา</label>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <input
+                      class="bf5"
+                      type="checkbox"
+                      id="focusWeaknesses"
+                      name="focusWeaknesses"
+                    />
+                    <label for="focusWeaknesses">Focus</label>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <input
+                      class="bf5"
+                      type="checkbox"
+                      id="fastWeaknesses"
+                      name="fastWeaknesses"
+                    />
+                    <label for="fastWeaknesses">Fast</label>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <input
+                      class="bf5"
+                      type="checkbox"
+                      id="flexibleWeaknesses"
+                      name="flexibleWeaknesses"
+                    />
+                    <label for="flexibleWeaknesses">Flexible</label>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <input
+                      class="bf5"
+                      type="checkbox"
+                      id="foreGrabWeaknesses"
+                      name="foreGrabWeaknesses"
+                    />
+                    <label for="foreGrabWeaknesses">ForeGrab</label>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <input
+                      class="bf5"
+                      type="checkbox"
+                      id="forecastWeaknesses"
+                      name="forecastWeaknesses"
+                    />
+                    <label for="forecastWeaknesses">Forecast</label>
+                  </div>
+                </div>
               </div>
             </div>
 

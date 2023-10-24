@@ -806,6 +806,173 @@
       </div>
     </div>
 
+    <div
+      class="modal fade"
+      id="approveModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog"
+        style="max-width: 100%; max-height: 100%"
+        role="document"
+      >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              <strong class="text-gray-900"> รายการเวรรายบุคคล </strong>
+            </h5>
+            <button
+              class="close"
+              type="button"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="col-sm-12">
+              <p id="dutyDateDisplayModal"></p>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-2">
+                <div class="col-lg-1 text-center">
+                  <img
+                    class="img-profile rounded-circle"
+                    src="img/undraw_profile.svg"
+                    id="profileImg"
+                    width="100"
+                    height="100"
+                    alt="image"
+                  />
+                </div>
+                <br />
+                <div class="col-lg-8 text-center">
+                  <a class="small" href="" target="_blank" id="previewProfile"
+                    >ข้อมูลส่วนตัว</a
+                  >
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <label class="col-sm-12 col-form-label-sm" id="firstNameModal"
+                  >ชื่อ: -</label
+                >
+                <label
+                  class="col-sm-12 col-form-label-sm"
+                  id="positionCodeModal"
+                  >ตำแหน่ง: -</label
+                >
+                <label class="col-sm-12 col-form-label-sm" id="workplaceModal"
+                  >สถานที่ทำงาน: -</label
+                >
+                <label class="col-sm-12 col-form-label-sm" id="userLevelCode"
+                  >Level: -</label
+                >
+                <label class="col-sm-12 col-form-label-sm" id="phone"
+                  >หมายเลขโทรศพท์: -</label
+                >
+                <label class="col-sm-12 col-form-label-sm" id="email"
+                  >Email: -</label
+                >
+              </div>
+              <div class="col-sm-3">
+                <label class="col-sm-12 col-form-label-sm"
+                  ><strong class="text-gray-900">ประวัติการศึกษา</strong></label
+                >
+                <!-- <div class="col-sm-6 "> -->
+                <div class="form-group row">
+                  <label
+                    class="col-sm-12 col-form-label-sm"
+                    id="educationalQualificationCode"
+                    >วุฒิการศึกษา: -</label
+                  >
+                  <label class="col-sm-12 col-form-label-sm" id="majorCode"
+                    >สาขา: -</label
+                  >
+                  <label class="col-sm-12 col-form-label-sm" id="graduationYear"
+                    >ปีที่จบ: -</label
+                  >
+                  <label class="col-sm-12 col-form-label-sm" id="university"
+                    >มหาวิทยาลัย: -</label
+                  >
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <label class="col-sm-12 col-form-label-sm"
+                  ><strong class="text-gray-900">ประสบการณ์</strong></label
+                >
+                <div class="form-group row">
+                  <label
+                    class="col-sm-12 col-form-label-sm"
+                    id="experienceTypeCode"
+                    >ประสบการณ์: -</label
+                  >
+                  <label class="col-sm-12 col-form-label-sm" id="positionCode"
+                    >ตำแหน่ง: -</label
+                  >
+                  <label class="col-sm-6 col-form-label-sm" id="beginYear"
+                    >ปีที่เริ่ม: -</label
+                  >
+                  <label class="col-sm-6 col-form-label-sm" id="endYear"
+                    >ปีที่สิ้นสุด: -</label
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">รายการ</h6>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table
+                    class="table table-bordered nowrap"
+                    id="dataTableDetail"
+                    width="100%"
+                    cellspacing="0"
+                  >
+                    <thead>
+                      <tr>
+                        <th>No.</th>
+                        <th>โรงพยาบาล</th>
+                        <th>Location</th>
+                        <th>แผนกลำดับที่ 1</th>
+                        <th>แผนกลำดับที่ 2</th>
+                        <th>แผนกลำดับที่ 3</th>
+                        <th>ช่วงเวลา</th>
+                        <th>โรงพยาบาลที่อนุมัติ</th>
+                        <th>Locationที่อนุมัติ</th>
+                        <th>แผนกที่อนุมัติ</th>
+                        <th>ช่วงเวลาที่อนุมัติ</th>
+                        <th>สถานะ</th>
+                        <th>หมายเหตุ</th>
+                        <!-- <th>แก้ไข</th> -->
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <!-- <button class="btn btn-success" type="button" id="submit">
+              บันทึก
+            </button> -->
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-dismiss="modal"
+            >
+              ปิด
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

@@ -850,7 +850,9 @@ let CreateDatatable = (function () {
           "checked",
           data.requestShuttle == null || data.requestShuttle == 0 ? false : true
         );
-
+        if (userData.userCategoryCode != 1) {
+          $(".div-input-requestShuttleEdit").hide();
+        }
         $("#editScheduleModal").modal();
       });
 

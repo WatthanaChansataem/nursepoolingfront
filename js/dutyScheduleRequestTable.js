@@ -222,6 +222,32 @@ let SetupData = (function () {
           userData = res.data;
           $("#version").html("Version " + userData.version);
           $("#currentUserName").html(userData.firstName);
+          if (
+            userData.dutyScheduleList != null &&
+            userData.dutyScheduleList.length > 0
+          ) {
+            $("#notifyCount").html(1);
+            $("#notifyDropdown")
+              .append(`<a class="dropdown-item d-flex align-items-center" href="employeeAppraisalForm.html?from=notification">
+              <div class="mr-3">
+                <div class="icon-circle bg-primary">
+                  <i class="fas fa-user text-white"></i>
+                </div>
+              </div>
+              <div>
+                <div class="small text-gray-500">${userData.notifyDateString}</div>
+                <span class="font-weight-bold"
+                  >มีผู้ใช้ที่ยังไม่ได้รับการประเมิน ${userData.dutyScheduleList.length} รายการ</span
+                >
+              </div>
+            </a>`);
+          } else {
+            $("#notifyDropdown").append(`<a
+            class="dropdown-item text-center small text-gray-500"
+            href="#"
+            >ไม่พบรายการ</a
+          >`);
+          }
           $("#navProfileImg").attr(
             "src",
             `${link}/api/document/avatar/${userData.userId}`
@@ -1794,7 +1820,6 @@ let CreateDatatableDetail = (function () {
         { data: "approveDepartmentCode", className: "text-center" },
         { data: "approveShiftStart", className: "text-center" },
         { data: "realShiftStart", className: "text-center" },
-        { data: "score", className: "text-center" },
         { data: "remark", className: "text-center" },
       ],
       order: [[0, "asc"]],
@@ -1858,15 +1883,6 @@ let CreateDatatableDetail = (function () {
         },
         {
           targets: 7,
-          title: "ผลประเมิน",
-          render: function (data, type, full, meta) {
-            return '<span class="fa fa-star checked" style="color:orange"></span>'.repeat(
-              data
-            );
-          },
-        },
-        {
-          targets: 8,
           title: "หมายเหตุ",
           render: function (data, type, full, meta) {
             return data;
