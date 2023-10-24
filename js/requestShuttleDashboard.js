@@ -428,6 +428,7 @@ let CreateDatatable = (function () {
         { data: "approveShiftStart", className: "text-center" },
         { data: "shuttleTimeStart", className: "text-center" },
         { data: "shuttleTimeEnd", className: "text-center" },
+        { data: "phone", className: "text-center" },
       ],
       order: [[0, "asc"]],
       columnDefs: [
@@ -505,6 +506,13 @@ let CreateDatatable = (function () {
         {
           targets: 9,
           title: "เวลาส่ง",
+          render: function (data, type, full, meta) {
+            return data;
+          },
+        },
+        {
+          targets: 10,
+          title: "TEL.",
           render: function (data, type, full, meta) {
             return data;
           },
