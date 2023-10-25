@@ -243,7 +243,7 @@ let SetupData = (function () {
             $("#notifyDropdown")
               .append(`<a class="dropdown-item d-flex align-items-center" href="userManagement.html?from=notification">
               <div class="mr-3">
-                <div class="icon-circle bg-primary">
+                <div class="icon-circle" style="background-color: #0f6641">
                   <i class="fas fa-user text-white"></i>
                 </div>
               </div>
@@ -404,6 +404,10 @@ $("#generalSearch").on("click", function () {
   LoadDutyScheduleRequest();
 });
 
+$("#exportExcel").on("click", function () {
+  ExportExcel();
+});
+
 $("#sidebarToggle").on("click", function () {
   CreateDatatable.adjust();
 });
@@ -420,11 +424,11 @@ let CreateDatatable = (function () {
       columns: [
         { data: "", className: "text-center" },
         { data: "firstName", className: "text-center" },
-        { data: "positionCode", className: "text-center" },
         { data: "dutyDate", className: "text-center" },
         { data: "approveHospitalCode", className: "text-center" },
         { data: "approveLocationCode", className: "text-center" },
         { data: "approveDepartmentCode", className: "text-center" },
+        { data: "positionCode", className: "text-center" },
         { data: "approveShiftStart", className: "text-center" },
         { data: "shuttleTimeStart", className: "text-center" },
         { data: "shuttleTimeEnd", className: "text-center" },
@@ -448,20 +452,13 @@ let CreateDatatable = (function () {
         },
         {
           targets: 2,
-          title: "ตำแหน่ง",
-          render: function (data, type, full, meta) {
-            return positionMap.get(full.positionCode).positionDesc;
-          },
-        },
-        {
-          targets: 3,
           title: "วันที่ส่งเวร",
           render: function (data, type, full, meta) {
             return isDateTime(data) ? moment(data).format("DD/MM/YYYY") : data;
           },
         },
         {
-          targets: 4,
+          targets: 3,
           title: "โรงพยาบาล",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -470,7 +467,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 5,
+          targets: 4,
           title: "Location",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -479,12 +476,19 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 6,
+          targets: 5,
           title: "แผนก",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
               ? "-"
               : departmentMap.get(data).departmentDesc;
+          },
+        },
+        {
+          targets: 6,
+          title: "ตำแหน่ง",
+          render: function (data, type, full, meta) {
+            return positionMap.get(full.positionCode).positionDesc;
           },
         },
         {
@@ -721,4 +725,48 @@ let CreateRowParentBody = function () {
         </div>
         `;
   return childRow;
+};
+
+let ExportExcel = function () {
+  let dutyDate = $("#beginDate").val();
+  let hospitalCode = parseInt($("#hospitalCode").val());
+  let locationCode = parseInt($("#locationCode").val());
+  let departmentCode = parseInt($("#departmentCode").val());
+  let positionCode = parseInt($("#positionCode").val());
+
+  let objData = {
+    dutyDate: dutyDate,
+    hospitalCode: hospitalCode,
+    locationCode: locationCode,
+    departmentCode: departmentCode,
+    positionCode: positionCode,
+  };
+
+  let data = {
+    stringQuery: JSON.stringify(objData),
+  };
+
+  $.ajax({
+    url: link + "/api/exportquery/addqurey",
+    method: "POST",
+    data: JSON.stringify(data),
+    dataType: "json",
+    contentType: "application/json; charset=UTF-8;",
+    success: function (res) {
+      if (res.status.code == 200) {
+        let requestParams = {
+          exportId: res.data,
+        };
+        let urlParams = $.param(requestParams);
+        window.open(
+          `${link}/api/dutySchedule/searchForRequestShuttleDashboardExportExcel?${urlParams}`
+        );
+      } else {
+        toastr.error(res.status.message);
+      }
+    },
+    error: function (res) {
+      toastr.error("ไม่สามารถ export ได้");
+    },
+  });
 };
