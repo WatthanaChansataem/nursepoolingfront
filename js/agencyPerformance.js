@@ -250,7 +250,7 @@ let SetupData = (function () {
             $("#notifyDropdown")
               .append(`<a class="dropdown-item d-flex align-items-center" href="userManagement.html?from=notification">
               <div class="mr-3">
-                <div class="icon-circle bg-primary">
+                <div class="icon-circle" style="background-color: #0f6641">
                   <i class="fas fa-user text-white"></i>
                 </div>
               </div>
@@ -1504,7 +1504,7 @@ let RequestDatatable = (function () {
           render: function (data, type, full, meta) {
             return data;
           },
-        }
+        },
       ],
     });
   };
