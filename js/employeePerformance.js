@@ -519,6 +519,10 @@ $("#generalSearch").on("click", function () {
   LoadDutySchedule();
 });
 
+$("#exportExcel").on("click", function () {
+  ExportExcel();
+});
+
 let CreateDatatable = (function () {
   let table;
   let currentPage = 0;
@@ -1388,3 +1392,40 @@ let CreateDatatableDetail = (function () {
     },
   };
 })();
+
+let ExportExcel = function () {
+  let objData = {
+    insertDate: $("#beginDate").val(),
+    startDate: $("#startDate").val(),
+    endDate: $("#endDate").val(),
+    positionCode: parseInt($("#positionCode").val()),
+  };
+
+  let data = {
+    stringQuery: JSON.stringify(objData),
+  };
+
+  $.ajax({
+    url: link + "/api/exportquery/addqurey",
+    method: "POST",
+    data: JSON.stringify(data),
+    dataType: "json",
+    contentType: "application/json; charset=UTF-8;",
+    success: function (res) {
+      if (res.status.code == 200) {
+        let requestParams = {
+          exportId: res.data,
+        };
+        let urlParams = $.param(requestParams);
+        window.open(
+          `${link}/api/dutySchedule/employeePerformanceExportExcel?${urlParams}`
+        );
+      } else {
+        toastr.error(res.status.message);
+      }
+    },
+    error: function (res) {
+      toastr.error("ไม่สามารถ export ได้");
+    },
+  });
+};
