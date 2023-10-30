@@ -67,6 +67,8 @@ let educationalQualificationMap = new Map();
 let educationalQualificationMaster;
 let experienceTypeMap = new Map();
 let experienceTypeMaster;
+let userCategoryMap = new Map();
+let userCategoryMaster;
 
 let dutyScheduleStatusConstant = {
   Wait: "N",
@@ -378,6 +380,32 @@ let SetupData = (function () {
       },
     });
   };
+
+  let loadUserCategory = function (defered) {
+    $.ajax({
+      url: link + "/api/userCategory/list",
+      type: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      success: function (res) {
+        if (res.status.code == 200) {
+          userCategoryMaster = res.data;
+          for (let data of res.data) {
+            userCategoryMap.set(data.userCategoryCode, data);
+          }
+          defered.resolve(true);
+        } else {
+          defered.resolve(false);
+          toastr.error("ไม่สามารถดึงข้อมูล UserCategory ได้", "Error");
+        }
+      },
+      error: function (res) {
+        defered.resolve(false);
+        toastr.error("ไม่สามารถดึงข้อมูล UserCategory ได้", "Error");
+      },
+    });
+  };
   return {
     init: function (defered) {
       let hospitalDefered = $.Deferred();
@@ -387,6 +415,7 @@ let SetupData = (function () {
       let positionDefered = $.Deferred();
       let educationalQualificationDefered = $.Deferred();
       let experienceTypeDefer = $.Deferred();
+      let userCategoryDefered = $.Deferred();
       loadHospital(hospitalDefered);
       loadLocation(locationDefered);
       loadDepartment(departmentDefered);
@@ -394,6 +423,7 @@ let SetupData = (function () {
       loadPosition(positionDefered);
       loadEducationalQualification(educationalQualificationDefered);
       loadExperienceType(experienceTypeDefer);
+      loadUserCategory(userCategoryDefered);
 
       $.when(
         hospitalDefered,
@@ -402,7 +432,8 @@ let SetupData = (function () {
         userDataDefered,
         positionDefered,
         educationalQualificationDefered,
-        experienceTypeDefer
+        experienceTypeDefer,
+        userCategoryDefered
       ).done(function (
         hospitalResult,
         locationDefered,
@@ -410,7 +441,8 @@ let SetupData = (function () {
         userDataResult,
         positionResult,
         educationalQualificationResult,
-        experienceTypeResult
+        experienceTypeResult,
+        userCategoryResult
       ) {
         if (
           hospitalResult &&
@@ -419,7 +451,8 @@ let SetupData = (function () {
           userDataResult &&
           positionResult &&
           educationalQualificationResult &&
-          experienceTypeResult
+          experienceTypeResult &&
+          userCategoryResult
         ) {
           defered.resolve(true);
         } else {
@@ -432,7 +465,14 @@ let SetupData = (function () {
 
 let renderPage = function () {
   //   CreateDatatable.adjust();
-  LoadDutySchedule();
+  $.each(userCategoryMaster, function (i, item) {
+    $("select[name=userCategoryCodeSearch]").append(
+      $("<option>", {
+        value: item.userCategoryCode,
+        text: item.userCategoryDesc,
+      })
+    );
+  });
   $("#beginDate").datepicker({
     format: "dd/mm/yyyy",
     autoclose: true,
@@ -509,6 +549,7 @@ let renderPage = function () {
       })
     );
   });
+  LoadDutySchedule();
 };
 
 $("#sidebarToggle").on("click", function () {
@@ -517,6 +558,10 @@ $("#sidebarToggle").on("click", function () {
 
 $("#generalSearch").on("click", function () {
   LoadDutySchedule();
+});
+
+$("#exportExcel").on("click", function () {
+  ExportExcel();
 });
 
 let CreateDatatable = (function () {
@@ -536,6 +581,7 @@ let CreateDatatable = (function () {
         { data: "firstName", className: "text-center" },
         { data: "role", className: "text-center" },
         { data: "positionCode", className: "text-center" },
+        { data: "userCategoryCode", className: "text-center" },
         { data: "requestNumber", className: "text-center" },
         { data: "approveNumber", className: "text-center" },
         { data: "realNumber", className: "text-center" },
@@ -587,9 +633,17 @@ let CreateDatatable = (function () {
               : positionMap.get(data).positionDesc;
           },
         },
-
         {
           targets: 4,
+          title: "User Category",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data) || data == 0
+              ? "-"
+              : userCategoryMap.get(data).userCategoryDesc;
+          },
+        },
+        {
+          targets: 5,
           title: "จำนวนเวรที่ขอ",
           render: function (data, type, full, meta) {
             return data == 0
@@ -598,7 +652,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 5,
+          targets: 6,
           title: "จำนวนเวรที่ได้รับบการอนุมัติ",
           render: function (data, type, full, meta) {
             return data == 0
@@ -607,7 +661,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 6,
+          targets: 7,
           title: "จำนวนเวรที่เข้างาน",
           render: function (data, type, full, meta) {
             return data == 0
@@ -616,7 +670,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 7,
+          targets: 8,
           title: "จำนวนเวรที่OFF",
           render: function (data, type, full, meta) {
             return data == 0
@@ -625,7 +679,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 8,
+          targets: 9,
           title: "จำนวนชั่วโมงที่ขอ",
           render: function (data, type, full, meta) {
             return data == "00:00"
@@ -634,7 +688,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 9,
+          targets: 10,
           title: "จำนวนชั่วโมงที่ได้รับบการอนุมัติ",
           render: function (data, type, full, meta) {
             return data == "00:00"
@@ -643,7 +697,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 10,
+          targets: 11,
           title: "จำนวนชั่วโมงที่เข้างาน",
           render: function (data, type, full, meta) {
             return data == "00:00"
@@ -652,7 +706,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 11,
+          targets: 12,
           title: "จำนวนชั่วโมงที่OFF",
           render: function (data, type, full, meta) {
             return data == "00:00"
@@ -661,7 +715,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 12,
+          targets: 13,
           title: "คะแนนเฉลี่ย",
           render: function (data, type, full, meta) {
             return data;
@@ -669,7 +723,7 @@ let CreateDatatable = (function () {
         },
 
         {
-          targets: 13,
+          targets: 14,
           title: "สถานะ",
           render: function (data, type, full, meta) {
             if (data == 0) {
@@ -680,14 +734,14 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 14,
+          targets: 15,
           title: "วันที่ลงทะเบียน",
           render: function (data, type, full, meta) {
             return isDateTime(data) ? moment(data).format("DD/MM/YYYY") : data;
           },
         },
         {
-          targets: 15,
+          targets: 16,
           title: "รายละเอียด",
           render: function (data, type, full, meta) {
             return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-info"></i></a>`;
@@ -896,6 +950,7 @@ let LoadDutySchedule = function () {
     startDate: $("#startDate").val(),
     endDate: $("#endDate").val(),
     positionCode: parseInt($("#positionCode").val()),
+    userCategoryCode: parseInt($("#userCategoryCodeSearch").val()),
   };
   endDateGlobal = $("#endDate").val();
   startDateGlobal = $("#startDate").val();
@@ -1388,3 +1443,40 @@ let CreateDatatableDetail = (function () {
     },
   };
 })();
+
+let ExportExcel = function () {
+  let objData = {
+    insertDate: $("#beginDate").val(),
+    startDate: $("#startDate").val(),
+    endDate: $("#endDate").val(),
+    positionCode: parseInt($("#positionCode").val()),
+  };
+
+  let data = {
+    stringQuery: JSON.stringify(objData),
+  };
+
+  $.ajax({
+    url: link + "/api/exportquery/addqurey",
+    method: "POST",
+    data: JSON.stringify(data),
+    dataType: "json",
+    contentType: "application/json; charset=UTF-8;",
+    success: function (res) {
+      if (res.status.code == 200) {
+        let requestParams = {
+          exportId: res.data,
+        };
+        let urlParams = $.param(requestParams);
+        window.open(
+          `${link}/api/dutySchedule/employeePerformanceExportExcel?${urlParams}`
+        );
+      } else {
+        toastr.error(res.status.message);
+      }
+    },
+    error: function (res) {
+      toastr.error("ไม่สามารถ export ได้");
+    },
+  });
+};

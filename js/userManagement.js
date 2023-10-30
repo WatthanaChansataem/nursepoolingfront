@@ -477,6 +477,15 @@ let renderPage = function () {
     );
   });
 
+  $.each(userCategoryMaster, function (i, item) {
+    $("select[name=userCategoryCodeSearch]").append(
+      $("<option>", {
+        value: item.userCategoryCode,
+        text: item.userCategoryDesc,
+      })
+    );
+  });
+
   $.each(departmentMaster, function (i, item) {
     $("select[name=departmentCodeEditModal]").append(
       $("<option>", {
@@ -510,7 +519,7 @@ let CreateDatatable = (function () {
       fixedHeader: true,
       responsive: true,
       data: [],
-      scrollY: "50vh",
+      // scrollY: "50vh",
       scrollX: true,
       scrollCollapse: true,
       columns: [
@@ -518,6 +527,7 @@ let CreateDatatable = (function () {
         { data: "firstName", className: "text-center" },
         { data: "role", className: "text-center" },
         { data: "positionCode", className: "text-center" },
+        { data: "userCategoryCode", className: "text-center" },
         { data: "hospitalCode", className: "text-center" },
         { data: "locationCode", className: "text-center" },
         { data: "departmentCode", className: "text-center" },
@@ -566,6 +576,15 @@ let CreateDatatable = (function () {
         },
         {
           targets: 4,
+          title: "User Category",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data) || data == 0
+              ? "-"
+              : userCategoryMap.get(data).userCategoryDesc;
+          },
+        },
+        {
+          targets: 5,
           title: "โรงพยาบาล",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -574,7 +593,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 5,
+          targets: 6,
           title: "Location",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -583,7 +602,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 6,
+          targets: 7,
           title: "แผนก",
           render: function (data, type, full, meta) {
             return data == null || isNaN(data)
@@ -592,7 +611,7 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 7,
+          targets: 8,
           title: "สถานะ",
           render: function (data, type, full, meta) {
             if (data == 0) {
@@ -603,21 +622,21 @@ let CreateDatatable = (function () {
           },
         },
         {
-          targets: 8,
+          targets: 9,
           title: "วันที่ลงทะเบียน",
           render: function (data, type, full, meta) {
             return isDateTime(data) ? moment(data).format("DD/MM/YYYY") : data;
           },
         },
         {
-          targets: 9,
+          targets: 10,
           title: "สถานะการอนุมัติ",
           render: function (data, type, full, meta) {
             return approveStatusMap[data].desc;
           },
         },
         {
-          targets: 10,
+          targets: 11,
           title: "แก้ไข",
           render: function (data, type, full, meta) {
             return `<a class="btn btn-outline-dark btn-circle btn-sm edit-button" id="addEducation"><i class="fas fa-pencil-alt"></i></a>`;
@@ -826,6 +845,7 @@ let LoadDutySchedule = function () {
     status: parseInt($("#statusCode").val()),
     role: $("#userRole").val(),
     positionCode: parseInt($("#positionCode").val()),
+    userCategoryCode: parseInt($("#userCategoryCodeSearch").val()),
   };
   $.ajax({
     url: link + "/api/User/searchForUserManagement",

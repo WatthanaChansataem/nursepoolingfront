@@ -497,6 +497,10 @@ $("#generalSearch").on("click", function () {
   LoadDutySchedule();
 });
 
+$("#exportExcel").on("click", function () {
+  ExportExcel();
+});
+
 let CreateDatatable = (function () {
   let table;
   let currentPage = 0;
@@ -1537,3 +1541,46 @@ let RequestDatatable = (function () {
     },
   };
 })();
+
+let ExportExcel = function () {
+  let hospitalCode = parseInt($("#hospitalCode").val());
+  let locationCode = parseInt($("#locationCode").val());
+  let departmentCode = parseInt($("#departmentCode").val());
+  
+  let objData = {
+    insertDate: $("#beginDate").val(),
+    hospitalCode: hospitalCode,
+    locationCode: locationCode,
+    departmentCode: departmentCode,
+    startDate: $("#startDate").val(),
+    endDate: $("#endDate").val(),
+  };
+
+  let data = {
+    stringQuery: JSON.stringify(objData),
+  };
+
+  $.ajax({
+    url: link + "/api/exportquery/addqurey",
+    method: "POST",
+    data: JSON.stringify(data),
+    dataType: "json",
+    contentType: "application/json; charset=UTF-8;",
+    success: function (res) {
+      if (res.status.code == 200) {
+        let requestParams = {
+          exportId: res.data,
+        };
+        let urlParams = $.param(requestParams);
+        window.open(
+          `${link}/api/dutySchedule/agencyPerformanceExportExcel?${urlParams}`
+        );
+      } else {
+        toastr.error(res.status.message);
+      }
+    },
+    error: function (res) {
+      toastr.error("ไม่สามารถ export ได้");
+    },
+  });
+};

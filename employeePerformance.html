@@ -450,6 +450,19 @@
                   id="endDate"
                 />
               </div>
+              <div class="col-sm-3 div-input-positionCode">
+                <label for="userCategoryCodeSearch" class="col-form-label-sm"
+                  >User Category</label
+                >
+                <select
+                  class="custom-select userCategoryCodeSearch"
+                  name="userCategoryCodeSearch"
+                  id="userCategoryCodeSearch"
+                  data-size="4"
+                >
+                  <option selected value="-1">ทั้งหมด</option>
+                </select>
+              </div>
             </div>
             <div
               class="col-sm-12"
@@ -498,6 +511,7 @@
                         <th>ชื่อ</th>
                         <th>UserRole</th>
                         <th>ตำแหน่ง</th>
+                        <th>User Category</th>
                         <th>จำนวนเวรที่ขอ</th>
                         <th>จำนวนเวรที่ได้รับบการอนุมัติ</th>
                         <th>จำนวนเวรที่เข้างาน</th>
@@ -521,12 +535,12 @@
                 class="col-sm-12"
                 style="display: flex; justify-content: flex-end"
               >
-                <!-- <a class="btn btn-primary btn-icon-split" id="submit">
+                <a class="btn btn-success btn-icon-split" id="exportExcel">
                   <span class="icon text-white-50">
-                    <i class="fa fa-check"></i>
+                    <i class="fa fa-download"></i>
                   </span>
-                  <span class="text">บันทึก</span>
-                </a> -->
+                  <span class="text">Export Excel</span>
+                </a>
               </div>
             </div>
           </div>
