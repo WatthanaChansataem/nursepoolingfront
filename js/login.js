@@ -84,6 +84,7 @@ $("#loginButton").on("click", function () {
     password: password,
     rememberMe: rememberMe,
   };
+  $("#loginButton").addClass("disabled");
   $("#loginSpinner").show();
   $.ajax({
     url: link + "/api/user/login",
@@ -106,13 +107,16 @@ $("#loginButton").on("click", function () {
         } else {
           window.location.href = res.data.appRoleMenu;
         }
+        $("#loginButton").removeClass("disabled");
       } else {
         $("#loginSpinner").hide();
+        $("#loginButton").removeClass("disabled");
         toastr.error(res.status.message);
       }
     },
     error: function (res) {
       $("#loginSpinner").hide();
+      $("#loginButton").removeClass("disabled");
       toastr.error("ไม่สามารถ Login ได้", "Error");
     },
   });

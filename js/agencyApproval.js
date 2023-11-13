@@ -69,6 +69,10 @@ let educationalQualificationMaster;
 let experienceTypeMap = new Map();
 let experienceTypeMaster;
 
+let currentHospitalCode = null;
+let currentLocationCode = null;
+let currentDepartmentCode = null;
+
 let userRoleConstant = {
   User: "U",
   Admin: "A",
@@ -1217,6 +1221,9 @@ let loadUserDateForApproveModal = function (day, data) {
             departmentMap.get(approvalDetaildata.departmentCode).departmentDesc
         );
 
+        currentHospitalCode = approvalDetaildata.hospitalCode;
+        currentLocationCode = approvalDetaildata.locationCode;
+        currentDepartmentCode = approvalDetaildata.departmentCode;
         $("#positionCodeModal").html(
           '<strong class="text-gray-900">ตำแหน่ง:  </strong> ' +
             positionMap.get(approvalDetaildata.positionCode).positionDesc
@@ -1794,7 +1801,9 @@ let renderRowEdit = function (table) {
         .val(isChanged.approveHospitalCode)
         .change();
     } else {
-      if (isChanged.dutyScheduleRequestList != null) {
+      if (currentHospitalCode != null) {
+        row.find("select[name=hospitalCode]").val(currentHospitalCode).change();
+      } else if (isChanged.dutyScheduleRequestList != null) {
         row
           .find("select[name=hospitalCode]")
           .val(isChanged.dutyScheduleRequestList.hospitalCode)
@@ -1808,7 +1817,9 @@ let renderRowEdit = function (table) {
         .val(isChanged.approveLocationCode)
         .change();
     } else {
-      if (isChanged.dutyScheduleRequestList != null) {
+      if (currentLocationCode != null) {
+        row.find("select[name=locationCode]").val(currentLocationCode).change();
+      } else if (isChanged.dutyScheduleRequestList != null) {
         row
           .find("select[name=locationCode]")
           .val(isChanged.dutyScheduleRequestList.locationCode)
@@ -1822,7 +1833,12 @@ let renderRowEdit = function (table) {
         .val(isChanged.approveDepartmentCode)
         .change();
     } else {
-      if (isChanged.dutyScheduleRequestList != null) {
+      if (currentDepartmentCode != null) {
+        row
+          .find("select[name=departmentCode]")
+          .val(currentDepartmentCode)
+          .change();
+      } else if (isChanged.dutyScheduleRequestList != null) {
         row
           .find("select[name=departmentCode]")
           .val(isChanged.dutyScheduleRequestList.departmentCode)
