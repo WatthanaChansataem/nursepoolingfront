@@ -414,6 +414,14 @@ let renderPage = function () {
       })
     );
   });
+  $.each(positionMaster, function (i, item) {
+    $("select[name=positionCodeModal]").append(
+      $("<option>", {
+        value: item.positionCode,
+        text: item.positionDesc,
+      })
+    );
+  });
 
   $.each(userRoleMasters, function (i, item) {
     $("select[name=userRole]").append(
@@ -687,6 +695,7 @@ let CreateDatatable = (function () {
           $("#vendorNo").val(data.vendorNo);
           $("#userLevelCode").val(data.userLevelCode);
           $("#userCategoryCode").val(data.userCategoryCode);
+          $("#positionCodeModal").val(data.positionCode);
         }
 
         if (data.role == userRoleConstant.Department) {
@@ -749,6 +758,7 @@ let CreateDatatable = (function () {
         let hospitalCode = parseInt($("#hospitalCodeEditModal").val());
         let locationCode = parseInt($("#locationCodeEditModal").val());
         let departmentCode = parseInt($("#departmentCodeEditModal").val());
+        let positionCode = parseInt($("#positionCodeModal").val());
         let userCategoryCode =
           $("#userCategoryCode").val() == NaN ||
           $("#userCategoryCode").val() == null
@@ -763,6 +773,7 @@ let CreateDatatable = (function () {
             userCategoryCode: userCategoryCode,
             isApprove: isApprove,
             active: active,
+            positionCode: positionCode,
           };
         }
 
