@@ -1256,11 +1256,13 @@ let CreateDatatableDetail = (function () {
         { data: "departmentCode1", className: "text-center" },
         { data: "departmentCode2", className: "text-center" },
         { data: "departmentCode3", className: "text-center" },
+        { data: "positionCode", className: "text-center" },
         { data: "shiftStart", className: "text-center" },
         { data: "hospitalCode", className: "text-center" },
         { data: "locationCode", className: "text-center" },
         { data: "departmentCode1", className: "text-center" },
         { data: "shiftStart", className: "text-center" },
+        { data: "hospitalCode", className: "text-center" },
         { data: "hospitalCode", className: "text-center" },
         { data: "hospitalCode", className: "text-center" },
         { data: "hospitalCode", className: "text-center" },
@@ -1325,13 +1327,22 @@ let CreateDatatableDetail = (function () {
         },
         {
           targets: 6,
+          title: "ตำแหน่ง",
+          render: function (data, type, full, meta) {
+            return data == null || isNaN(data)
+              ? "-"
+              : positionMap.get(data).positionDesc;
+          },
+        },
+        {
+          targets: 7,
           title: "ช่วงเวลา",
           render: function (data, type, full, meta) {
             return full.shiftStart + "-" + full.shiftEnd;
           },
         },
         {
-          targets: 7,
+          targets: 8,
           title: "โรงพยาบาลที่ขอ",
           render: function (data, type, full, meta) {
             if (full.dutyScheduleRequestList != null) {
@@ -1343,7 +1354,7 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 8,
+          targets: 9,
           title: "Locationที่ขอ",
           render: function (data, type, full, meta) {
             if (full.dutyScheduleRequestList != null) {
@@ -1355,7 +1366,7 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 9,
+          targets: 10,
           title: "แผนกที่ขอ",
           render: function (data, type, full, meta) {
             if (full.dutyScheduleRequestList != null) {
@@ -1368,7 +1379,19 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 10,
+          targets: 11,
+          title: "ตำแหน่งที่ขอ",
+          render: function (data, type, full, meta) {
+            if (full.dutyScheduleRequestList != null) {
+              return positionMap.get(full.dutyScheduleRequestList.positionCode)
+                .positionDesc;
+            } else {
+              return "-";
+            }
+          },
+        },
+        {
+          targets: 12,
           title: "ช่วงเวลาที่ขอ",
           render: function (data, type, full, meta) {
             if (full.dutyScheduleRequestList != null) {
@@ -1379,7 +1402,7 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 11,
+          targets: 13,
           title: "โรงพยาบาลที่อนุมัติ",
           render: function (data, type, full, meta) {
             if (full.isUpdate === true) {
@@ -1395,7 +1418,7 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 12,
+          targets: 14,
           title: "Locationที่อนุมัติ",
           render: function (data, type, full, meta) {
             if (full.isUpdate === true) {
@@ -1411,7 +1434,7 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 13,
+          targets: 15,
           title: "แผนกที่อนุมัติ",
           render: function (data, type, full, meta) {
             if (full.isUpdate === true) {
@@ -1427,7 +1450,7 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 14,
+          targets: 16,
           title: "ช่วงเวลาที่อนุมัติ",
           render: function (data, type, full, meta) {
             if (full.isUpdate === true) {
@@ -1443,7 +1466,7 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 15,
+          targets: 17,
           title: "สถานะ",
           render: function (data, type, full, meta) {
             if (full.isUpdate === true) {
@@ -1456,7 +1479,7 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 16,
+          targets: 18,
           title: "หมายเหตุ",
           render: function (data, type, full, meta) {
             if (full.isUpdate === true) {
@@ -1469,7 +1492,7 @@ let CreateDatatableDetail = (function () {
           },
         },
         {
-          targets: 17,
+          targets: 19,
           title: "แก้ไข",
           render: function (data, type, full, meta) {
             if (

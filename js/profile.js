@@ -218,7 +218,29 @@ let SetupData = (function () {
           //     positionMap.set(data.positionCode, data);
           //   }
           $("#version").html("Version " + userData.version);
-
+          if (userData.userNotifyNumber > 0) {
+            $("#notifyCount").html(1);
+            $("#notifyDropdown")
+              .append(`<a class="dropdown-item d-flex align-items-center" href="dutyScheduleFormTable.html?from=notification">
+              <div class="mr-3">
+                <div class="icon-circle" style="background-color: #0f6641">
+                  <i class="fas fa-list-ol text-white"></i>
+                </div>
+              </div>
+              <div>
+                <div class="small text-gray-500">${userData.notifyDateString}</div>
+                <span class="font-weight-bold"
+                  >มีรายการเวรที่ได้รับการอนุมัติแล้ว ${userData.userNotifyNumber} รายการ</span
+                >
+              </div>
+            </a>`);
+          } else {
+            $("#notifyDropdown").append(`<a
+            class="dropdown-item text-center small text-gray-500"
+            href="#"
+            >ไม่พบรายการ</a
+          >`);
+          }
           $("#currentUserName").html(
             userData.firstName + " " + userData.lastName
           );

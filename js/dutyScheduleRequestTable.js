@@ -1160,7 +1160,7 @@ let CreateDatatable = (function () {
                 ? "success"
                 : full.allApproveNumber > 0
                 ? "primary"
-                : "warning"
+                : "secondary"
             } btn-circle btn-sm"> ${data}</i></a>`;
           },
         },
@@ -1173,7 +1173,7 @@ let CreateDatatable = (function () {
                 ? "success"
                 : full.allApproveNumber > 0
                 ? "primary"
-                : "warning"
+                : "secondary"
             } btn-circle btn-sm display-button"> ${data}</i></a>`;
           },
         },

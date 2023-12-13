@@ -292,6 +292,9 @@ let renderPage = function () {
   $("#addEducation").trigger("click");
   $("#addExperience").trigger("click");
   // $("#addCourse").trigger("click");
+  $(`#pdpaCheck`).prop("checked", true);
+  $("#submitRegister").trigger("click");
+  $(`#pdpaCheck`).prop("checked", false);
 };
 $("#dateOfBirth").on("change", function () {
   $("#age").html(ageCalculator($("#dateOfBirth").val()));
@@ -1353,6 +1356,7 @@ $("#submitRegister").on("click", function () {
     if (isValidate == 1) {
       return;
     }
+    $("#submitRegister").addClass("disabled");
     $.ajax({
       url: link + "/api/user/create",
       type: "POST",
@@ -1361,13 +1365,16 @@ $("#submitRegister").on("click", function () {
       dataType: "json",
       success: function (res) {
         if (res.status.code == 200) {
+          $("#submitRegister").removeClass("disabled");
           toastr.success("ลงทะเบียนสำเร็จ");
           window.location.href = "login.html?from=registration";
         } else {
+          $("#submitRegister").removeClass("disabled");
           toastr.error(res.status.message);
         }
       },
       error: function (res) {
+        $("#submitRegister").removeClass("disabled");
         toastr.error("ไม่สามารถลงทะเบียนได้");
       },
     });
