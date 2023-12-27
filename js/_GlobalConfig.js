@@ -1,6 +1,4 @@
-let link =
-  "https://svnh-nursepooling-bdms-dev-api.apps.svh-ocp-test.bdms.co.th";
-let flink =
-  "https://svnh-nursepooling-front-bdms-dev-app.apps.svh-ocp-test.bdms.co.th";
+let link = "https://localhost:7063";
+let flink = "http://127.0.0.1:8080";
 let maximumSize = 1024 * 1024 * 5;
 $(document).ready(function () {});
